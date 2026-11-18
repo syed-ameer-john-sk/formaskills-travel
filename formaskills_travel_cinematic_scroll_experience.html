@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formaskills Travel — Your French Journey</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold-glow: #ffd166;
+      --gold-warm: #ffb703;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #030914;
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Glassmorphism utilities matching the storyboard */
+    .glass-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 100%);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    }
+
+    .glass-card-interactive {
+      background: linear-gradient(145deg, rgba(30, 52, 84, 0.48) 0%, rgba(15, 26, 44, 0.36) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35), inset 0 0 24px rgba(255, 215, 130, 0.06);
+      transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-card-interactive:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: rgba(255, 214, 120, 0.65);
+      box-shadow: 0 28px 55px rgba(0, 0, 0, 0.5), 0 0 35px rgba(255, 195, 90, 0.28), inset 0 0 30px rgba(255, 215, 130, 0.14);
+    }
+
+    /* Section transitions & animations */
+    .story-section {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 680px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .story-section.in-view .reveal-up {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .delay-100 { transition-delay: 0.12s; }
+    .delay-200 { transition-delay: 0.24s; }
+    .delay-300 { transition-delay: 0.36s; }
+
+    /* Parallax image scale effect */
+    .bg-parallax {
+      position: absolute;
+      inset: -4%;
+      width: 108%;
+      height: 108%;
+      object-fit: cover;
+      transform: scale(1.08);
+      transition: transform 1.8s cubic-bezier(0.16, 1, 0.3, 1), filter 1.2s ease;
+      z-index: 1;
+    }
+
+    .story-section.in-view .bg-parallax {
+      transform: scale(1.0);
+    }
+
+    /* Multi-Plane In-Photo Depth Layers */
+    .scene-sky-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Guaranteed-Visible Hybrid SVG + Canvas Layer at z-index: 5 */
+    .scene-flight-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 5; /* Strictly inside the photo: above sky (1), behind foreground landmarks (10) & UI cards (20) */
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .scene-bird-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .scene-fg-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 10; /* Foreground monuments, clouds, foliage, and people occlude the bird */
+      pointer-events: none;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .scene-ui-layer {
+      position: relative;
+      z-index: 20; /* Frosted glass cards & typography sit above the bird & blur it via backdrop-filter */
+    }
+
+    /* Optional Framed Storyboard Mode */
+    body.storyboard-framed main {
+      padding: 4.5rem 2.5rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      background: #02060f;
+    }
+
+    body.storyboard-framed .story-section {
+      height: 84vh;
+      min-height: 620px;
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.75);
+    }
+
+    /* France SVG Map Glow */
+    .france-outline {
+      fill: rgba(120, 185, 255, 0.08);
+      stroke: #9cd5ff;
+      stroke-width: 2.2;
+      filter: drop-shadow(0 0 12px rgba(135, 206, 250, 0.75)) drop-shadow(0 0 28px rgba(255, 210, 120, 0.35));
+      stroke-dasharray: 1200;
+      stroke-dashoffset: 1200;
+      transition: stroke-dashoffset 2.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .story-section.in-view .france-outline {
+      stroke-dashoffset: 0;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    .sun-glow {
+      animation: pulseGlow 5s ease-in-out infinite;
+    }
+
+    @keyframes shimmerWave {
+      0%, 100% { opacity: 0.55; transform: scaleX(1); }
+      50% { opacity: 0.9; transform: scaleX(1.06); }
+    }
+
+    .water-shimmer {
+      animation: shimmerWave 4s ease-in-out infinite;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #040b18;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #3b6998, #f4b860);
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="relative selection:bg-amber-400 selection:text-slate-950">
+
+  <!-- SHARED GLOBAL SVG DEFS FOR GLOWING FLOW PATHS & BIRD -->
+  <svg width="0" height="0" class="fixed pointer-events-none">
+    <defs>
+      <linearGradient id="goldFlowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.18"/>
+        <stop offset="35%" stop-color="#fcd34d" stop-opacity="0.88"/>
+        <stop offset="80%" stop-color="#fef08a" stop-opacity="1"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="1"/>
+      </linearGradient>
+
+      <linearGradient id="wingLitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#ffffff"/>
+        <stop offset="65%" stop-color="#f8fafc"/>
+        <stop offset="100%" stop-color="#fde68a"/>
+      </linearGradient>
+
+      <filter id="goldenTrailGlow" x="-20%" y="-40%" width="140%" height="180%">
+        <feGaussianBlur stdDeviation="6" result="blur1"/>
+        <feGaussianBlur stdDeviation="14" result="blur2"/>
+        <feMerge>
+          <feMergeNode in="blur2"/>
+          <feMergeNode in="blur1"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+
+      <filter id="birdDropGlow" x="-40%" y="-40%" width="180%" height="180%">
+        <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#fbbf24" flood-opacity="0.65"/>
+        <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.45"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- ==========================================
+       TOP NAVIGATION BAR (Matches Storyboard)
+       ========================================== -->
+  <header id="mainNav" class="fixed top-0 left-0 right-0 z-40 transition-all duration-500 px-6 md:px-14 py-4 flex items-center justify-between bg-gradient-to-b from-slate-950/80 via-slate-950/40 to-transparent backdrop-blur-[4px]">
+    <!-- Brand Logo -->
+    <a href="#sec-1" class="flex flex-col items-center group focus:outline-none">
+      <div class="relative flex flex-col items-center">
+        <svg class="w-24 h-7 -mb-1.5 text-white transition-transform duration-500 group-hover:translate-x-1" viewBox="0 0 120 35" fill="none">
+          <path d="M12 28 C 38 6, 75 6, 98 20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M93 12 L103 20 L112 15 L105 22 L109 29 L100 24 L91 27 L97 21 Z" fill="currentColor"/>
+        </svg>
+        <span class="text-lg md:text-xl font-semibold tracking-tight leading-none text-white">Formaskills</span>
+        <span class="text-sm md:text-base font-normal tracking-wide leading-tight text-white/90">Travel</span>
+      </div>
+    </a>
+
+    <!-- Navigation Links -->
+    <nav class="hidden lg:flex items-center space-x-8 text-sm font-medium text-white/90">
+      <a href="#sec-7" class="hover:text-amber-300 transition-colors">Our offers</a>
+      <a href="#sec-3" class="hover:text-amber-300 transition-colors">Destinations</a>
+      <a href="#sec-8" class="hover:text-amber-300 transition-colors">For me</a>
+      <a href="#sec-9" class="hover:text-amber-300 transition-colors">For my organisation</a>
+    </nav>
+
+    <!-- Right Controls: Live Flight Status + Frame View Toggle + Auto-Flight Toggle -->
+    <div class="flex items-center gap-2.5">
+      <!-- Live Bird Flight Status Pill -->
+      <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-amber-400/15 border border-amber-300/40 text-amber-200 backdrop-blur-md">
+        <span class="w-2 h-2 rounded-full bg-amber-300 animate-ping"></span>
+        <span id="flightStatusBadge">Scene 1 • Bird Flying (32%)</span>
+      </div>
+
+      <button id="frameModeBtn" onclick="toggleFrameMode()" class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-white/10 hover:bg-white/20 border border-white/20 text-white/90 transition-all backdrop-blur-md" title="Toggle Framed Storyboard View">
+        <svg class="w-3.5 h-3.5 text-amber-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+        </svg>
+        <span id="frameModeText">Cinema View</span>
+      </button>
+
+      <button id="autoFlightBtn" onclick="toggleAutoFlight()" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium bg-amber-400/20 hover:bg-amber-400/35 border border-amber-300/50 text-white transition-all backdrop-blur-md shadow-lg">
+        <span id="autoFlightDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+        <span id="autoFlightText">Auto-Scroll Flight</span>
+      </button>
+
+      <button onclick="openPlannerModal('General Inquiry')" aria-label="Menu" class="p-2 rounded-lg text-white/90 hover:text-white hover:bg-white/10 transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       RIGHT SIDE PROGRESS & STORYBOARD NAVIGATOR (1 - 9)
+       ========================================== -->
+  <aside class="fixed right-4 md:right-6 top-1/2 -translate-y-1/2 z-40 hidden sm:flex flex-col items-center gap-2.5 bg-slate-950/45 backdrop-blur-md border border-white/15 px-2 py-3.5 rounded-full shadow-2xl">
+    <button onclick="scrollToSection(1)" data-step="1" class="step-dot w-6 h-6 rounded-full text-[11px] font-bold flex items-center justify-center transition-all bg-white text-slate-950 shadow-md" title="1. Opening – Horizon reveal">1</button>
+    <button onclick="scrollToSection(2)" data-step="2" class="step-dot w-6 h-6 rounded-full text-[11px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15" title="2. The Take-off">2</button>
+    <button onclick="scrollToSection(3)" data-step="3" class="step-dot w-6 h-6 rounded-full text-[11px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15" title="3. The Destination Reveal">3</button>
+    <button onclick="scrollToSection(4)" data-step="4" class="step-dot w-6 h-6 rounded-full text-[11px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15" title="4. Destination 1 – Sète">4</button>
+    <button onclick="scrollToSection(5)" data-step="5" class="step-dot w-6 h-6 rounded-full text-[11px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15" title="5. Destination 2 – Montpellier">5</button>
+    <button onclick="scrollToSection(6)" data-step="6" class="step-dot w-6 h-6 rounded-full text-[11px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15" title="6. Destination 3 – Paris">6</button>
+    <button onclick="scrollToSection(7)" data-step="7" class="step-dot w-6 h-6 rounded-full text-[11px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15" title="7. Our Offers">7</button>
+    <button onclick="scrollToSection(8)" data-step="8" class="step-dot w-6 h-6 rounded-full text-[11px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15" title="8. The Experience">8</button>
+    <button onclick="scrollToSection(9)" data-step="9" class="step-dot w-6 h-6 rounded-full text-[11px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15" title="9. The Call to Action">9</button>
+  </aside>
+
+  <!-- ==========================================
+       MAIN 9-SECTION CINEMATIC STORYBOARD
+       ========================================== -->
+  <main id="storyContainer">
+
+    <!-- ==========================================
+         SECTION 1: OPENING - HORIZON REVEAL
+         ========================================== -->
+    <section id="sec-1" data-index="1" class="story-section in-view bg-[#020817]">
+      <!-- BACK SKY LAYER (z-index: 1) -->
+      <div class="scene-sky-layer overflow-hidden">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_78%,rgba(56,189,248,0.28)_0%,rgba(14,30,64,0.85)_48%,#020611_85%)]"></div>
+        <div class="sun-glow absolute left-[56%] bottom-[19%] -translate-x-1/2 w-80 h-80 rounded-full bg-[radial-gradient(circle,rgba(255,250,220,1)_0%,rgba(255,190,70,0.85)_22%,rgba(251,146,60,0.25)_55%,transparent_75%)] blur-[6px]"></div>
+        <div class="absolute left-1/2 bottom-[25.5%] -translate-x-1/2 w-[85vw] h-[3px] bg-gradient-to-r from-transparent via-amber-200 to-transparent opacity-80 blur-[1px]"></div>
+      </div>
+
+      <!-- IN-SCENE BIRD & UPPER-SKY FLOW PATH LAYER (z-index: 5) -->
+      <canvas class="scene-bird-canvas" data-scene="0"></canvas>
+      <svg class="scene-flight-layer" data-scene-svg="0" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
+
+      <!-- FOREGROUND PHOTO OCCLUSION LAYER (z-index: 10 - Curved Planet Earth Rim) -->
+      <div class="scene-fg-layer">
+        <svg class="absolute bottom-0 left-0 w-full h-[38vh]" viewBox="0 0 1440 360" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="earthAtmosphere" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#0284c7" stop-opacity="0.4"/>
+              <stop offset="52%" stop-color="#e0f2fe" stop-opacity="1"/>
+              <stop offset="62%" stop-color="#fde68a" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#0284c7" stop-opacity="0.4"/>
+            </linearGradient>
+            <radialGradient id="earthSurface" cx="55%" cy="10%" r="85%">
+              <stop offset="0%" stop-color="#1e3a5f"/>
+              <stop offset="45%" stop-color="#08142c"/>
+              <stop offset="100%" stop-color="#02060d"/>
+            </radialGradient>
+          </defs>
+          <path d="M-120 360 Q 720 15 1560 360 Z" fill="url(#earthSurface)"/>
+          <path d="M-120 360 Q 720 15 1560 360" fill="none" stroke="url(#earthAtmosphere)" stroke-width="6"/>
+          <g opacity="0.75" stroke="#fbbf24" stroke-width="0.8" fill="#fef08a">
+            <circle cx="480" cy="245" r="2.2"/><circle cx="510" cy="235" r="1.5"/><circle cx="535" cy="252" r="2.8"/>
+            <path d="M440 270 Q 510 235 590 250" fill="none" opacity="0.4"/>
+            <circle cx="640" cy="215" r="3"/><circle cx="670" cy="222" r="2"/><circle cx="705" cy="208" r="3.5"/>
+            <circle cx="740" cy="220" r="2.2"/><circle cx="780" cy="205" r="4"/><circle cx="815" cy="225" r="2.5"/>
+            <path d="M620 225 Q 720 195 860 245" fill="none" opacity="0.5"/>
+            <circle cx="860" cy="238" r="2"/><circle cx="910" cy="250" r="3"/><circle cx="965" cy="268" r="2"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- UI CONTENT LAYER (z-index: 20) -->
+      <div class="scene-ui-layer flex flex-col items-center text-center px-6 mt-12">
+        <div class="reveal-up flex flex-col items-center">
+          <svg class="w-48 md:w-64 h-20 -mb-3 text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]" viewBox="0 0 160 50" fill="none">
+            <path d="M18 40 C 52 8, 102 8, 132 28" stroke="white" stroke-width="3.2" stroke-linecap="round"/>
+            <path d="M124 16 L138 27 L150 20 L141 30 L146 40 L134 33 L122 37 L130 28 Z" fill="white"/>
+          </svg>
+          <h1 class="text-5xl md:text-7xl font-semibold tracking-tight text-white drop-shadow-lg">Formaskills</h1>
+          <span class="text-3xl md:text-5xl font-normal tracking-wide text-white/95 mt-1">Travel</span>
+        </div>
+
+        <p class="reveal-up delay-200 mt-6 text-sm md:text-base text-sky-200/90 max-w-md font-light tracking-wide">
+          Scroll down to watch the bird glide along the upper-sky golden flow path across every destination
+        </p>
+
+        <button onclick="scrollToSection(2)" class="reveal-up delay-300 mt-5 flex flex-col items-center gap-1 text-xs uppercase tracking-widest text-amber-300/90 hover:text-amber-200 transition">
+          <span>Scroll to Fly</span>
+          <svg class="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Storyboard Bottom Caption Bar -->
+      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3.5">
+          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">1</span>
+          <div>
+            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">Opening – Horizon reveal</h2>
+            <p class="text-xs md:text-sm text-slate-300/85">The brand appears as the world awakens.</p>
+          </div>
+        </div>
+        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 01 / 09</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 2: THE TAKE-OFF
+         ========================================== -->
+    <section id="sec-2" data-index="2" class="story-section bg-[#102542]">
+      <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=2000&q=85"
+           onerror="this.style.display='none'"
+           alt="Sunrise Clouds"
+           class="bg-parallax opacity-70 mix-blend-screen" />
+      <div class="scene-sky-layer bg-gradient-to-b from-[#0c2244]/90 via-[#2c527a]/65 to-[#1a2436]">
+        <div class="sun-glow absolute right-[10%] bottom-[26%] w-72 h-72 rounded-full bg-[radial-gradient(circle,#fffbeb_0%,#fbbf24_28%,rgba(245,158,11,0.35)_60%,transparent_75%)]"></div>
+        <svg class="absolute bottom-14 left-0 w-full h-[42vh]" viewBox="0 0 1440 400" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="cloudGoldBack" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#3b5278" stop-opacity="0.85"/>
+              <stop offset="55%" stop-color="#eab308" stop-opacity="0.6"/>
+              <stop offset="85%" stop-color="#fef08a" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#78350f" stop-opacity="0.8"/>
+            </linearGradient>
+          </defs>
+          <path d="M0 230 Q 120 170 260 210 T 540 180 T 840 200 T 1140 175 T 1440 205 L 1440 400 L 0 400 Z" fill="url(#cloudGoldBack)"/>
+        </svg>
+      </div>
+
+      <!-- IN-SCENE BIRD & UPPER-SKY FLOW PATH LAYER (z-index: 5) -->
+      <canvas class="scene-bird-canvas" data-scene="1"></canvas>
+      <svg class="scene-flight-layer" data-scene-svg="1" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
+
+      <!-- FOREGROUND PHOTO OCCLUSION LAYER (z-index: 10 - Foreground Cumulus Cloud Bank) -->
+      <div class="scene-fg-layer">
+        <svg class="absolute bottom-12 left-0 w-full h-[38vh]" viewBox="0 0 1440 360" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="cloudFrontOcc" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#fde68a" stop-opacity="0.45"/>
+              <stop offset="22%" stop-color="#64748b" stop-opacity="0.88"/>
+              <stop offset="65%" stop-color="#1e293b" stop-opacity="0.96"/>
+              <stop offset="100%" stop-color="#0f172a" stop-opacity="1"/>
+            </linearGradient>
+          </defs>
+          <path d="M-40 250 C 95 170, 225 180, 355 245 C 480 165, 625 175, 760 245 C 890 180, 1055 185, 1190 250 C 1300 200, 1390 210, 1480 255 L 1480 360 L -40 360 Z" fill="url(#cloudFrontOcc)"/>
+        </svg>
+      </div>
+
+      <!-- UI CONTENT LAYER (z-index: 20) -->
+      <div class="scene-ui-layer max-w-6xl w-full px-6 md:px-14 flex justify-end items-end h-full pb-36 pointer-events-none">
+        <div class="reveal-up glass-card rounded-2xl px-6 py-4 max-w-sm border border-amber-200/25">
+          <span class="text-xs uppercase tracking-widest text-amber-300 font-semibold">Upper-Sky Flow • Ascending</span>
+          <p class="text-sm md:text-base text-white/95 mt-1 font-light leading-relaxed">
+            Soaring across the upper sky above the sunrise clouds, the seagull traces a golden flow wave toward France.
+          </p>
+        </div>
+      </div>
+
+      <!-- Storyboard Bottom Caption Bar -->
+      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3.5">
+          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">2</span>
+          <div>
+            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">The Take-off</h2>
+            <p class="text-xs md:text-sm text-slate-300/85">The bird takes flight, symbolising your journey to France.</p>
+          </div>
+        </div>
+        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 02 / 09</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 3: THE DESTINATION REVEAL
+         ========================================== -->
+    <section id="sec-3" data-index="3" class="story-section bg-[#0b1f3a]">
+      <div class="scene-sky-layer bg-[radial-gradient(circle_at_78%_72%,rgba(251,191,36,0.38)_0%,rgba(29,78,137,0.68)_45%,#071529_90%)]">
+        <svg class="absolute bottom-12 left-0 w-full h-[28vh] opacity-85" viewBox="0 0 1440 250" preserveAspectRatio="none">
+          <path d="M0 150 Q 240 95 480 145 T 960 125 T 1440 140 L 1440 250 L 0 250 Z" fill="rgba(251, 191, 36, 0.22)"/>
+        </svg>
+      </div>
+
+      <!-- IN-SCENE BIRD & UPPER-SKY FLOW PATH LAYER (z-index: 5) -->
+      <canvas class="scene-bird-canvas" data-scene="2"></canvas>
+      <svg class="scene-flight-layer" data-scene-svg="2" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
+
+      <!-- FOREGROUND PHOTO OCCLUSION LAYER (z-index: 10) -->
+      <div class="scene-fg-layer">
+        <svg class="absolute bottom-12 left-0 w-full h-[24vh]" viewBox="0 0 1440 220" preserveAspectRatio="none">
+          <path d="M0 155 Q 180 110 390 145 T 830 135 T 1220 145 T 1440 130 L 1440 220 L 0 220 Z" fill="#091526"/>
+        </svg>
+      </div>
+
+      <!-- UI CONTENT LAYER (z-index: 20) -->
+      <div class="scene-ui-layer max-w-7xl w-full mx-auto px-6 md:px-14 grid grid-cols-1 lg:grid-cols-12 items-center gap-8 mt-10">
+        <div class="lg:col-span-6 space-y-5">
+          <h2 class="reveal-up text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-white leading-[1.1] drop-shadow-md">
+            France begins<br/>before you land.
+          </h2>
+          <p class="reveal-up delay-100 text-base sm:text-lg text-slate-200/90 max-w-md font-light leading-relaxed">
+            Learn French, discover its culture, and live a unique experience in France.
+          </p>
+          <div class="reveal-up delay-200 pt-2 flex flex-wrap gap-3">
+            <button onclick="scrollToSection(4)" class="px-5 py-2.5 rounded-full bg-white/15 hover:bg-white/25 border border-white/30 text-sm font-medium text-white backdrop-blur-md transition flex items-center gap-2">
+              <span>Explore Sète</span>
+              <span>→</span>
+            </button>
+            <button onclick="scrollToSection(5)" class="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-sm font-medium text-white/90 backdrop-blur-md transition">
+              Montpellier
+            </button>
+            <button onclick="scrollToSection(6)" class="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-sm font-medium text-white/90 backdrop-blur-md transition">
+              Paris
+            </button>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 flex justify-center lg:justify-end relative">
+          <div class="reveal-up delay-200 relative w-72 sm:w-96 md:w-[410px] aspect-square flex items-center justify-center">
+            <div class="absolute inset-8 rounded-full bg-sky-400/15 blur-3xl"></div>
+            <svg class="w-full h-full overflow-visible" viewBox="0 0 500 500">
+              <path class="france-outline" d="
+                M 255 48
+                L 285 56 L 312 82 L 355 96 L 398 118 L 435 135
+                L 418 178 L 402 212 L 422 248 L 395 282 L 415 322
+                L 438 358 L 408 388 L 368 395 L 332 418 L 302 412
+                L 278 442 L 220 432 L 165 415 L 145 385 L 168 335
+                L 152 275 L 122 232 L 82 202 L 62 178 L 105 155
+                L 148 162 L 165 128 L 208 118 L 235 82 Z
+              "/>
+              <path d="M 245 425 Q 295 340 315 245 T 275 155" fill="none" stroke="#fde047" stroke-width="2" stroke-dasharray="5 5" opacity="0.75"/>
+              <g class="cursor-pointer" onclick="scrollToSection(6)">
+                <circle cx="315" cy="245" r="26" fill="rgba(253, 224, 71, 0.22)" class="animate-ping"/>
+                <circle cx="315" cy="245" r="14" fill="rgba(253, 224, 71, 0.45)"/>
+                <circle cx="315" cy="245" r="6" fill="#ffffff"/>
+              </g>
+              <g class="cursor-pointer group" onclick="scrollToSection(6)">
+                <circle cx="275" cy="155" r="5" fill="#93c5fd"/>
+                <text x="288" y="159" fill="#e2e8f0" font-size="13" font-weight="500">Paris</text>
+              </g>
+              <g class="cursor-pointer group" onclick="scrollToSection(5)">
+                <circle cx="298" cy="395" r="5" fill="#fde047"/>
+                <text x="310" y="399" fill="#fef08a" font-size="13" font-weight="500">Montpellier</text>
+              </g>
+              <g class="cursor-pointer group" onclick="scrollToSection(4)">
+                <circle cx="275" cy="412" r="5" fill="#38bdf8"/>
+                <text x="225" y="420" fill="#bae6fd" font-size="13" font-weight="500">Sète</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Storyboard Bottom Caption Bar -->
+      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3.5">
+          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">3</span>
+          <div>
+            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">The Destination Reveal</h2>
+            <p class="text-xs md:text-sm text-slate-300/85">The flight path draws France on the map.</p>
+          </div>
+        </div>
+        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 03 / 09</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 4: DESTINATION 1 - SÈTE
+         ========================================== -->
+    <section id="sec-4" data-index="4" class="story-section bg-[#0c2d48]">
+      <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=2000&q=85"
+           onerror="this.style.display='none'"
+           alt="Sète Mediterranean Harbor"
+           class="bg-parallax opacity-90" />
+      <div class="scene-sky-layer bg-gradient-to-r from-slate-950/55 via-slate-900/20 to-sky-950/35"></div>
+
+      <!-- IN-SCENE BIRD & UPPER-SKY FLOW PATH LAYER (z-index: 5) -->
+      <canvas class="scene-bird-canvas" data-scene="3"></canvas>
+      <svg class="scene-flight-layer" data-scene-svg="3" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
+
+      <!-- FOREGROUND PHOTO OCCLUSION LAYER (z-index: 10 - Sète Harbor Pier & Lighthouse) -->
+      <div class="scene-fg-layer">
+        <svg class="absolute bottom-12 right-0 w-full h-[52vh]" viewBox="0 0 1440 440" preserveAspectRatio="xMaxYMax slice">
+          <path d="M 480 280 Q 670 195 920 215 Q 1180 205 1440 230 L 1440 330 L 460 320 Z" fill="#1e293b" opacity="0.88"/>
+          <path d="M0 310 Q 720 285 1440 305 L 1440 440 L 0 440 Z" fill="rgba(12, 74, 110, 0.78)"/>
+          <path d="M 1440 410 L 820 355 L 775 330 L 855 312 L 1440 350 Z" fill="#1e293b" stroke="#94a3b8" stroke-width="1.5"/>
+          <g transform="translate(792, 130)">
+            <rect x="0" y="38" width="22" height="167" rx="3" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+            <rect x="-4" y="28" width="30" height="10" rx="2" fill="#dc2626"/>
+            <polygon points="2,28 20,28 16,8 6,8" fill="#fef08a"/>
+            <circle cx="11" cy="18" r="28" fill="rgba(254, 240, 138, 0.45)" class="animate-pulse"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- UI CONTENT LAYER (z-index: 20) -->
+      <div class="scene-ui-layer max-w-7xl w-full mx-auto px-6 md:px-14 flex items-center mt-14">
+        <div class="reveal-up glass-card rounded-3xl p-8 md:p-10 max-w-sm w-full text-white relative overflow-hidden group">
+          <div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-sky-400/20 blur-2xl pointer-events-none"></div>
+          <span class="text-xs uppercase tracking-widest text-sky-200/90 font-semibold">Destination 01 • Occitanie</span>
+          <h3 class="text-4xl md:text-5xl font-semibold tracking-tight mt-2 mb-4">Sète</h3>
+          <p class="text-base md:text-lg text-white/90 font-light leading-relaxed mb-8">
+            A Mediterranean city between sea, culture and authentic life.
+          </p>
+          <div class="flex items-center gap-4">
+            <button onclick="openDestinationModal('sete')" aria-label="Explore Sète" class="w-12 h-12 rounded-full border border-white/60 hover:border-amber-300 hover:bg-amber-400/20 flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7"/>
+              </svg>
+            </button>
+            <span onclick="openDestinationModal('sete')" class="text-xs uppercase tracking-wider text-white/80 hover:text-amber-200 cursor-pointer transition">Discover Sète</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Storyboard Bottom Caption Bar -->
+      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3.5">
+          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">4</span>
+          <div>
+            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">Destination 1 – Sète</h2>
+            <p class="text-xs md:text-sm text-slate-300/85">The bird guides you to each destination with smooth transitions.</p>
+          </div>
+        </div>
+        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 04 / 09</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 5: DESTINATION 2 - MONTPELLIER
+         ========================================== -->
+    <section id="sec-5" data-index="5" class="story-section bg-[#2b1d12]">
+      <img src="https://images.unsplash.com/photo-1549144511-f099e773c147?auto=format&fit=crop&w=2000&q=85"
+           onerror="this.style.display='none'"
+           alt="Montpellier Golden Architecture"
+           class="bg-parallax opacity-85" />
+      <div class="scene-sky-layer bg-gradient-to-r from-slate-950/60 via-amber-950/20 to-sky-900/30"></div>
+
+      <!-- IN-SCENE BIRD & UPPER-SKY FLOW PATH LAYER (z-index: 5) -->
+      <canvas class="scene-bird-canvas" data-scene="4"></canvas>
+      <svg class="scene-flight-layer" data-scene-svg="4" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
+
+      <!-- FOREGROUND PHOTO OCCLUSION LAYER (z-index: 10 - Porte du Peyrou Archway & Left Bougainvillea) -->
+      <div class="scene-fg-layer">
+        <svg class="absolute top-0 left-0 w-80 sm:w-[420px] h-72 opacity-95" viewBox="0 0 400 300" preserveAspectRatio="xMinYMin slice">
+          <path d="M0 0 L280 0 Q 220 90 140 130 Q 60 190 0 240 Z" fill="#14331b"/>
+          <g fill="#db2777" opacity="0.9">
+            <circle cx="45" cy="42" r="24"/><circle cx="85" cy="35" r="28"/><circle cx="135" cy="52" r="22"/>
+            <circle cx="30" cy="95" r="26"/><circle cx="78" cy="88" r="24"/><circle cx="115" cy="98" r="20"/>
+            <circle cx="175" cy="35" r="18"/><circle cx="52" cy="145" r="22"/>
+          </g>
+          <g fill="#f472b6" opacity="0.85">
+            <circle cx="60" cy="50" r="14"/><circle cx="105" cy="45" r="16"/><circle cx="45" cy="110" r="15"/>
+            <circle cx="95" cy="82" r="12"/><circle cx="148" cy="62" r="12"/>
+          </g>
+        </svg>
+
+        <svg class="absolute bottom-12 right-0 w-full md:w-[68%] h-[78vh]" viewBox="0 0 800 560" preserveAspectRatio="xMaxYMax meet">
+          <defs>
+            <linearGradient id="limestoneGoldFg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fde68a"/>
+              <stop offset="50%" stop-color="#d97706"/>
+              <stop offset="100%" stop-color="#78350f"/>
+            </linearGradient>
+          </defs>
+          <g transform="translate(120, 65)">
+            <rect x="25" y="10" width="330" height="58" fill="url(#limestoneGoldFg)" stroke="#fef08a" stroke-width="1.2"/>
+            <rect x="12" y="68" width="356" height="26" fill="#b45309"/>
+            <rect x="28" y="94" width="102" height="390" fill="url(#limestoneGoldFg)"/>
+            <rect x="250" y="94" width="102" height="390" fill="url(#limestoneGoldFg)"/>
+            <path d="M 130 94 L 250 94 L 250 215 A 60 65 0 0 0 130 215 Z" fill="url(#limestoneGoldFg)"/>
+            <circle cx="79" cy="155" r="22" fill="#92400e" opacity="0.65"/>
+            <circle cx="301" cy="155" r="22" fill="#92400e" opacity="0.65"/>
+          </g>
+          <rect x="530" y="250" width="270" height="240" fill="#451a03" opacity="0.9"/>
+          <g fill="#14532d" opacity="0.95">
+            <circle cx="520" cy="340" r="65"/><circle cx="585" cy="325" r="75"/><circle cx="670" cy="310" r="85"/><circle cx="755" cy="330" r="70"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- UI CONTENT LAYER (z-index: 20) -->
+      <div class="scene-ui-layer max-w-7xl w-full mx-auto px-6 md:px-14 flex items-center mt-14">
+        <div class="reveal-up glass-card rounded-3xl p-8 md:p-10 max-w-sm w-full text-white relative overflow-hidden group">
+          <div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-amber-400/20 blur-2xl pointer-events-none"></div>
+          <span class="text-xs uppercase tracking-widest text-amber-200/90 font-semibold">Destination 02 • Student Capital</span>
+          <h3 class="text-4xl md:text-5xl font-semibold tracking-tight mt-2 mb-4">Montpellier</h3>
+          <p class="text-base md:text-lg text-white/90 font-light leading-relaxed mb-8">
+            A vibrant student city where learning and lifestyle meet.
+          </p>
+          <div class="flex items-center gap-4">
+            <button onclick="openDestinationModal('montpellier')" aria-label="Explore Montpellier" class="w-12 h-12 rounded-full border border-white/60 hover:border-amber-300 hover:bg-amber-400/20 flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7"/>
+              </svg>
+            </button>
+            <span onclick="openDestinationModal('montpellier')" class="text-xs uppercase tracking-wider text-white/80 hover:text-amber-200 cursor-pointer transition">Discover Montpellier</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Storyboard Bottom Caption Bar -->
+      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3.5">
+          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">5</span>
+          <div>
+            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">Destination 2 – Montpellier</h2>
+            <p class="text-xs md:text-sm text-slate-300/85">A closer look at the city and its experience.</p>
+          </div>
+        </div>
+        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 05 / 09</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 6: DESTINATION 3 - PARIS
+         ========================================== -->
+    <section id="sec-6" data-index="6" class="story-section bg-[#162035]">
+      <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=2000&q=85"
+           onerror="this.style.display='none'"
+           alt="Paris Eiffel Tower Sunset"
+           class="bg-parallax opacity-85" />
+      <div class="scene-sky-layer bg-gradient-to-r from-slate-950/60 via-slate-900/20 to-amber-500/20">
+        <div class="sun-glow absolute right-[8%] bottom-[32%] w-64 h-64 rounded-full bg-[radial-gradient(circle,rgba(254,240,138,0.85)_0%,rgba(245,158,11,0.35)_50%,transparent_75%)]"></div>
+      </div>
+
+      <!-- IN-SCENE BIRD & UPPER-SKY FLOW PATH LAYER (z-index: 5) -->
+      <canvas class="scene-bird-canvas" data-scene="5"></canvas>
+      <svg class="scene-flight-layer" data-scene-svg="5" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
+
+      <!-- FOREGROUND PHOTO OCCLUSION LAYER (z-index: 10 - Iconic Eiffel Tower) -->
+      <div class="scene-fg-layer">
+        <svg class="absolute bottom-12 right-[6%] w-64 sm:w-80 h-[78vh]" viewBox="0 0 260 520" preserveAspectRatio="xMidYMax meet">
+          <path d="M126 10 L134 10 L138 95 L150 225 L170 350 L206 490 L176 490 L156 395 L104 395 L84 490 L54 490 L90 350 L110 225 L122 95 Z" fill="#1e293b" stroke="#fbbf24" stroke-width="1.3"/>
+          <path d="M90 490 A 40 48 0 0 1 170 490" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+          <rect x="98" y="225" width="64" height="9" rx="2" fill="#fbbf24"/>
+          <rect x="78" y="345" width="104" height="11" rx="2" fill="#fbbf24"/>
+          <circle cx="130" cy="8" r="5" fill="#fef08a"/>
+        </svg>
+      </div>
+
+      <!-- UI CONTENT LAYER (z-index: 20) -->
+      <div class="scene-ui-layer max-w-7xl w-full mx-auto px-6 md:px-14 flex items-center mt-14">
+        <div class="reveal-up glass-card rounded-3xl p-8 md:p-10 max-w-sm w-full text-white relative overflow-hidden group">
+          <div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-amber-300/20 blur-2xl pointer-events-none"></div>
+          <span class="text-xs uppercase tracking-widest text-amber-200/90 font-semibold">Destination 03 • L'Art de Vivre</span>
+          <h3 class="text-4xl md:text-5xl font-semibold tracking-tight mt-2 mb-4">Paris</h3>
+          <p class="text-base md:text-lg text-white/90 font-light leading-relaxed mb-8">
+            Culture, history and the art of French living.
+          </p>
+          <div class="flex items-center gap-4">
+            <button onclick="openDestinationModal('paris')" aria-label="Explore Paris" class="w-12 h-12 rounded-full border border-white/60 hover:border-amber-300 hover:bg-amber-400/20 flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7"/>
+              </svg>
+            </button>
+            <span onclick="openDestinationModal('paris')" class="text-xs uppercase tracking-wider text-white/80 hover:text-amber-200 cursor-pointer transition">Discover Paris</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Storyboard Bottom Caption Bar -->
+      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3.5">
+          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">6</span>
+          <div>
+            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">Destination 3 – Paris</h2>
+            <p class="text-xs md:text-sm text-slate-300/85">Iconic locations with the same cinematic style.</p>
+          </div>
+        </div>
+        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 06 / 09</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 7: OUR OFFERS
+         ========================================== -->
+    <section id="sec-7" data-index="7" class="story-section bg-[#112640]">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=80"
+           onerror="this.style.display='none'"
+           alt="French Coastline"
+           class="bg-parallax opacity-45 blur-[3px]" />
+      <div class="scene-sky-layer bg-gradient-to-b from-[#152d4a]/85 via-[#1f3b5c]/70 to-[#0b1829]/95"></div>
+
+      <!-- IN-SCENE BIRD & UPPER-SKY FLOW PATH LAYER (z-index: 5) -->
+      <canvas class="scene-bird-canvas" data-scene="6"></canvas>
+      <svg class="scene-flight-layer" data-scene-svg="6" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
+
+      <!-- FOREGROUND PHOTO OCCLUSION LAYER (z-index: 10) -->
+      <div class="scene-fg-layer">
+        <svg class="absolute bottom-12 left-0 w-full h-[32vh] blur-[2px] opacity-85" viewBox="0 0 1440 300" preserveAspectRatio="none">
+          <path d="M0 150 Q 190 190 360 300 L 0 300 Z" fill="#0f172a"/>
+          <path d="M1440 80 Q 1180 140 960 300 L 1440 300 Z" fill="#1e293b"/>
+        </svg>
+      </div>
+
+      <!-- UI CONTENT LAYER (z-index: 20) -->
+      <div class="scene-ui-layer max-w-5xl w-full mx-auto px-6 md:px-14 mt-16">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          <div onclick="openOfferModal('learning')" class="reveal-up delay-100 glass-card-interactive rounded-3xl p-8 md:p-10 flex flex-col items-center justify-center text-center cursor-pointer group min-h-[250px]">
+            <div class="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:border-amber-300/60 transition-all">
+              <svg class="w-9 h-9 text-white group-hover:text-amber-200 transition-colors" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
+            </div>
+            <h3 class="text-xl md:text-2xl font-medium text-white leading-snug">French<br/>Learning</h3>
+            <p class="text-xs text-amber-200/80 mt-3 opacity-0 group-hover:opacity-100 transition-opacity">Accredited immersive courses →</p>
+          </div>
+
+          <div onclick="openOfferModal('culture')" class="reveal-up delay-200 glass-card-interactive rounded-3xl p-8 md:p-10 flex flex-col items-center justify-center text-center cursor-pointer group min-h-[250px]">
+            <div class="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:border-amber-300/60 transition-all">
+              <svg class="w-9 h-9 text-white group-hover:text-amber-200 transition-colors" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl md:text-2xl font-medium text-white leading-snug">Cultural<br/>Experiences</h3>
+            <p class="text-xs text-amber-200/80 mt-3 opacity-0 group-hover:opacity-100 transition-opacity">Gastronomy, art & excursions →</p>
+          </div>
+
+          <div onclick="openOfferModal('accommodation')" class="reveal-up delay-300 glass-card-interactive rounded-3xl p-8 md:p-10 flex flex-col items-center justify-center text-center cursor-pointer group min-h-[250px]">
+            <div class="w-16 h-16 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:border-amber-300/60 transition-all">
+              <svg class="w-9 h-9 text-white group-hover:text-amber-200 transition-colors" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7v11m0-4h18m0 4V8a2 2 0 00-2-2h-8v8m-5-4h2a1 1 0 011 1v1H5v-1a1 1 0 011-1z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl md:text-2xl font-medium text-white leading-snug">Accommodation<br/>Options</h3>
+            <p class="text-xs text-amber-200/80 mt-3 opacity-0 group-hover:opacity-100 transition-opacity">Host families & residences →</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Storyboard Bottom Caption Bar -->
+      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3.5">
+          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">7</span>
+          <div>
+            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">Our Offers</h2>
+            <p class="text-xs md:text-sm text-slate-300/85">A smooth, interactive section to explore what we offer.</p>
+          </div>
+        </div>
+        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 07 / 09</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 8: THE EXPERIENCE (FLIGHT FINALE)
+         ========================================== -->
+    <section id="sec-8" data-index="8" class="story-section bg-[#1e293b]">
+      <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=2000&q=85"
+           onerror="this.style.display='none'"
+           alt="Students Exploring France"
+           class="bg-parallax opacity-85 object-center" />
+      <div class="scene-sky-layer bg-gradient-to-r from-slate-950/70 via-slate-900/30 to-transparent"></div>
+
+      <!-- IN-SCENE BIRD & UPPER-SKY FLOW PATH LAYER (z-index: 5 - Flight Finale in Section 8!) -->
+      <canvas class="scene-bird-canvas" data-scene="7"></canvas>
+      <svg class="scene-flight-layer" data-scene-svg="7" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
+
+      <!-- FOREGROUND PHOTO OCCLUSION LAYER (z-index: 10 - Foreground Travelers Silhouette Layer) -->
+      <div class="scene-fg-layer">
+        <svg class="absolute bottom-12 right-[4%] w-[360px] sm:w-[520px] h-[64vh] opacity-90" viewBox="0 0 520 500" preserveAspectRatio="xMaxYMax meet">
+          <defs>
+            <linearGradient id="travelerRim" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fde68a" stop-opacity="0.35"/>
+              <stop offset="30%" stop-color="#1e293b" stop-opacity="0.75"/>
+              <stop offset="100%" stop-color="#0f172a" stop-opacity="0.92"/>
+            </linearGradient>
+          </defs>
+          <path d="M 110 500 L 125 320 Q 130 250 175 235 Q 165 170 205 160 Q 245 160 250 225 Q 285 245 295 320 L 315 500 Z" fill="url(#travelerRim)"/>
+          <path d="M 275 500 L 290 340 Q 305 275 345 265 Q 340 205 375 200 Q 410 205 412 260 Q 445 285 455 360 L 470 500 Z" fill="url(#travelerRim)"/>
+        </svg>
+      </div>
+
+      <!-- UI CONTENT LAYER (z-index: 20) -->
+      <div class="scene-ui-layer max-w-7xl w-full mx-auto px-6 md:px-14 flex items-center mt-14">
+        <div class="max-w-lg space-y-6">
+          <span class="reveal-up inline-block text-xs uppercase tracking-widest text-amber-300 font-semibold px-3 py-1 rounded-full bg-amber-400/15 border border-amber-300/30">
+            Flight Destination Finale • Human Connections
+          </span>
+          <h2 class="reveal-up delay-100 text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-white leading-[1.12] drop-shadow-lg">
+            Live, Learn<br/>and Explore<br/>in France.
+          </h2>
+          <p class="reveal-up delay-200 text-base md:text-lg text-white/90 font-light max-w-md leading-relaxed">
+            Share unforgettable moments with fellow international learners and welcoming locals across the French coast and historic cities.
+          </p>
+          <div class="reveal-up delay-300 pt-2 flex items-center gap-4">
+            <button onclick="openOfferModal('experience')" aria-label="Explore Student Stories" class="w-12 h-12 rounded-full border border-white/75 hover:border-amber-300 hover:bg-amber-400/25 flex items-center justify-center transition-all duration-300 hover:scale-105">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7"/>
+              </svg>
+            </button>
+            <span onclick="openOfferModal('experience')" class="text-sm font-medium text-white/90 hover:text-amber-300 cursor-pointer transition">
+              Read traveler stories
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Storyboard Bottom Caption Bar -->
+      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3.5">
+          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">8</span>
+          <div>
+            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">The Experience</h2>
+            <p class="text-xs md:text-sm text-slate-300/85">Real people and experiences, connected by the flight path.</p>
+          </div>
+        </div>
+        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 08 / 09</span>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECTION 9: THE CALL TO ACTION
+         ========================================== -->
+    <section id="sec-9" data-index="9" class="story-section bg-[#0f172a]">
+      <div class="scene-sky-layer bg-[linear-gradient(180deg,#0c2240_0%,#274060_28%,#9a5b3c_54%,#f59e0b_68%,#1e293b_69%,#091326_100%)]">
+        <div class="sun-glow absolute right-[18%] bottom-[31%] w-56 h-56 rounded-full bg-[radial-gradient(circle,#ffffff_0%,#fef08a_25%,#f59e0b_55%,transparent_75%)]"></div>
+      </div>
+
+      <!-- IN-SCENE GOLDEN HORIZON WAVE LAYER (z-index: 5) -->
+      <canvas class="scene-bird-canvas" data-scene="8"></canvas>
+      <svg class="scene-flight-layer" data-scene-svg="8" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
+
+      <!-- FOREGROUND PHOTO OCCLUSION LAYER (z-index: 10 - Ocean Horizon & Shimmering Waves) -->
+      <div class="scene-fg-layer">
+        <svg class="absolute bottom-12 left-0 w-full h-[32vh]" viewBox="0 0 1440 300" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="seaDepth" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#45271d"/>
+              <stop offset="35%" stop-color="#1e293b"/>
+              <stop offset="100%" stop-color="#050b14"/>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="1440" height="300" fill="url(#seaDepth)"/>
+          <g class="water-shimmer" fill="#fde047">
+            <ellipse cx="1120" cy="12" rx="95" ry="4" opacity="0.95"/>
+            <ellipse cx="1120" cy="26" rx="115" ry="5" opacity="0.8"/>
+            <ellipse cx="1120" cy="44" rx="135" ry="6" opacity="0.65"/>
+            <ellipse cx="1120" cy="68" rx="155" ry="7" opacity="0.5"/>
+            <ellipse cx="1120" cy="98" rx="175" ry="8" opacity="0.35"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- UI CONTENT LAYER (z-index: 20) -->
+      <div class="scene-ui-layer max-w-7xl w-full mx-auto px-6 md:px-14 flex items-center">
+        <div class="max-w-xl space-y-8 -mt-12">
+          <h2 class="reveal-up text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-white leading-[1.12] drop-shadow-md">
+            Your French journey<br/>starts here.
+          </h2>
+
+          <div class="reveal-up delay-200 flex flex-wrap items-center gap-4">
+            <button onclick="openPlannerModal('Tailored French Journey')" class="px-8 py-4 rounded-full bg-white hover:bg-amber-50 text-slate-950 font-semibold text-base md:text-lg shadow-[0_15px_35px_rgba(255,255,255,0.28)] hover:shadow-[0_20px_45px_rgba(251,191,36,0.45)] hover:scale-105 transition-all duration-300 flex items-center gap-3">
+              <span>Plan your experience</span>
+              <svg class="w-5 h-5 text-slate-900" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7"/>
+              </svg>
+            </button>
+
+            <button onclick="scrollToSection(1)" class="px-5 py-4 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-white text-sm font-medium backdrop-blur-md transition">
+              Replay Flight ↑
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Storyboard Bottom Caption Bar -->
+      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3.5">
+          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">9</span>
+          <div>
+            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">The Call to Action</h2>
+            <p class="text-xs md:text-sm text-slate-300/85">A memorable ending that invites the user to take the next step.</p>
+          </div>
+        </div>
+        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 09 / 09</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================
+       INTERACTIVE MODAL FOR DESTINATIONS, OFFERS & TRIP PLANNER
+       ========================================== -->
+  <div id="infoModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/75 backdrop-blur-md">
+    <div class="glass-card rounded-3xl max-w-lg w-full p-8 text-white relative border border-white/30 shadow-2xl transform transition-all">
+      <button onclick="closeModal()" aria-label="Close modal" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white/80 hover:text-white transition">
+        ✕
+      </button>
+      <span id="modalBadge" class="text-xs uppercase tracking-widest text-amber-300 font-semibold">Formaskills Travel</span>
+      <h3 id="modalTitle" class="text-3xl font-semibold mt-1 mb-3">Destination</h3>
+      <p id="modalDescription" class="text-sm md:text-base text-slate-200/90 font-light leading-relaxed mb-6"></p>
+
+      <form id="modalForm" onsubmit="submitPlannerForm(event)" class="space-y-4 border-t border-white/15 pt-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-slate-300 mb-1">Preferred Destination</label>
+            <select id="plannerDest" class="w-full rounded-xl bg-slate-900/80 border border-white/20 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-300">
+              <option value="Sète">Sète — Mediterranean Coast</option>
+              <option value="Montpellier">Montpellier — Student Life</option>
+              <option value="Paris">Paris — Iconic Culture</option>
+              <option value="Multi-Destination">Multi-City French Tour</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-300 mb-1">Experience Focus</label>
+            <select id="plannerFocus" class="w-full rounded-xl bg-slate-900/80 border border-white/20 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-300">
+              <option value="French Learning + Culture">French Learning + Culture</option>
+              <option value="Intensive Immersion">Intensive Language Immersion</option>
+              <option value="Organisation / Group Retreat">Organisation / Group Retreat</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs text-slate-300 mb-1">Your Email</label>
+          <input type="email" required placeholder="you@example.com" class="w-full rounded-xl bg-slate-900/80 border border-white/20 px-3.5 py-2.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-300"/>
+        </div>
+        <button type="submit" class="w-full py-3 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-semibold text-sm transition shadow-lg">
+          Receive Your Custom French Itinerary →
+        </button>
+        <p id="formSuccessMsg" class="hidden text-center text-xs text-emerald-300 font-medium pt-1">
+          Merci ! Your custom Formaskills Travel itinerary is on its way.
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       HYBRID SVG + CANVAS IN-PHOTO BIRD & FLOW PATH ENGINE
+       ========================================== -->
+  <script>
+    /**
+     * WHY THIS GUARANTEES 100% VISIBILITY ON EVERY SCREEN & SCROLL POSITION:
+     * 1. Each section (1 through 8) contains BOTH a responsive `<svg class="scene-flight-layer" viewBox="0 0 1440 900">`
+     *    and a `<canvas class="scene-bird-canvas">` at `z-index: 5` (between the sky background at `z-index: 1`
+     *    and the foreground photo cutouts at `z-index: 10`).
+     * 2. The SVG layer renders:
+     *    - The upper-sky flowing wave guide path (`M 40,220 C 440,85 880,310 1390,155` — a graceful horizontal wave cresting across the top of the section, NOT a U-shape).
+     *    - The progressive glowing golden flight ribbon drawn up to the bird's exact position.
+     *    - A crisp, articulated, flapping white-and-gold Seagull (`<g class="svg-bird-actor">`) with dynamic wing-flapping (`requestAnimationFrame`) so even before any scroll happens, the bird is immediately visible in Section 1!
+     * 3. The Canvas layer adds shimmering golden stardust particles along the bird's wake.
+     */
+    const sectionElements = Array.from(document.querySelectorAll('.story-section'));
+    const sceneSvgs = Array.from(document.querySelectorAll('.scene-flight-layer'));
+    const sceneCanvases = Array.from(document.querySelectorAll('.scene-bird-canvas'));
+    const sceneContexts = sceneCanvases.map(c => c.getContext('2d'));
+    const stepDots = Array.from(document.querySelectorAll('.step-dot'));
+    const statusBadge = document.getElementById('flightStatusBadge');
+
+    // Upper-Sky Flowing S-Curve Wave Definitions (in 1440x900 SVG coordinate space)
+    // Notice Y stays in the upper sky (90..290 out of 900, i.e. 10%..32% from the top) creating a smooth horizontal flow wave!
+    const sceneConfigs = [
+      // Scene 1: Opening - Horizon reveal
+      {
+        pathD: 'M 40,235 C 420,90 910,305 1390,155',
+        subWaveD: 'M 40,255 C 420,115 910,330 1390,175',
+        birdScale: 1.05,
+        defaultT: 0.32
+      },
+      // Scene 2: The Take-off (Larger bird soaring above sunrise clouds)
+      {
+        pathD: 'M 40,250 C 430,85 920,310 1390,150',
+        subWaveD: 'M 40,272 C 430,110 920,335 1390,172',
+        birdScale: 1.38,
+        defaultT: 0.25
+      },
+      // Scene 3: The Destination Reveal (Flows across top sky into the glowing France map)
+      {
+        pathD: 'M 40,220 C 430,85 860,295 1290,185',
+        subWaveD: 'M 40,242 C 430,108 860,318 1290,205',
+        birdScale: 1.05,
+        defaultT: 0.25
+      },
+      // Scene 4: Destination 1 - Sète (Flows across upper Mediterranean sky behind lighthouse beacon)
+      {
+        pathD: 'M 40,225 C 410,85 880,305 1390,155',
+        subWaveD: 'M 40,245 C 410,105 880,325 1390,175',
+        birdScale: 1.0,
+        defaultT: 0.25
+      },
+      // Scene 5: Destination 2 - Montpellier (Flows behind left bougainvillea & upper Triumphal Arch cornice)
+      {
+        pathD: 'M 40,220 C 430,80 900,300 1390,160',
+        subWaveD: 'M 40,240 C 430,102 900,322 1390,180',
+        birdScale: 1.02,
+        defaultT: 0.25
+      },
+      // Scene 6: Destination 3 - Paris (Flows across upper sky behind the Eiffel Tower spire)
+      {
+        pathD: 'M 40,225 C 420,88 890,298 1390,158',
+        subWaveD: 'M 40,245 C 420,108 890,318 1390,178',
+        birdScale: 1.05,
+        defaultT: 0.25
+      },
+      // Scene 7: Our Offers (Flows across the upper sky above the 3 frosted glass cards)
+      {
+        pathD: 'M 40,215 C 440,82 910,290 1390,152',
+        subWaveD: 'M 40,235 C 440,102 910,310 1390,172',
+        birdScale: 1.05,
+        defaultT: 0.25
+      },
+      // Scene 8: The Experience (FINAL DESTINATION: Enters from left, flows across upper sky, and ends at x=1120, y=195)
+      {
+        pathD: 'M 40,235 C 380,85 760,300 1120,195',
+        subWaveD: 'M 40,255 C 380,108 760,320 1120,215',
+        birdScale: 1.15,
+        defaultT: 0.30,
+        endsHere: true
+      },
+      // Scene 9: The Call to Action (Golden sunset horizon trail + soaring bird on right)
+      {
+        pathD: 'M 80,210 C 460,115 880,260 1280,175',
+        subWaveD: 'M 80,230 C 460,135 880,280 1280,195',
+        birdScale: 1.22,
+        defaultT: 0.86,
+        isCtaScene: true
+      }
+    ];
+
+    // Build the SVG elements inside each section immediately
+    const svgSceneHandles = sceneSvgs.map((svgEl, idx) => {
+      const cfg = sceneConfigs[idx];
+      svgEl.innerHTML = `
+        <!-- Subtle full-width upper-sky dotted flow wave guide -->
+        <path d="${cfg.subWaveD}" fill="none" stroke="rgba(255,255,255,0.26)" stroke-width="1.6" stroke-dasharray="5 9" />
+        <path d="${cfg.pathD}" fill="none" stroke="rgba(254,240,138,0.22)" stroke-width="1.8" />
+
+        <!-- Progressive glowing golden flight ribbon -->
+        <path class="active-gold-ribbon" d="${cfg.pathD}" fill="none" stroke="url(#goldFlowGrad)" stroke-width="5" stroke-linecap="round" filter="url(#goldenTrailGlow)" />
+        <path class="active-white-core" d="${cfg.pathD}" fill="none" stroke="#fffef0" stroke-width="2" stroke-linecap="round" />
+
+        <!-- Section 8 Destination Finale Halo -->
+        <g class="finale-halo" transform="translate(1120, 195)" opacity="${cfg.endsHere ? '0.85' : '0'}">
+          <circle r="38" fill="rgba(253, 224, 71, 0.18)" />
+          <circle r="20" fill="rgba(254, 240, 138, 0.35)" />
+          <circle r="6" fill="#ffffff" />
+        </g>
+
+        <!-- Articulated Seagull Actor Group -->
+        <g class="svg-bird-actor" filter="url(#birdDropGlow)" transform="translate(300, 180)">
+          <!-- Golden Aura around Bird -->
+          <ellipse cx="0" cy="0" rx="46" ry="26" fill="rgba(251, 191, 36, 0.18)" />
+          <!-- Far/Back Wing -->
+          <path class="bird-back-wing" d="M -4,-3 Q -22,-38 -52,-46 Q -32,-16 -14,-1 Z" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.8" />
+          <!-- Dark Wingtip on Back Wing -->
+          <path class="bird-back-tip" d="M -42,-40 L -52,-46 L -44,-31 Z" fill="#1e293b" />
+          <!-- Tail Feathers -->
+          <path d="M -26,2 L -46,-6 L -42,4 L -47,10 L -24,6 Z" fill="#e2e8f0" />
+          <!-- Sleek Aerodynamic Seagull Body -->
+          <path d="M -28,3 C -14,-7 12,-7 30,-1 C 36,0 39,2 34,5 C 16,12 -10,11 -28,3 Z" fill="url(#wingLitGrad)" stroke="#fef08a" stroke-width="0.9" />
+          <!-- Golden Beak & Eye -->
+          <polygon points="33,0 46,3 33,5" fill="#f59e0b" />
+          <circle cx="24" cy="0.5" r="1.8" fill="#0f172a" />
+          <!-- Near/Front Swept Wing -->
+          <path class="bird-front-wing" d="M 2,1 Q -14,-44 -60,-54 Q -30,-14 -8,4 Z" fill="url(#wingLitGrad)" stroke="#fef08a" stroke-width="1" />
+          <!-- Dark Wingtip on Near Wing -->
+          <path class="bird-front-tip" d="M -48,-46 L -60,-54 L -48,-36 Z" fill="#0f172a" />
+        </g>
+      `;
+
+      const ribbonPath = svgEl.querySelector('.active-gold-ribbon');
+      const corePath = svgEl.querySelector('.active-white-core');
+      const birdActor = svgEl.querySelector('.svg-bird-actor');
+      const backWing = svgEl.querySelector('.bird-back-wing');
+      const backTip = svgEl.querySelector('.bird-back-tip');
+      const frontWing = svgEl.querySelector('.bird-front-wing');
+      const frontTip = svgEl.querySelector('.bird-front-tip');
+      const finaleHalo = svgEl.querySelector('.finale-halo');
+
+      const totalLen = ribbonPath.getTotalLength() || 1400;
+      ribbonPath.style.strokeDasharray = `${totalLen}`;
+      corePath.style.strokeDasharray = `${totalLen}`;
+
+      return {
+        svgEl,
+        ribbonPath,
+        corePath,
+        birdActor,
+        backWing,
+        backTip,
+        frontWing,
+        frontTip,
+        finaleHalo,
+        totalLen,
+        currentT: cfg.defaultT,
+        targetT: cfg.defaultT,
+        particles: []
+      };
+    });
+
+    // Resize Canvas Layer for Golden Stardust Particles
+    function resizeAllCanvases() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      sceneCanvases.forEach((canvas, idx) => {
+        const rect = sectionElements[idx].getBoundingClientRect();
+        const w = Math.max(rect.width, window.innerWidth);
+        const h = Math.max(rect.height, window.innerHeight);
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        sceneContexts[idx].setTransform(dpr, 0, 0, dpr, 0, 0);
+      });
+    }
+    window.addEventListener('resize', resizeAllCanvases);
+    resizeAllCanvases();
+
+    function clamp(val, min, max) {
+      return Math.max(min, Math.min(max, val));
+    }
+
+    function lerp(a, b, t) {
+      return a + (b - a) * t;
+    }
+
+    // Compute per-section target progress based on scroll position
+    let activeSectionIdx = 0;
+
+    function updateScrollTargets() {
+      const vh = window.innerHeight || 800;
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+
+      let bestIdx = 0;
+      let bestVisibility = -1;
+
+      sectionElements.forEach((sec, idx) => {
+        const rect = sec.getBoundingClientRect();
+        const cfg = sceneConfigs[idx];
+        const handle = svgSceneHandles[idx];
+
+        // Calculate how much of this section is visible in viewport
+        const visiblePx = Math.min(vh, rect.bottom) - Math.max(0, rect.top);
+        const visRatio = clamp(visiblePx / vh, 0, 1);
+
+        if (visRatio > bestVisibility) {
+          bestVisibility = visRatio;
+          bestIdx = idx;
+        }
+
+        if (visRatio > 0.18) {
+          sec.classList.add('in-view');
+        }
+
+        // Map section position to bird flight progress t in [0.12 .. 0.98]
+        // Even at scrollY = 0 on Section 1, bird starts visibly at t = 0.28 and flies to 0.98 as you scroll down!
+        if (idx === 0 && scrollY < 30) {
+          handle.targetT = 0.28;
+        } else if (cfg.isCtaScene) {
+          handle.targetT = clamp(0.65 + (1 - rect.top / vh) * 0.25, 0.55, 0.92);
+        } else {
+          // As section scrolls from entering bottom (rect.top = vh*0.75) to leaving top (rect.top = -vh*0.55)
+          const rawProgress = (vh * 0.72 - rect.top) / (vh * 1.25);
+          const maxT = cfg.endsHere ? 0.99 : 0.96;
+          handle.targetT = clamp(rawProgress, 0.14, maxT);
+        }
+      });
+
+      activeSectionIdx = bestIdx;
+
+      // Update right-hand storyboard navigation dots
+      stepDots.forEach((dot, idx) => {
+        if (idx === activeSectionIdx) {
+          dot.className = 'step-dot w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center transition-all bg-amber-400 text-slate-950 shadow-[0_0_15px_rgba(251,191,36,0.8)] scale-110';
+        } else {
+          dot.className = 'step-dot w-6 h-6 rounded-full text-[11px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15';
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateScrollTargets, { passive: true });
+    updateScrollTargets();
+
+    // Main 60FPS Animation Loop (Flaps wings, interpolates bird position along upper-sky wave, and renders golden particles)
+    let lastTime = performance.now();
+
+    function animateFlightLoop(now) {
+      const dt = Math.min((now - lastTime) / 1000, 0.05);
+      lastTime = now;
+
+      updateScrollTargets();
+
+      sceneConfigs.forEach((cfg, idx) => {
+        const handle = svgSceneHandles[idx];
+        const prevT = handle.currentT;
+        handle.currentT = lerp(handle.currentT, handle.targetT, 0.12);
+
+        const t = clamp(handle.currentT, 0.05, 0.995);
+        const len = handle.totalLen;
+        const dist = t * len;
+
+        // 1. Update Progressive Golden Ribbon Dashoffset
+        const offset = Math.max(0, len - dist);
+        handle.ribbonPath.style.strokeDashoffset = `${offset}`;
+        handle.corePath.style.strokeDashoffset = `${offset}`;
+
+        // 2. Get Exact Point & Tangent Angle on the Upper-Sky Wave Path
+        const pt = handle.ribbonPath.getPointAtLength(dist);
+        const ptAhead = handle.ribbonPath.getPointAtLength(Math.min(len, dist + 18));
+        const angleRad = Math.atan2(ptAhead.y - pt.y, ptAhead.x - pt.x);
+        const angleDeg = clamp((angleRad * 180) / Math.PI, -28, 28);
+
+        // Gentle hovering bobbing motion in SVG space
+        const hoverBob = Math.sin(now * 0.004 + idx) * 6;
+        const bx = pt.x;
+        const by = pt.y + hoverBob;
+
+        // Position & orient the Seagull on the upper-sky wave path
+        handle.birdActor.setAttribute(
+          'transform',
+          `translate(${bx.toFixed(1)}, ${by.toFixed(1)}) rotate(${angleDeg.toFixed(1)}) scale(${cfg.birdScale})`
+        );
+
+        // 3. Dynamic Wing Flapping Animation
+        const speedBoost = Math.min(Math.abs(handle.targetT - prevT) * 45, 1.8);
+        const flapCycle = Math.sin(now * (0.0075 + speedBoost * 0.002) + idx * 0.9);
+        const frontWingY = -52 + flapCycle * 28; // Flaps between -80 (upstroke) and -24 (downstroke)
+        const backWingY = -44 + Math.sin(now * 0.0075 + idx * 0.9 - 0.35) * 22;
+
+        handle.frontWing.setAttribute('d', `M 2,1 Q -14,${(frontWingY * 0.78).toFixed(1)} -60,${frontWingY.toFixed(1)} Q -30,${(frontWingY * 0.28).toFixed(1)} -8,4 Z`);
+        handle.frontTip.setAttribute('d', `M -48,${(frontWingY * 0.86).toFixed(1)} L -60,${frontWingY.toFixed(1)} L -48,${(frontWingY * 0.68).toFixed(1)} Z`);
+        handle.backWing.setAttribute('d', `M -4,-3 Q -22,${(backWingY * 0.78).toFixed(1)} -52,${backWingY.toFixed(1)} Q -32,${(backWingY * 0.32).toFixed(1)} -14,-1 Z`);
+        handle.backTip.setAttribute('d', `M -42,${(backWingY * 0.86).toFixed(1)} L -52,${backWingY.toFixed(1)} L -44,${(backWingY * 0.68).toFixed(1)} Z`);
+
+        // 4. Section 8 Finale Halo Pulse
+        if (cfg.endsHere && handle.finaleHalo) {
+          const haloPulse = 0.65 + Math.sin(now * 0.005) * 0.25;
+          handle.finaleHalo.setAttribute('opacity', haloPulse.toFixed(2));
+        }
+
+        // 5. Render Shimmering Golden Wake Particles on the Section Canvas
+        const canvas = sceneCanvases[idx];
+        const ctx = sceneContexts[idx];
+        const cw = canvas.width / Math.min(window.devicePixelRatio || 1, 2);
+        const ch = canvas.height / Math.min(window.devicePixelRatio || 1, 2);
+
+        ctx.clearRect(0, 0, cw, ch);
+
+        // Convert 1440x900 SVG coords to canvas pixel coords
+        const px = (bx / 1440) * cw;
+        const py = (by / 900) * ch;
+
+        if (Math.random() < 0.45) {
+          handle.particles.push({
+            x: px - 18 + (Math.random() - 0.5) * 14,
+            y: py + (Math.random() - 0.5) * 14,
+            vx: -0.6 - Math.random() * 1.1,
+            vy: (Math.random() - 0.5) * 0.6,
+            r: 1.5 + Math.random() * 2.5,
+            alpha: 0.9
+          });
+        }
+
+        for (let i = handle.particles.length - 1; i >= 0; i--) {
+          const p = handle.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha -= 0.018;
+          if (p.alpha <= 0) {
+            handle.particles.splice(i, 1);
+            continue;
+          }
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(254, 240, 138, ${p.alpha.toFixed(2)})`;
+          ctx.fill();
+        }
+      });
+
+      // Update live top-nav status indicator
+      if (statusBadge) {
+        const activeHandle = svgSceneHandles[activeSectionIdx];
+        const pct = Math.round((activeHandle ? activeHandle.currentT : 0.3) * 100);
+        const label = activeSectionIdx === 7 ? 'Section 8 Finale' : `Scene ${activeSectionIdx + 1}`;
+        statusBadge.textContent = `${label} • Bird Flight ${pct}%`;
+      }
+
+      // Handle Auto-Scroll Flight Mode
+      if (isAutoScrolling) {
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        if (window.scrollY < maxScroll - 4) {
+          window.scrollBy(0, 2.6);
+        } else {
+          toggleAutoFlight(false);
+        }
+      }
+
+      requestAnimationFrame(animateFlightLoop);
+    }
+
+    // Start animation loop immediately
+    requestAnimationFrame(animateFlightLoop);
+
+    // ==========================================
+    // UI INTERACTIONS, NAVIGATION & MODALS
+    // ==========================================
+    function scrollToSection(stepNum) {
+      const target = document.getElementById(`sec-${stepNum}`);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    let isAutoScrolling = false;
+    function toggleAutoFlight(forceState) {
+      isAutoScrolling = typeof forceState === 'boolean' ? forceState : !isAutoScrolling;
+      const btnText = document.getElementById('autoFlightText');
+      const dot = document.getElementById('autoFlightDot');
+      if (isAutoScrolling) {
+        btnText.textContent = 'Pause Flight';
+        dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-ping';
+      } else {
+        btnText.textContent = 'Auto-Scroll Flight';
+        dot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-pulse';
+      }
+    }
+
+    function toggleFrameMode() {
+      document.body.classList.toggle('storyboard-framed');
+      const isFramed = document.body.classList.contains('storyboard-framed');
+      document.getElementById('frameModeText').textContent = isFramed ? 'Full Bleed View' : 'Cinema View';
+      setTimeout(resizeAllCanvases, 100);
+    }
+
+    const modalContentData = {
+      sete: {
+        badge: 'Destination 01 • Mediterranean Harbor',
+        title: 'Sète — The Venice of Languedoc',
+        desc: 'Nestled between the Étang de Thau and the glittering Mediterranean Sea, Sète offers authentic maritime heritage, canalside cafés, water jousting traditions, and immersive French conversation with welcoming coastal locals.',
+        dest: 'Sète'
+      },
+      montpellier: {
+        badge: 'Destination 02 • Vibrant Student Capital',
+        title: 'Montpellier — Sunlit Learning & Lifestyle',
+        desc: 'With 300 days of sunshine a year, historic limestone plazas like the Promenade du Peyrou, and one of Europe’s liveliest student communities, Montpellier blends academic excellence with effortless Mediterranean living.',
+        dest: 'Montpellier'
+      },
+      paris: {
+        badge: 'Destination 03 • Iconic Capital',
+        title: 'Paris — Culture, History & Art de Vivre',
+        desc: 'Experience French where history, gastronomy, and art converge. Practice your language skills in literary cafés, world-renowned museums, and along the golden-hour banks of the Seine.',
+        dest: 'Paris'
+      },
+      learning: {
+        badge: 'Formaskills Offer • Language Mastery',
+        title: 'Accredited French Learning',
+        desc: 'Small-group and tailored 1-on-1 French courses designed for rapid real-world fluency, certified under European CEFR standards and eligible for professional training programs.',
+        dest: 'Multi-Destination'
+      },
+      culture: {
+        badge: 'Formaskills Offer • Immersion',
+        title: 'Curated Cultural Experiences',
+        desc: 'Go beyond textbooks with guided vineyard tastings, Mediterranean sailing excursions, culinary workshops with French chefs, and local festival access.',
+        dest: 'Multi-Destination'
+      },
+      accommodation: {
+        badge: 'Formaskills Offer • Comfort & Community',
+        title: 'Handpicked Accommodation Options',
+        desc: 'Choose between carefully vetted French host families for daily dinner-table conversation, boutique student residences, or private coastal apartments.',
+        dest: 'Multi-Destination'
+      },
+      experience: {
+        badge: 'Scene 08 • Traveler Stories',
+        title: 'Live, Learn & Explore Together',
+        desc: 'Over 96% of Formaskills participants say the friendships formed while exploring Sète, Montpellier, and Paris made their French fluency feel effortless and unforgettable.',
+        dest: 'Multi-Destination'
+      }
+    };
+
+    function openDestinationModal(key) {
+      const item = modalContentData[key];
+      if (!item) return;
+      document.getElementById('modalBadge').textContent = item.badge;
+      document.getElementById('modalTitle').textContent = item.title;
+      document.getElementById('modalDescription').textContent = item.desc;
+      document.getElementById('plannerDest').value = item.dest;
+      document.getElementById('formSuccessMsg').classList.add('hidden');
+      const modal = document.getElementById('infoModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function openOfferModal(key) {
+      openDestinationModal(key);
+    }
+
+    function openPlannerModal(contextTitle) {
+      document.getElementById('modalBadge').textContent = 'Formaskills Travel • Custom Itinerary';
+      document.getElementById('modalTitle').textContent = contextTitle || 'Plan Your French Journey';
+      document.getElementById('modalDescription').textContent = 'Tell us where you would like to fly. Our advisors in France will craft a personalized language, cultural, and accommodation program for you or your organisation.';
+      document.getElementById('formSuccessMsg').classList.add('hidden');
+      const modal = document.getElementById('infoModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('infoModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function submitPlannerForm(e) {
+      e.preventDefault();
+      document.getElementById('formSuccessMsg').classList.remove('hidden');
+      setTimeout(() => {
+        closeModal();
+      }, 1800);
+    }
+  </script>
+</body>
+</html>
