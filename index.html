@@ -3,23 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Formaskills Travel — Your French Journey Begins Before You Land</title>
-  <meta name="description" content="Immersive French language stays, Erasmus+ group mobility, cultural discovery, and au pair homestays across Sète, Montpellier, Paris, and Nice. Coordinated from Sète." />
-  <meta name="theme-color" content="#030914" />
+  <title>Formaskills Travel — French Immersion Cohorts &amp; Educational Mobility</title>
+  <meta name="description" content="Boutique French language stays, Erasmus+ group mobility, cultural discovery, and au pair homestays across Sète, Montpellier, Paris, and Nice. Coordinated from Sète." />
+  <meta name="theme-color" content="#040a18" />
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
 
   <!-- Tailwind CSS & Google Fonts -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --gold-glow: #ffd166;
-      --gold-warm: #ffb703;
-      --med-blue: #0284c7;
-      --dark-navy: #030914;
+      --gold-warm: #f59e0b;
+      --navy-deep: #040a18;
     }
 
     * {
@@ -30,47 +29,46 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: #030914;
+      background-color: #040a18;
       color: #ffffff;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       overflow-x: hidden;
     }
 
-    .font-serif-italic {
+    .font-serif {
       font-family: 'Playfair Display', Georgia, serif;
-      font-style: italic;
     }
 
-    /* Glassmorphism system */
-    .glass-card {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.20);
-      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    /* Refined Luxury Glassmorphism */
+    .premium-panel {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.18);
     }
 
-    .glass-card-interactive {
-      background: linear-gradient(145deg, rgba(30, 52, 84, 0.52) 0%, rgba(15, 26, 44, 0.40) 100%);
+    .premium-card {
+      background: linear-gradient(145deg, rgba(15, 25, 45, 0.65) 0%, rgba(6, 12, 24, 0.55) 100%);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35), inset 0 0 24px rgba(255, 215, 130, 0.06);
-      transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .glass-card-interactive:hover {
-      transform: translateY(-8px) scale(1.02);
-      border-color: rgba(255, 214, 120, 0.65);
-      box-shadow: 0 28px 55px rgba(0, 0, 0, 0.5), 0 0 35px rgba(255, 195, 90, 0.28), inset 0 0 30px rgba(255, 215, 130, 0.14);
+    .premium-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(245, 158, 11, 0.45);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(245, 158, 11, 0.12);
     }
 
-    /* Section transitions & scroll animations */
+    /* Cinematic story section */
     .story-section {
       position: relative;
       width: 100%;
       height: 100vh;
-      min-height: 700px;
+      min-height: 720px;
       overflow: hidden;
       display: flex;
       align-items: center;
@@ -79,8 +77,8 @@
 
     .reveal-up {
       opacity: 0;
-      transform: translateY(32px);
-      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(28px);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .story-section.in-view .reveal-up {
@@ -88,20 +86,19 @@
       transform: translateY(0);
     }
 
-    .delay-100 { transition-delay: 0.12s; }
-    .delay-200 { transition-delay: 0.24s; }
-    .delay-300 { transition-delay: 0.36s; }
-    .delay-400 { transition-delay: 0.48s; }
+    .delay-100 { transition-delay: 0.15s; }
+    .delay-200 { transition-delay: 0.30s; }
+    .delay-300 { transition-delay: 0.45s; }
 
-    /* Parallax image scale effect */
+    /* Parallax Background Photography */
     .bg-parallax {
       position: absolute;
-      inset: -4%;
-      width: 108%;
-      height: 108%;
+      inset: -5%;
+      width: 110%;
+      height: 110%;
       object-fit: cover;
       transform: scale(1.08);
-      transition: transform 1.8s cubic-bezier(0.16, 1, 0.3, 1), filter 1.2s ease;
+      transition: transform 2.2s cubic-bezier(0.16, 1, 0.3, 1), filter 1.4s ease;
       z-index: 1;
     }
 
@@ -109,11 +106,11 @@
       transform: scale(1.0);
     }
 
-    /* Multi-Plane Depth Layers */
+    /* Multi-plane depth layers */
     .scene-sky-layer {
       position: absolute;
       inset: 0;
-      z-index: 1;
+      z-index: 2;
       pointer-events: none;
     }
 
@@ -136,25 +133,18 @@
       pointer-events: none;
     }
 
-    .scene-fg-layer {
-      position: absolute;
-      inset: 0;
-      z-index: 10;
-      pointer-events: none;
-      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
     .scene-ui-layer {
       position: relative;
       z-index: 20;
+      width: 100%;
     }
 
     /* France SVG Map Glow */
     .france-outline {
-      fill: rgba(120, 185, 255, 0.08);
-      stroke: #9cd5ff;
-      stroke-width: 2.2;
-      filter: drop-shadow(0 0 12px rgba(135, 206, 250, 0.75)) drop-shadow(0 0 28px rgba(255, 210, 120, 0.35));
+      fill: rgba(255, 255, 255, 0.03);
+      stroke: rgba(255, 255, 255, 0.45);
+      stroke-width: 1.8;
+      filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.35));
       stroke-dasharray: 1200;
       stroke-dashoffset: 1200;
       transition: stroke-dashoffset 2.4s cubic-bezier(0.25, 1, 0.5, 1);
@@ -165,44 +155,35 @@
     }
 
     @keyframes pulseGlow {
-      0%, 100% { transform: scale(1); opacity: 0.85; }
-      50% { transform: scale(1.08); opacity: 1; }
+      0%, 100% { transform: scale(1); opacity: 0.75; }
+      50% { transform: scale(1.06); opacity: 0.95; }
     }
 
     .sun-glow {
-      animation: pulseGlow 5s ease-in-out infinite;
+      animation: pulseGlow 6s ease-in-out infinite;
     }
 
-    @keyframes shimmerWave {
-      0%, 100% { opacity: 0.55; transform: scaleX(1); }
-      50% { opacity: 0.9; transform: scaleX(1.06); }
-    }
-
-    .water-shimmer {
-      animation: shimmerWave 4s ease-in-out infinite;
-    }
-
-    /* Custom Scrollbar */
+    /* Minimalist Scrollbar */
     ::-webkit-scrollbar {
-      width: 8px;
+      width: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #030914;
+      background: #040a18;
     }
     ::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, #0284c7, #fbbf24);
+      background: rgba(245, 158, 11, 0.6);
       border-radius: 9999px;
     }
   </style>
 </head>
 <body class="relative selection:bg-amber-400 selection:text-slate-950">
 
-  <!-- SHARED GLOBAL SVG DEFS FOR GLOWING FLOW PATHS & BIRD -->
+  <!-- SHARED SVG DEFS FOR FLIGHT PATHS & BIRD -->
   <svg width="0" height="0" class="fixed pointer-events-none">
     <defs>
       <linearGradient id="goldFlowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.18"/>
-        <stop offset="35%" stop-color="#fcd34d" stop-opacity="0.88"/>
+        <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.15"/>
+        <stop offset="35%" stop-color="#fbbf24" stop-opacity="0.85"/>
         <stop offset="80%" stop-color="#fef08a" stop-opacity="1"/>
         <stop offset="100%" stop-color="#ffffff" stop-opacity="1"/>
       </linearGradient>
@@ -214,8 +195,8 @@
       </linearGradient>
 
       <filter id="goldenTrailGlow" x="-20%" y="-40%" width="140%" height="180%">
-        <feGaussianBlur stdDeviation="6" result="blur1"/>
-        <feGaussianBlur stdDeviation="14" result="blur2"/>
+        <feGaussianBlur stdDeviation="5" result="blur1"/>
+        <feGaussianBlur stdDeviation="12" result="blur2"/>
         <feMerge>
           <feMergeNode in="blur2"/>
           <feMergeNode in="blur1"/>
@@ -224,57 +205,52 @@
       </filter>
 
       <filter id="birdDropGlow" x="-40%" y="-40%" width="180%" height="180%">
-        <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#fbbf24" flood-opacity="0.65"/>
-        <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.45"/>
+        <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#f59e0b" flood-opacity="0.55"/>
       </filter>
     </defs>
   </svg>
 
   <!-- ==========================================
-       TOP NAVIGATION BAR
+       CLEAN, EDITORIAL TOP NAVIGATION BAR
        ========================================== -->
-  <header id="mainNav" class="fixed top-0 left-0 right-0 z-40 transition-all duration-500 px-6 md:px-14 py-4 flex items-center justify-between bg-gradient-to-b from-slate-950/90 via-slate-950/60 to-transparent backdrop-blur-[6px]">
-    <!-- Brand Logo -->
-    <a href="#sec-1" class="flex flex-col items-center group focus:outline-none">
-      <div class="relative flex flex-col items-center">
-        <svg class="w-24 h-7 -mb-1.5 text-white transition-transform duration-500 group-hover:translate-x-1" viewBox="0 0 120 35" fill="none">
-          <path d="M12 28 C 38 6, 75 6, 98 20" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-          <path d="M93 12 L103 20 L112 15 L105 22 L109 29 L100 24 L91 27 L97 21 Z" fill="currentColor"/>
+  <header id="mainNav" class="fixed top-0 left-0 right-0 z-40 transition-all duration-500 px-6 md:px-16 py-5 flex items-center justify-between bg-gradient-to-b from-slate-950/90 via-slate-950/40 to-transparent backdrop-blur-[4px]">
+    <!-- Brand Signature -->
+    <a href="#sec-1" class="flex items-center gap-3 group focus:outline-none">
+      <div class="w-8 h-8 rounded-full border border-amber-300/40 flex items-center justify-center text-amber-300 bg-amber-400/10 group-hover:bg-amber-400/20 transition">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 28 C 38 6, 75 6, 98 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M5 12l7-7 7 7"/>
         </svg>
-        <span class="text-lg md:text-xl font-semibold tracking-tight leading-none text-white">Formaskills</span>
-        <span class="text-sm md:text-base font-normal tracking-wide leading-tight text-amber-300">Travel</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-base md:text-lg font-bold tracking-tight text-white leading-none">Formaskills <span class="font-serif italic font-normal text-amber-300">Travel</span></span>
+        <span class="text-[10px] uppercase tracking-widest text-slate-400 mt-0.5">Sète · France</span>
       </div>
     </a>
 
-    <!-- Navigation Links based on Client Site -->
-    <nav class="hidden lg:flex items-center space-x-8 text-sm font-medium text-white/90">
+    <!-- Navigation Links -->
+    <nav class="hidden lg:flex items-center space-x-10 text-xs uppercase tracking-widest font-medium text-slate-200">
       <a href="#sec-3" class="hover:text-amber-300 transition-colors">Destinations</a>
-      <a href="#sec-8" class="hover:text-amber-300 transition-colors">Our Offers</a>
-      <a href="#sec-8" onclick="openOfferModal('for-me')" class="hover:text-amber-300 transition-colors">For Me</a>
-      <a href="#sec-8" onclick="openOfferModal('for-org')" class="hover:text-amber-300 transition-colors">For Organisations</a>
+      <a href="#sec-8" class="hover:text-amber-300 transition-colors">Programmes &amp; Offers</a>
+      <a href="#sec-8" onclick="openOfferModal('for-me')" class="hover:text-amber-300 transition-colors">For Individuals</a>
+      <a href="#sec-8" onclick="openOfferModal('organisations')" class="hover:text-amber-300 transition-colors">Erasmus+ &amp; Groups</a>
       <a href="#sec-10" class="hover:text-amber-300 transition-colors">FAQ &amp; Contact</a>
     </nav>
 
-    <!-- Right Controls: Flight Status + Auto-Flight + Enquire CTA -->
+    <!-- Right Controls -->
     <div class="flex items-center gap-3">
-      <!-- Live Bird Flight Status Pill -->
-      <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-amber-400/15 border border-amber-300/40 text-amber-200 backdrop-blur-md">
-        <span class="w-2 h-2 rounded-full bg-amber-300 animate-ping"></span>
-        <span id="flightStatusBadge">Scene 1 • Flight 28%</span>
-      </div>
-
       <!-- Auto-Flight Toggle -->
-      <button id="autoFlightBtn" onclick="toggleAutoFlight()" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium bg-amber-400/20 hover:bg-amber-400/35 border border-amber-300/50 text-white transition-all backdrop-blur-md shadow-lg" title="Automatic Cinematic Storyboard Scroll">
+      <button id="autoFlightBtn" onclick="toggleAutoFlight()" class="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium bg-white/10 hover:bg-white/20 border border-white/20 text-slate-200 hover:text-white transition-all backdrop-blur-md">
         <span id="autoFlightDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-        <span id="autoFlightText">Auto-Fly</span>
+        <span id="autoFlightText">Auto-Flight</span>
       </button>
 
-      <!-- Direct Enquiry Trigger -->
-      <button onclick="openPlannerModal('Enquire / Start Project')" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-white hover:bg-amber-100 text-slate-950 transition-all shadow-md">
-        Enquire
+      <!-- Primary Action CTA -->
+      <button onclick="scrollToSection(10)" class="px-5 py-2 rounded-full text-xs uppercase tracking-wider font-semibold bg-amber-400 hover:bg-amber-300 text-slate-950 transition-all shadow-[0_4px_20px_rgba(245,158,11,0.3)] hover:scale-105">
+        Enquire Now
       </button>
 
-      <!-- Mobile Menu Button -->
+      <!-- Mobile Menu Toggle -->
       <button onclick="toggleMobileMenu()" aria-label="Menu" class="lg:hidden p-2 rounded-lg text-white/90 hover:text-white hover:bg-white/10 transition">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
@@ -284,226 +260,180 @@
   </header>
 
   <!-- Mobile Drawer Menu -->
-  <div id="mobileDrawer" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl p-8 flex flex-col justify-between hidden lg:hidden">
+  <div id="mobileDrawer" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-2xl p-8 flex flex-col justify-between hidden lg:hidden">
     <div>
       <div class="flex items-center justify-between pb-6 border-b border-white/15">
-        <span class="text-xl font-bold text-white">Formaskills <span class="text-amber-300">Travel</span></span>
+        <span class="text-xl font-bold text-white">Formaskills <span class="font-serif italic text-amber-300">Travel</span></span>
         <button onclick="toggleMobileMenu()" class="text-white text-2xl p-2">✕</button>
       </div>
-      <nav class="flex flex-col gap-6 mt-8 text-lg font-medium text-slate-200">
+      <nav class="flex flex-col gap-6 mt-8 text-base uppercase tracking-wider font-medium text-slate-300">
         <a href="#sec-1" onclick="toggleMobileMenu()" class="hover:text-amber-300">Home</a>
         <a href="#sec-3" onclick="toggleMobileMenu()" class="hover:text-amber-300">Destinations (Sète, Montpellier, Paris, Nice)</a>
         <a href="#sec-8" onclick="toggleMobileMenu()" class="hover:text-amber-300">Our Offers (French, Culture, Housing)</a>
-        <a href="#sec-9" onclick="toggleMobileMenu()" class="hover:text-amber-300">The Experience &amp; Community</a>
-        <a href="#sec-10" onclick="toggleMobileMenu()" class="hover:text-amber-300">Plan Your Project / Contact</a>
+        <a href="#sec-9" onclick="toggleMobileMenu()" class="hover:text-amber-300">The Experience</a>
+        <a href="#sec-10" onclick="toggleMobileMenu()" class="hover:text-amber-300">Plan a Stay &amp; Contact</a>
       </nav>
     </div>
-    <div class="border-t border-white/15 pt-6 text-xs text-slate-400 space-y-2">
+    <div class="border-t border-white/15 pt-6 text-xs text-slate-400 space-y-1">
       <p>6 rue Voltaire, 34200 Sète, France</p>
       <p>contact.skillstravel@gmail.com · +33 9 75 46 22 81</p>
     </div>
   </div>
 
   <!-- ==========================================
-       RIGHT SIDE SCENE SELECTOR (1 - 10)
+       SLENDER RIGHT-SIDE PROGRESS INDICATOR
        ========================================== -->
-  <aside class="fixed right-4 md:right-6 top-1/2 -translate-y-1/2 z-40 hidden sm:flex flex-col items-center gap-2 bg-slate-950/50 backdrop-blur-md border border-white/15 px-2 py-3 rounded-full shadow-2xl">
-    <button onclick="scrollToSection(1)" data-step="1" class="step-dot w-6 h-6 rounded-full text-[10px] font-bold flex items-center justify-center transition-all bg-white text-slate-950 shadow-md" title="1. Opening">1</button>
-    <button onclick="scrollToSection(2)" data-step="2" class="step-dot w-6 h-6 rounded-full text-[10px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15" title="2. The Take-off">2</button>
-    <button onclick="scrollToSection(3)" data-step="3" class="step-dot w-6 h-6 rounded-full text-[10px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15" title="3. France Map">3</button>
-    <button onclick="scrollToSection(4)" data-step="4" class="step-dot w-6 h-6 rounded-full text-[10px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15" title="4. Sète HQ">4</button>
-    <button onclick="scrollToSection(5)" data-step="5" class="step-dot w-6 h-6 rounded-full text-[10px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15" title="5. Montpellier">5</button>
-    <button onclick="scrollToSection(6)" data-step="6" class="step-dot w-6 h-6 rounded-full text-[10px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15" title="6. Paris">6</button>
-    <button onclick="scrollToSection(7)" data-step="7" class="step-dot w-6 h-6 rounded-full text-[10px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15" title="7. Nice">7</button>
-    <button onclick="scrollToSection(8)" data-step="8" class="step-dot w-6 h-6 rounded-full text-[10px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15" title="8. Offers &amp; Programs">8</button>
-    <button onclick="scrollToSection(9)" data-step="9" class="step-dot w-6 h-6 rounded-full text-[10px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15" title="9. The Experience">9</button>
-    <button onclick="scrollToSection(10)" data-step="10" class="step-dot w-6 h-6 rounded-full text-[10px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15" title="10. Plan &amp; FAQ">10</button>
+  <aside class="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center gap-3">
+    <div class="w-[1px] h-12 bg-gradient-to-b from-transparent via-white/30 to-white/10"></div>
+    <button onclick="scrollToSection(1)" data-step="1" class="step-dot w-2.5 h-2.5 rounded-full bg-white transition-all scale-125" title="1. Horizon"></button>
+    <button onclick="scrollToSection(2)" data-step="2" class="step-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all" title="2. The Take-off"></button>
+    <button onclick="scrollToSection(3)" data-step="3" class="step-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all" title="3. France Map"></button>
+    <button onclick="scrollToSection(4)" data-step="4" class="step-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all" title="4. Sète HQ"></button>
+    <button onclick="scrollToSection(5)" data-step="5" class="step-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all" title="5. Montpellier"></button>
+    <button onclick="scrollToSection(6)" data-step="6" class="step-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all" title="6. Paris"></button>
+    <button onclick="scrollToSection(7)" data-step="7" class="step-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all" title="7. Nice"></button>
+    <button onclick="scrollToSection(8)" data-step="8" class="step-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all" title="8. Offers"></button>
+    <button onclick="scrollToSection(9)" data-step="9" class="step-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all" title="9. Experience"></button>
+    <button onclick="scrollToSection(10)" data-step="10" class="step-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all" title="10. Planner &amp; FAQ"></button>
+    <div class="w-[1px] h-12 bg-gradient-to-b from-white/10 via-white/30 to-transparent"></div>
   </aside>
 
   <!-- ==========================================
-       MAIN 10-SCENE CINEMATIC SCROLL EXPERIENCE
+       MAIN 10-SECTION CINEMATIC JOURNEY
        ========================================== -->
   <main id="storyContainer">
 
     <!-- ==========================================
-         SCENE 1: OPENING — HORIZON REVEAL
+         SCENE 1: OPENING HERO — HORIZON REVEAL
          ========================================== -->
-    <section id="sec-1" data-index="1" class="story-section in-view bg-[#020817]">
-      <div class="scene-sky-layer overflow-hidden">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_78%,rgba(56,189,248,0.28)_0%,rgba(14,30,64,0.85)_48%,#020611_85%)]"></div>
-        <div class="sun-glow absolute left-[56%] bottom-[19%] -translate-x-1/2 w-80 h-80 rounded-full bg-[radial-gradient(circle,rgba(255,250,220,1)_0%,rgba(255,190,70,0.85)_22%,rgba(251,146,60,0.25)_55%,transparent_75%)] blur-[6px]"></div>
-        <div class="absolute left-1/2 bottom-[25.5%] -translate-x-1/2 w-[85vw] h-[3px] bg-gradient-to-r from-transparent via-amber-200 to-transparent opacity-80 blur-[1px]"></div>
+    <section id="sec-1" data-index="1" class="story-section in-view bg-[#040a18]">
+      <div class="scene-sky-layer">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_75%,rgba(56,189,248,0.20)_0%,rgba(6,16,36,0.85)_50%,#040a18_90%)]"></div>
+        <div class="sun-glow absolute left-[54%] bottom-[20%] -translate-x-1/2 w-96 h-96 rounded-full bg-[radial-gradient(circle,rgba(255,250,220,0.95)_0%,rgba(245,158,11,0.55)_25%,rgba(2,132,199,0.15)_60%,transparent_75%)] blur-[10px]"></div>
+        <div class="absolute left-1/2 bottom-[26%] -translate-x-1/2 w-[80vw] h-[1px] bg-gradient-to-r from-transparent via-amber-200/80 to-transparent"></div>
       </div>
 
       <!-- IN-SCENE BIRD & FLOW PATH LAYER (z-index: 5) -->
       <canvas class="scene-bird-canvas" data-scene="0"></canvas>
       <svg class="scene-flight-layer" data-scene-svg="0" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
 
-      <!-- FOREGROUND OCCLUSION LAYER (Curved Earth Horizon) -->
-      <div class="scene-fg-layer">
-        <svg class="absolute bottom-0 left-0 w-full h-[38vh]" viewBox="0 0 1440 360" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="earthAtmosphere" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#0284c7" stop-opacity="0.4"/>
-              <stop offset="52%" stop-color="#e0f2fe" stop-opacity="1"/>
-              <stop offset="62%" stop-color="#fde68a" stop-opacity="1"/>
-              <stop offset="100%" stop-color="#0284c7" stop-opacity="0.4"/>
-            </linearGradient>
-            <radialGradient id="earthSurface" cx="55%" cy="10%" r="85%">
-              <stop offset="0%" stop-color="#1e3a5f"/>
-              <stop offset="45%" stop-color="#08142c"/>
-              <stop offset="100%" stop-color="#02060d"/>
-            </radialGradient>
-          </defs>
-          <path d="M-120 360 Q 720 15 1560 360 Z" fill="url(#earthSurface)"/>
-          <path d="M-120 360 Q 720 15 1560 360" fill="none" stroke="url(#earthAtmosphere)" stroke-width="6"/>
-          <g opacity="0.75" stroke="#fbbf24" stroke-width="0.8" fill="#fef08a">
-            <circle cx="480" cy="245" r="2.2"/><circle cx="510" cy="235" r="1.5"/><circle cx="535" cy="252" r="2.8"/>
-            <path d="M440 270 Q 510 235 590 250" fill="none" opacity="0.4"/>
-            <circle cx="640" cy="215" r="3"/><circle cx="670" cy="222" r="2"/><circle cx="705" cy="208" r="3.5"/>
-            <circle cx="740" cy="220" r="2.2"/><circle cx="780" cy="205" r="4"/><circle cx="815" cy="225" r="2.5"/>
-            <path d="M620 225 Q 720 195 860 245" fill="none" opacity="0.5"/>
-          </g>
-        </svg>
-      </div>
-
-      <!-- UI CONTENT LAYER (z-index: 20) -->
-      <div class="scene-ui-layer flex flex-col items-center text-center px-6 mt-8">
-        <div class="reveal-up flex flex-col items-center">
-          <span class="text-xs uppercase tracking-widest text-amber-300 font-semibold mb-3 px-3.5 py-1 rounded-full bg-white/10 border border-white/20 backdrop-blur-md">
-            Operational Hub: 6 rue Voltaire, Sète · France
+      <!-- Clean Editorial Hero Content -->
+      <div class="scene-ui-layer max-w-4xl mx-auto px-6 text-center mt-6">
+        <div class="reveal-up">
+          <span class="inline-block text-xs uppercase tracking-[0.25em] text-amber-300 font-medium mb-4 px-4 py-1.5 rounded-full border border-amber-300/30 bg-amber-400/5 backdrop-blur-md">
+            Educational Mobility &amp; French Immersion
           </span>
-          <h1 class="text-5xl md:text-7xl font-bold tracking-tight text-white drop-shadow-2xl">
-            Your journey begins<br/><span class="font-serif-italic font-normal text-amber-300">before you land.</span>
+          <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-[1.05]">
+            Your journey begins<br/>
+            <span class="font-serif italic font-normal text-amber-300">before you land.</span>
           </h1>
         </div>
 
-        <p class="reveal-up delay-100 mt-6 text-base md:text-xl text-sky-200/90 max-w-xl font-light tracking-wide leading-relaxed">
-          Group programmes, Erasmus+ mobility projects, cultural experiences and French learning across France, coordinated from our Mediterranean base in Sète.
+        <p class="reveal-up delay-100 mt-6 text-base sm:text-lg md:text-xl text-slate-300/90 font-light max-w-2xl mx-auto leading-relaxed">
+          Bespoke group programmes, Erasmus+ mobility cohorts, cultural experiences, and accredited language stays in France — coordinated directly from our maritime base in Sète.
         </p>
 
         <div class="reveal-up delay-200 mt-8 flex flex-wrap items-center justify-center gap-4">
-          <button onclick="scrollToSection(2)" class="px-7 py-3.5 rounded-full bg-white text-slate-950 font-semibold text-sm hover:bg-amber-100 transition shadow-lg flex items-center gap-2">
-            <span>Begin Flight</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+          <button onclick="scrollToSection(2)" class="px-8 py-3.5 rounded-full bg-white hover:bg-amber-100 text-slate-950 font-semibold text-xs uppercase tracking-wider transition-all shadow-xl flex items-center gap-2.5">
+            <span>Discover The Journey</span>
+            <svg class="w-4 h-4 text-slate-900" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
           </button>
-          <button onclick="openPlannerModal('Start Your Enquiry')" class="px-7 py-3.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-white font-medium text-sm backdrop-blur-md transition">
-            Prepare Enquiry
+          <button onclick="scrollToSection(10)" class="px-8 py-3.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-medium text-xs uppercase tracking-wider backdrop-blur-md transition-all">
+            Plan A Programme
           </button>
         </div>
-      </div>
 
-      <!-- Bottom Caption Bar -->
-      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-3.5">
-          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">1</span>
-          <div>
-            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">Opening – Horizon Reveal</h2>
-            <p class="text-xs md:text-sm text-slate-300/85">Learn. Explore. Experience. Grow.</p>
-          </div>
+        <div class="reveal-up delay-300 mt-12 flex items-center justify-center gap-8 text-xs text-slate-400">
+          <span>6 rue Voltaire, 34200 Sète</span>
+          <span class="w-1 h-1 rounded-full bg-slate-600"></span>
+          <span>SIREN 990 746 430</span>
+          <span class="w-1 h-1 rounded-full bg-slate-600"></span>
+          <span>Bespoke Proposals Within 24h</span>
         </div>
-        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 01 / 10</span>
       </div>
     </section>
 
     <!-- ==========================================
          SCENE 2: THE TAKE-OFF & IDENTITY
          ========================================== -->
-    <section id="sec-2" data-index="2" class="story-section bg-[#102542]">
-      <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=2000&q=85" alt="Sunrise Clouds" class="bg-parallax opacity-70 mix-blend-screen" />
-      <div class="scene-sky-layer bg-gradient-to-b from-[#0c2244]/90 via-[#2c527a]/65 to-[#1a2436]">
-        <div class="sun-glow absolute right-[10%] bottom-[26%] w-72 h-72 rounded-full bg-[radial-gradient(circle,#fffbeb_0%,#fbbf24_28%,rgba(245,158,11,0.35)_60%,transparent_75%)]"></div>
+    <section id="sec-2" data-index="2" class="story-section bg-[#08152c]">
+      <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=2000&q=85" alt="Morning Clouds" class="bg-parallax opacity-60 mix-blend-screen" />
+      <div class="scene-sky-layer bg-gradient-to-b from-[#08152c]/90 via-[#162e54]/55 to-[#08152c]">
+        <div class="sun-glow absolute right-[15%] bottom-[25%] w-80 h-80 rounded-full bg-[radial-gradient(circle,rgba(255,251,235,0.9)_0%,rgba(245,158,11,0.35)_35%,transparent_70%)]"></div>
       </div>
 
       <canvas class="scene-bird-canvas" data-scene="1"></canvas>
       <svg class="scene-flight-layer" data-scene-svg="1" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
 
-      <!-- FOREGROUND CLOUDS -->
-      <div class="scene-fg-layer">
-        <svg class="absolute bottom-12 left-0 w-full h-[38vh]" viewBox="0 0 1440 360" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="cloudFrontOcc" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#fde68a" stop-opacity="0.45"/>
-              <stop offset="22%" stop-color="#64748b" stop-opacity="0.88"/>
-              <stop offset="65%" stop-color="#1e293b" stop-opacity="0.96"/>
-              <stop offset="100%" stop-color="#0f172a" stop-opacity="1"/>
-            </linearGradient>
-          </defs>
-          <path d="M-40 250 C 95 170, 225 180, 355 245 C 480 165, 625 175, 760 245 C 890 180, 1055 185, 1190 250 C 1300 200, 1390 210, 1480 255 L 1480 360 L -40 360 Z" fill="url(#cloudFrontOcc)"/>
-        </svg>
-      </div>
-
-      <!-- UI CONTENT LAYER -->
-      <div class="scene-ui-layer max-w-6xl w-full px-6 md:px-14 flex justify-end items-end h-full pb-36 pointer-events-none">
-        <div class="reveal-up glass-card rounded-3xl p-8 max-w-md border border-amber-200/25 pointer-events-auto">
-          <span class="text-xs uppercase tracking-widest text-amber-300 font-semibold">The Take-off • Authentic Pedagogy</span>
-          <h3 class="text-2xl md:text-3xl font-bold text-white mt-2 mb-3">Crafted for Learners &amp; Groups</h3>
-          <p class="text-sm md:text-base text-white/90 font-light leading-relaxed">
-            Formaskills Travel bridges language learning, cultural immersion, and personalized coordination. No anonymous packages: every stay is accompanied by our dedicated team in southern France.
+      <!-- Clean Content Panel -->
+      <div class="scene-ui-layer max-w-6xl mx-auto px-6 md:px-14 flex justify-end items-center h-full">
+        <div class="reveal-up premium-panel rounded-3xl p-8 md:p-12 max-w-lg border border-white/15">
+          <span class="text-xs uppercase tracking-[0.2em] text-amber-300 font-semibold">Learn. Explore. Experience. Grow.</span>
+          <h2 class="text-3xl md:text-4xl font-bold text-white mt-2 mb-4 leading-tight">
+            Tailored stays with<br/><span class="font-serif italic font-normal text-amber-300">dedicated resident care.</span>
+          </h2>
+          <p class="text-sm md:text-base text-slate-300 font-light leading-relaxed mb-6">
+            We don’t offer generic, off-the-shelf packages. Whether you represent a school group, a university faculty, an Erasmus+ mobility cohort, or an independent learner, every stay is accompanied by our native coordinators in southern France.
           </p>
-          <div class="mt-4 pt-4 border-t border-white/15 flex items-center justify-between text-xs text-slate-300">
-            <span>Sète Flagship Hub</span>
-            <span class="text-amber-300">SIREN 990 746 430</span>
+          <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10 text-xs">
+            <div>
+              <span class="text-amber-300 font-semibold block text-sm">24/7 Support</span>
+              <span class="text-slate-400">On-site resident coordination</span>
+            </div>
+            <div>
+              <span class="text-amber-300 font-semibold block text-sm">Accredited FLE</span>
+              <span class="text-slate-400">Pedagogical alignment</span>
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- Bottom Caption Bar -->
-      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-3.5">
-          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">2</span>
-          <div>
-            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">The Take-off</h2>
-            <p class="text-xs md:text-sm text-slate-300/85">The swallow takes flight, guiding your voyage across France.</p>
-          </div>
-        </div>
-        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 02 / 10</span>
       </div>
     </section>
 
     <!-- ==========================================
-         SCENE 3: THE FRANCE MAP REVEAL
+         SCENE 3: INTERACTIVE FRANCE MAP
          ========================================== -->
-    <section id="sec-3" data-index="3" class="story-section bg-[#0b1f3a]">
-      <div class="scene-sky-layer bg-[radial-gradient(circle_at_78%_72%,rgba(251,191,36,0.38)_0%,rgba(29,78,137,0.68)_45%,#071529_90%)]"></div>
+    <section id="sec-3" data-index="3" class="story-section bg-[#071326]">
+      <div class="scene-sky-layer bg-[radial-gradient(circle_at_75%_70%,rgba(245,158,11,0.22)_0%,rgba(14,40,75,0.65)_45%,#071326_90%)]"></div>
 
       <canvas class="scene-bird-canvas" data-scene="2"></canvas>
       <svg class="scene-flight-layer" data-scene-svg="2" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
 
-      <!-- UI CONTENT LAYER -->
-      <div class="scene-ui-layer max-w-7xl w-full mx-auto px-6 md:px-14 grid grid-cols-1 lg:grid-cols-12 items-center gap-8 mt-10">
-        <div class="lg:col-span-6 space-y-5">
-          <span class="text-xs uppercase tracking-widest text-amber-300 font-semibold px-3 py-1 rounded-full bg-white/10 border border-white/20">Territory Map</span>
+      <!-- UI Grid -->
+      <div class="scene-ui-layer max-w-7xl mx-auto px-6 md:px-14 grid grid-cols-1 lg:grid-cols-12 items-center gap-12">
+        <div class="lg:col-span-6 space-y-6">
+          <span class="text-xs uppercase tracking-[0.2em] text-amber-300 font-semibold px-3.5 py-1.5 rounded-full bg-white/5 border border-white/15">
+            Four Verified Hubs
+          </span>
           <h2 class="reveal-up text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-[1.1]">
-            Four unique<br/><span class="font-serif-italic font-normal text-amber-300">destinations in France.</span>
+            Explore France<br/>
+            <span class="font-serif italic font-normal text-amber-300">from the coast to the capital.</span>
           </h2>
-          <p class="reveal-up delay-100 text-base sm:text-lg text-slate-200/90 max-w-md font-light leading-relaxed">
-            Click on any highlighted city to inspect our verified hubs, local ateliers, and bespoke itineraries.
+          <p class="reveal-up delay-100 text-base text-slate-300 font-light leading-relaxed max-w-lg">
+            From the tranquil saltwater canals of Sète to the university boulevards of Montpellier, the artistic light of Nice, and the iconic monuments of Paris.
           </p>
-          <div class="reveal-up delay-200 pt-2 flex flex-wrap gap-3">
-            <button onclick="scrollToSection(4)" class="px-5 py-2.5 rounded-full bg-sky-500/20 hover:bg-sky-500/35 border border-sky-400/40 text-sm font-medium text-white transition flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-sky-400"></span>
+          <div class="reveal-up delay-200 flex flex-wrap gap-3 pt-2">
+            <button onclick="scrollToSection(4)" class="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs uppercase tracking-wider font-semibold text-white transition flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-amber-400"></span>
               <span>1. Sète (HQ)</span>
             </button>
-            <button onclick="scrollToSection(5)" class="px-5 py-2.5 rounded-full bg-amber-500/20 hover:bg-amber-500/35 border border-amber-400/40 text-sm font-medium text-white transition flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+            <button onclick="scrollToSection(5)" class="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs uppercase tracking-wider font-semibold text-white transition flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-sky-400"></span>
               <span>2. Montpellier</span>
             </button>
-            <button onclick="scrollToSection(6)" class="px-5 py-2.5 rounded-full bg-indigo-500/20 hover:bg-indigo-500/35 border border-indigo-400/40 text-sm font-medium text-white transition flex items-center gap-2">
+            <button onclick="scrollToSection(6)" class="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs uppercase tracking-wider font-semibold text-white transition flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
               <span>3. Paris</span>
             </button>
-            <button onclick="scrollToSection(7)" class="px-5 py-2.5 rounded-full bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/40 text-sm font-medium text-white transition flex items-center gap-2">
+            <button onclick="scrollToSection(7)" class="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs uppercase tracking-wider font-semibold text-white transition flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
               <span>4. Nice</span>
             </button>
           </div>
         </div>
 
-        <!-- Glowing Interactive Map of France -->
-        <div class="lg:col-span-6 flex justify-center lg:justify-end relative">
-          <div class="reveal-up delay-200 relative w-72 sm:w-96 md:w-[430px] aspect-square flex items-center justify-center">
-            <div class="absolute inset-8 rounded-full bg-sky-400/15 blur-3xl"></div>
+        <!-- Luminous Map -->
+        <div class="lg:col-span-6 flex justify-center lg:justify-end">
+          <div class="reveal-up delay-200 relative w-80 sm:w-96 md:w-[440px] aspect-square flex items-center justify-center">
             <svg class="w-full h-full overflow-visible" viewBox="0 0 500 500">
               <path class="france-outline" d="
                 M 255 48
@@ -514,445 +444,373 @@
                 L 152 275 L 122 232 L 82 202 L 62 178 L 105 155
                 L 148 162 L 165 128 L 208 118 L 235 82 Z
               "/>
-              <!-- Flight Paths connecting hubs -->
-              <path d="M 275 412 Q 285 400 298 395 T 395 385 T 275 155" fill="none" stroke="#fde047" stroke-width="2" stroke-dasharray="5 5" opacity="0.65"/>
-              
-              <!-- Paris Node -->
+              <path d="M 272 415 Q 285 400 298 395 T 395 385 T 275 155" fill="none" stroke="#fde047" stroke-width="1.8" stroke-dasharray="4 6" opacity="0.6"/>
+
+              <!-- Paris Pin -->
               <g class="cursor-pointer group" onclick="scrollToSection(6)">
-                <circle cx="275" cy="155" r="18" fill="rgba(147, 197, 253, 0.25)" class="animate-ping"/>
-                <circle cx="275" cy="155" r="7" fill="#60a5fa"/>
-                <text x="290" y="160" fill="#ffffff" font-size="14" font-weight="600">Paris</text>
+                <circle cx="275" cy="155" r="16" fill="rgba(147, 197, 253, 0.2)" class="animate-ping"/>
+                <circle cx="275" cy="155" r="6" fill="#60a5fa"/>
+                <text x="290" y="160" fill="#ffffff" font-size="13" font-weight="600">Paris</text>
               </g>
 
-              <!-- Montpellier Node -->
+              <!-- Montpellier Pin -->
               <g class="cursor-pointer group" onclick="scrollToSection(5)">
-                <circle cx="298" cy="395" r="16" fill="rgba(253, 224, 71, 0.25)" class="animate-ping"/>
-                <circle cx="298" cy="395" r="7" fill="#facc15"/>
-                <text x="312" y="399" fill="#fef08a" font-size="14" font-weight="600">Montpellier</text>
+                <circle cx="298" cy="395" r="16" fill="rgba(253, 224, 71, 0.2)" class="animate-ping"/>
+                <circle cx="298" cy="395" r="6" fill="#facc15"/>
+                <text x="312" y="399" fill="#ffffff" font-size="13" font-weight="600">Montpellier</text>
               </g>
 
-              <!-- Sète Node (HQ) -->
+              <!-- Sète Pin (HQ) -->
               <g class="cursor-pointer group" onclick="scrollToSection(4)">
-                <circle cx="272" cy="415" r="22" fill="rgba(56, 189, 248, 0.35)" class="animate-ping"/>
-                <circle cx="272" cy="415" r="9" fill="#38bdf8"/>
-                <text x="210" y="422" fill="#bae6fd" font-size="14" font-weight="700">★ Sète (HQ)</text>
+                <circle cx="272" cy="415" r="22" fill="rgba(245, 158, 11, 0.3)" class="animate-ping"/>
+                <circle cx="272" cy="415" r="8" fill="#f59e0b"/>
+                <text x="205" y="421" fill="#fbbf24" font-size="13" font-weight="700">★ Sète (HQ)</text>
               </g>
 
-              <!-- Nice Node -->
+              <!-- Nice Pin -->
               <g class="cursor-pointer group" onclick="scrollToSection(7)">
-                <circle cx="395" cy="385" r="18" fill="rgba(52, 211, 153, 0.25)" class="animate-ping"/>
-                <circle cx="395" cy="385" r="7" fill="#34d399"/>
-                <text x="408" y="390" fill="#a7f3d0" font-size="14" font-weight="600">Nice</text>
+                <circle cx="395" cy="385" r="16" fill="rgba(52, 211, 153, 0.2)" class="animate-ping"/>
+                <circle cx="395" cy="385" r="6" fill="#34d399"/>
+                <text x="408" y="390" fill="#ffffff" font-size="13" font-weight="600">Nice</text>
               </g>
             </svg>
           </div>
         </div>
       </div>
-
-      <!-- Bottom Caption Bar -->
-      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-3.5">
-          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">3</span>
-          <div>
-            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">The Destination Reveal</h2>
-            <p class="text-xs md:text-sm text-slate-300/85">The flight path connects France on the map.</p>
-          </div>
-        </div>
-        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 03 / 10</span>
-      </div>
     </section>
 
     <!-- ==========================================
-         SCENE 4: DESTINATION 1 — SÈTE (FLAGSHIP BASE)
+         SCENE 4: SÈTE — FLAGSHIP MEDITERRANEAN HUB
          ========================================== -->
-    <section id="sec-4" data-index="4" class="story-section bg-[#0c2d48]">
-      <img src="assets/img/sete.jpg" onerror="this.src='https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=2000&q=85'" alt="Sète Mediterranean Harbor" class="bg-parallax opacity-85" />
-      <div class="scene-sky-layer bg-gradient-to-r from-slate-950/60 via-slate-900/30 to-sky-950/40"></div>
+    <section id="sec-4" data-index="4" class="story-section bg-[#06182c]">
+      <img src="assets/img/sete.jpg" onerror="this.src='https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=2000&q=85'" alt="Sète Mediterranean Harbor" class="bg-parallax opacity-90" />
+      <div class="scene-sky-layer bg-gradient-to-r from-slate-950/85 via-slate-950/50 to-transparent"></div>
 
       <canvas class="scene-bird-canvas" data-scene="3"></canvas>
       <svg class="scene-flight-layer" data-scene-svg="3" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
 
-      <!-- FOREGROUND PIER & LIGHTHOUSE -->
-      <div class="scene-fg-layer">
-        <svg class="absolute bottom-12 right-0 w-full h-[52vh]" viewBox="0 0 1440 440" preserveAspectRatio="xMaxYMax slice">
-          <path d="M 480 280 Q 670 195 920 215 Q 1180 205 1440 230 L 1440 330 L 460 320 Z" fill="#1e293b" opacity="0.88"/>
-          <path d="M0 310 Q 720 285 1440 305 L 1440 440 L 0 440 Z" fill="rgba(12, 74, 110, 0.78)"/>
-          <path d="M 1440 410 L 820 355 L 775 330 L 855 312 L 1440 350 Z" fill="#1e293b" stroke="#94a3b8" stroke-width="1.5"/>
-          <g transform="translate(792, 130)">
-            <rect x="0" y="38" width="22" height="167" rx="3" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
-            <rect x="-4" y="28" width="30" height="10" rx="2" fill="#dc2626"/>
-            <polygon points="2,28 20,28 16,8 6,8" fill="#fef08a"/>
-            <circle cx="11" cy="18" r="28" fill="rgba(254, 240, 138, 0.45)" class="animate-pulse"/>
-          </g>
-        </svg>
-      </div>
-
-      <!-- UI CARD -->
-      <div class="scene-ui-layer max-w-7xl w-full mx-auto px-6 md:px-14 flex items-center mt-10">
-        <div class="reveal-up glass-card rounded-3xl p-8 md:p-10 max-w-md w-full text-white relative overflow-hidden group">
-          <div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-sky-400/20 blur-2xl pointer-events-none"></div>
-          <span class="text-xs uppercase tracking-widest text-sky-300 font-semibold">Destination 01 • Flagship Hub</span>
-          <h3 class="text-4xl md:text-5xl font-bold tracking-tight mt-2 mb-3">Sète</h3>
-          <p class="text-base text-white/90 font-light leading-relaxed mb-6">
-            The "Venice of Languedoc", nestled between the open sea and the saltwater Thau lagoon. Historic fishing port, water jousting, oyster ateliers, and tranquil Mediterranean immersion away from mass tourism.
+      <!-- Editorial Card -->
+      <div class="scene-ui-layer max-w-7xl mx-auto px-6 md:px-16 flex items-center">
+        <div class="reveal-up premium-panel rounded-3xl p-8 md:p-12 max-w-md w-full">
+          <span class="text-xs uppercase tracking-[0.2em] text-amber-300 font-semibold">Destination 01 · Flagship Operational Hub</span>
+          <h2 class="text-4xl md:text-5xl font-bold text-white mt-2 mb-3">Sète</h2>
+          <p class="text-sm md:text-base text-slate-200 font-light leading-relaxed mb-6">
+            The "Venice of Languedoc", nestled between the open Mediterranean and the saltwater Thau lagoon. Historic fishing port, water jousting, oyster ateliers, and authentic French conversation away from mass tourism.
           </p>
-          <div class="space-y-2 mb-6 text-xs text-slate-300">
-            <div class="flex items-center gap-2">✓ <span>Mont Saint-Clair panoramic view &amp; canalside cafés</span></div>
-            <div class="flex items-center gap-2">✓ <span>Thau lagoon boat tours &amp; oyster farming discovery</span></div>
-            <div class="flex items-center gap-2">✓ <span>Direct TGV access from Paris (3h40)</span></div>
+          <div class="space-y-2.5 mb-8 text-xs text-slate-300">
+            <div class="flex items-center gap-2.5">
+              <span class="text-amber-300 font-bold">✓</span>
+              <span>Mont Saint-Clair panoramic view &amp; canalside living</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <span class="text-amber-300 font-bold">✓</span>
+              <span>Thau lagoon boat tours &amp; oyster farming workshops</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <span class="text-amber-300 font-bold">✓</span>
+              <span>Direct TGV access from Paris (3h40)</span>
+            </div>
           </div>
           <div class="flex items-center gap-4">
-            <button onclick="openDestinationModal('sete')" class="px-6 py-2.5 rounded-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold text-xs tracking-wider uppercase transition shadow-lg">
-              Explore Sète Details →
+            <button onclick="openDestinationModal('sete')" class="px-6 py-3 rounded-full bg-white hover:bg-amber-100 text-slate-950 font-semibold text-xs uppercase tracking-wider transition-all shadow-lg">
+              Explore Sète Details
             </button>
-            <button onclick="openPlannerModal('Sète Mediterranean Stay')" class="text-xs text-white/80 hover:text-amber-300 transition">
-              Enquire for Sète
+            <button onclick="openPlannerModal('Sète Mediterranean Stay')" class="text-xs uppercase tracking-wider text-amber-300 hover:text-amber-200 transition font-medium">
+              Enquire →
             </button>
           </div>
         </div>
-      </div>
-
-      <!-- Bottom Caption Bar -->
-      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-3.5">
-          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">4</span>
-          <div>
-            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">Destination 1 – Sète</h2>
-            <p class="text-xs md:text-sm text-slate-300/85">Mediterranean coast &amp; maritime living.</p>
-          </div>
-        </div>
-        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 04 / 10</span>
       </div>
     </section>
 
     <!-- ==========================================
-         SCENE 5: DESTINATION 2 — MONTPELLIER
+         SCENE 5: MONTPELLIER — ACADEMIC CAPITAL
          ========================================== -->
-    <section id="sec-5" data-index="5" class="story-section bg-[#2b1d12]">
-      <img src="assets/img/montpellier.jpg" onerror="this.src='https://images.unsplash.com/photo-1549144511-f099e773c147?auto=format&fit=crop&w=2000&q=85'" alt="Montpellier Architecture" class="bg-parallax opacity-85" />
-      <div class="scene-sky-layer bg-gradient-to-r from-slate-950/65 via-amber-950/25 to-sky-900/35"></div>
+    <section id="sec-5" data-index="5" class="story-section bg-[#1c140c]">
+      <img src="assets/img/montpellier.jpg" onerror="this.src='https://images.unsplash.com/photo-1549144511-f099e773c147?auto=format&fit=crop&w=2000&q=85'" alt="Montpellier Architecture" class="bg-parallax opacity-90" />
+      <div class="scene-sky-layer bg-gradient-to-r from-slate-950/85 via-slate-950/50 to-transparent"></div>
 
       <canvas class="scene-bird-canvas" data-scene="4"></canvas>
       <svg class="scene-flight-layer" data-scene-svg="4" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
 
-      <!-- FOREGROUND BOUGAINVILLEA & ARCH -->
-      <div class="scene-fg-layer">
-        <svg class="absolute top-0 left-0 w-80 sm:w-[420px] h-72 opacity-95" viewBox="0 0 400 300" preserveAspectRatio="xMinYMin slice">
-          <path d="M0 0 L280 0 Q 220 90 140 130 Q 60 190 0 240 Z" fill="#14331b"/>
-          <g fill="#db2777" opacity="0.9">
-            <circle cx="45" cy="42" r="24"/><circle cx="85" cy="35" r="28"/><circle cx="135" cy="52" r="22"/>
-            <circle cx="30" cy="95" r="26"/><circle cx="78" cy="88" r="24"/><circle cx="115" cy="98" r="20"/>
-          </g>
-        </svg>
-      </div>
-
-      <!-- UI CARD -->
-      <div class="scene-ui-layer max-w-7xl w-full mx-auto px-6 md:px-14 flex items-center mt-10">
-        <div class="reveal-up glass-card rounded-3xl p-8 md:p-10 max-w-md w-full text-white relative overflow-hidden group">
-          <div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-amber-400/20 blur-2xl pointer-events-none"></div>
-          <span class="text-xs uppercase tracking-widest text-amber-300 font-semibold">Destination 02 • Academic Capital</span>
-          <h3 class="text-4xl md:text-5xl font-bold tracking-tight mt-2 mb-3">Montpellier</h3>
-          <p class="text-base text-white/90 font-light leading-relaxed mb-6">
-            Europe's historic academic capital with 1,000 years of university life. Pedestrian marble boulevards in the historic Écusson, student cafe culture, and Musée Fabre fine arts just 20 minutes from Sète.
+      <!-- Editorial Card -->
+      <div class="scene-ui-layer max-w-7xl mx-auto px-6 md:px-16 flex items-center">
+        <div class="reveal-up premium-panel rounded-3xl p-8 md:p-12 max-w-md w-full">
+          <span class="text-xs uppercase tracking-[0.2em] text-amber-300 font-semibold">Destination 02 · Academic Capital</span>
+          <h2 class="text-4xl md:text-5xl font-bold text-white mt-2 mb-3">Montpellier</h2>
+          <p class="text-sm md:text-base text-slate-200 font-light leading-relaxed mb-6">
+            Europe's historic university capital with 1,000 years of academic life. Just 20 minutes from Sète, Montpellier combines marble pedestrian boulevards in the historic Écusson with a vibrant international student community.
           </p>
-          <div class="space-y-2 mb-6 text-xs text-slate-300">
-            <div class="flex items-center gap-2">✓ <span>Pedestrian Écusson old town &amp; historic squares</span></div>
-            <div class="flex items-center gap-2">✓ <span>Jardin des Plantes &amp; University Faculty heritage</span></div>
-            <div class="flex items-center gap-2">✓ <span>Youthful, international student atmosphere</span></div>
+          <div class="space-y-2.5 mb-8 text-xs text-slate-300">
+            <div class="flex items-center gap-2.5">
+              <span class="text-amber-300 font-bold">✓</span>
+              <span>Historic pedestrian Écusson &amp; student language cafes</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <span class="text-amber-300 font-bold">✓</span>
+              <span>Jardin des Plantes &amp; Europe's oldest medical faculty</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <span class="text-amber-300 font-bold">✓</span>
+              <span>Musée Fabre fine arts ateliers &amp; modern tramway</span>
+            </div>
           </div>
           <div class="flex items-center gap-4">
-            <button onclick="openDestinationModal('montpellier')" class="px-6 py-2.5 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-semibold text-xs tracking-wider uppercase transition shadow-lg">
-              Explore Montpellier →
+            <button onclick="openDestinationModal('montpellier')" class="px-6 py-3 rounded-full bg-white hover:bg-amber-100 text-slate-950 font-semibold text-xs uppercase tracking-wider transition-all shadow-lg">
+              Explore Montpellier
             </button>
-            <button onclick="openPlannerModal('Montpellier Academic Stay')" class="text-xs text-white/80 hover:text-amber-300 transition">
-              Enquire for Montpellier
+            <button onclick="openPlannerModal('Montpellier Academic Stay')" class="text-xs uppercase tracking-wider text-amber-300 hover:text-amber-200 transition font-medium">
+              Enquire →
             </button>
           </div>
         </div>
-      </div>
-
-      <!-- Bottom Caption Bar -->
-      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-3.5">
-          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">5</span>
-          <div>
-            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">Destination 2 – Montpellier</h2>
-            <p class="text-xs md:text-sm text-slate-300/85">Historic university heritage &amp; student life.</p>
-          </div>
-        </div>
-        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 05 / 10</span>
       </div>
     </section>
 
     <!-- ==========================================
-         SCENE 6: DESTINATION 3 — PARIS
+         SCENE 6: PARIS — CULTURE & HERITAGE
          ========================================== -->
-    <section id="sec-6" data-index="6" class="story-section bg-[#162035]">
-      <img src="assets/img/paris.jpg" onerror="this.src='https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=2000&q=85'" alt="Paris Architecture and Seine" class="bg-parallax opacity-85" />
-      <div class="scene-sky-layer bg-gradient-to-r from-slate-950/65 via-slate-900/30 to-amber-500/25"></div>
+    <section id="sec-6" data-index="6" class="story-section bg-[#101726]">
+      <img src="assets/img/paris.jpg" onerror="this.src='https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=2000&q=85'" alt="Paris Architecture and Seine" class="bg-parallax opacity-90" />
+      <div class="scene-sky-layer bg-gradient-to-r from-slate-950/85 via-slate-950/50 to-transparent"></div>
 
       <canvas class="scene-bird-canvas" data-scene="5"></canvas>
       <svg class="scene-flight-layer" data-scene-svg="5" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
 
-      <!-- FOREGROUND MONUMENT ACCENTS -->
-      <div class="scene-fg-layer">
-        <svg class="absolute bottom-12 right-[6%] w-64 sm:w-80 h-[74vh]" viewBox="0 0 260 520" preserveAspectRatio="xMidYMax meet">
-          <path d="M126 10 L134 10 L138 95 L150 225 L170 350 L206 490 L176 490 L156 395 L104 395 L84 490 L54 490 L90 350 L110 225 L122 95 Z" fill="#1e293b" stroke="#fbbf24" stroke-width="1.3"/>
-          <path d="M90 490 A 40 48 0 0 1 170 490" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
-          <rect x="98" y="225" width="64" height="9" rx="2" fill="#fbbf24"/>
-          <rect x="78" y="345" width="104" height="11" rx="2" fill="#fbbf24"/>
-        </svg>
-      </div>
-
-      <!-- UI CARD -->
-      <div class="scene-ui-layer max-w-7xl w-full mx-auto px-6 md:px-14 flex items-center mt-10">
-        <div class="reveal-up glass-card rounded-3xl p-8 md:p-10 max-w-md w-full text-white relative overflow-hidden group">
-          <div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-amber-300/20 blur-2xl pointer-events-none"></div>
-          <span class="text-xs uppercase tracking-widest text-amber-300 font-semibold">Destination 03 • Culture &amp; Heritage</span>
-          <h3 class="text-4xl md:text-5xl font-bold tracking-tight mt-2 mb-3">Paris</h3>
-          <p class="text-base text-white/90 font-light leading-relaxed mb-6">
-            An exceptional concentration of world-class museums, heritage sites, Latin Quarter literary salons, and Seine riverbanks. Ideal for cohorts looking for rich cultural depth.
+      <!-- Editorial Card -->
+      <div class="scene-ui-layer max-w-7xl mx-auto px-6 md:px-16 flex items-center">
+        <div class="reveal-up premium-panel rounded-3xl p-8 md:p-12 max-w-md w-full">
+          <span class="text-xs uppercase tracking-[0.2em] text-amber-300 font-semibold">Destination 03 · Culture &amp; Heritage</span>
+          <h2 class="text-4xl md:text-5xl font-bold text-white mt-2 mb-3">Paris</h2>
+          <p class="text-sm md:text-base text-slate-200 font-light leading-relaxed mb-6">
+            An exceptional concentration of world-class museums, heritage sites, Latin Quarter literary salons, and Seine riverbanks. Ideal for cohorts looking for profound cultural depth and iconic architecture.
           </p>
-          <div class="space-y-2 mb-6 text-xs text-slate-300">
-            <div class="flex items-center gap-2">✓ <span>Louvre, Musée d'Orsay &amp; cultural salons</span></div>
-            <div class="flex items-center gap-2">✓ <span>Montmartre, Marais &amp; Latin Quarter walks</span></div>
-            <div class="flex items-center gap-2">✓ <span>Full transit and accommodation coordination</span></div>
+          <div class="space-y-2.5 mb-8 text-xs text-slate-300">
+            <div class="flex items-center gap-2.5">
+              <span class="text-amber-300 font-bold">✓</span>
+              <span>Sorbonne salons, Latin Quarter &amp; literary heritage</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <span class="text-amber-300 font-bold">✓</span>
+              <span>Louvre, Musée d’Orsay &amp; twilight architectural walks</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <span class="text-amber-300 font-bold">✓</span>
+              <span>Full metro transit pass &amp; vetted student lodging</span>
+            </div>
           </div>
           <div class="flex items-center gap-4">
-            <button onclick="openDestinationModal('paris')" class="px-6 py-2.5 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-semibold text-xs tracking-wider uppercase transition shadow-lg">
-              Explore Paris Details →
+            <button onclick="openDestinationModal('paris')" class="px-6 py-3 rounded-full bg-white hover:bg-amber-100 text-slate-950 font-semibold text-xs uppercase tracking-wider transition-all shadow-lg">
+              Explore Paris Details
             </button>
-            <button onclick="openPlannerModal('Paris Cultural Stay')" class="text-xs text-white/80 hover:text-amber-300 transition">
-              Enquire for Paris
+            <button onclick="openPlannerModal('Paris Cultural Stay')" class="text-xs uppercase tracking-wider text-amber-300 hover:text-amber-200 transition font-medium">
+              Enquire →
             </button>
           </div>
         </div>
-      </div>
-
-      <!-- Bottom Caption Bar -->
-      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-3.5">
-          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">6</span>
-          <div>
-            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">Destination 3 – Paris</h2>
-            <p class="text-xs md:text-sm text-slate-300/85">Culture, history &amp; the French art of living.</p>
-          </div>
-        </div>
-        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 06 / 10</span>
       </div>
     </section>
 
     <!-- ==========================================
-         SCENE 7: DESTINATION 4 — NICE (FRENCH RIVIERA)
+         SCENE 7: NICE — THE FRENCH RIVIERA
          ========================================== -->
-    <section id="sec-7" data-index="7" class="story-section bg-[#0f2e3d]">
-      <img src="assets/img/nice.jpg" onerror="this.src='https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=2000&q=85'" alt="Nice Bay of Angels" class="bg-parallax opacity-85" />
-      <div class="scene-sky-layer bg-gradient-to-r from-slate-950/65 via-emerald-950/25 to-sky-900/35"></div>
+    <section id="sec-7" data-index="7" class="story-section bg-[#081e28]">
+      <img src="assets/img/nice.jpg" onerror="this.src='https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=2000&q=85'" alt="Nice Bay of Angels" class="bg-parallax opacity-90" />
+      <div class="scene-sky-layer bg-gradient-to-r from-slate-950/85 via-slate-950/50 to-transparent"></div>
 
       <canvas class="scene-bird-canvas" data-scene="6"></canvas>
       <svg class="scene-flight-layer" data-scene-svg="6" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
 
-      <!-- UI CARD -->
-      <div class="scene-ui-layer max-w-7xl w-full mx-auto px-6 md:px-14 flex items-center mt-10">
-        <div class="reveal-up glass-card rounded-3xl p-8 md:p-10 max-w-md w-full text-white relative overflow-hidden group">
-          <div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-emerald-400/20 blur-2xl pointer-events-none"></div>
-          <span class="text-xs uppercase tracking-widest text-emerald-300 font-semibold">Destination 04 • French Riviera</span>
-          <h3 class="text-4xl md:text-5xl font-bold tracking-tight mt-2 mb-3">Nice</h3>
-          <p class="text-base text-white/90 font-light leading-relaxed mb-6">
-            Where Mediterranean azure waters meet the Maritime Alps. The famous Promenade des Anglais, Vieux Nice flower market, coastal sailing ecology, and modern Riviera art (Matisse &amp; Chagall).
+      <!-- Editorial Card -->
+      <div class="scene-ui-layer max-w-7xl mx-auto px-6 md:px-16 flex items-center">
+        <div class="reveal-up premium-panel rounded-3xl p-8 md:p-12 max-w-md w-full">
+          <span class="text-xs uppercase tracking-[0.2em] text-amber-300 font-semibold">Destination 04 · French Riviera</span>
+          <h2 class="text-4xl md:text-5xl font-bold text-white mt-2 mb-3">Nice</h2>
+          <p class="text-sm md:text-base text-slate-200 font-light leading-relaxed mb-6">
+            Where Mediterranean azure waters meet the Maritime Alps. The world-famous Promenade des Anglais, Vieux Nice flower market, coastal sailing ecology, and modern Riviera art (Matisse &amp; Chagall).
           </p>
-          <div class="space-y-2 mb-6 text-xs text-slate-300">
-            <div class="flex items-center gap-2">✓ <span>Promenade des Anglais &amp; Baie des Anges</span></div>
-            <div class="flex items-center gap-2">✓ <span>Cours Saleya food and flower market ateliers</span></div>
-            <div class="flex items-center gap-2">✓ <span>Light, art &amp; Riviera lifestyle exploration</span></div>
+          <div class="space-y-2.5 mb-8 text-xs text-slate-300">
+            <div class="flex items-center gap-2.5">
+              <span class="text-amber-300 font-bold">✓</span>
+              <span>Promenade des Anglais &amp; turquoise Baie des Anges</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <span class="text-amber-300 font-bold">✓</span>
+              <span>Cours Saleya culinary &amp; flower market ateliers</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <span class="text-amber-300 font-bold">✓</span>
+              <span>Matisse &amp; Chagall museum workshops</span>
+            </div>
           </div>
           <div class="flex items-center gap-4">
-            <button onclick="openDestinationModal('nice')" class="px-6 py-2.5 rounded-full bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-semibold text-xs tracking-wider uppercase transition shadow-lg">
-              Explore Nice Details →
+            <button onclick="openDestinationModal('nice')" class="px-6 py-3 rounded-full bg-white hover:bg-amber-100 text-slate-950 font-semibold text-xs uppercase tracking-wider transition-all shadow-lg">
+              Explore Nice Details
             </button>
-            <button onclick="openPlannerModal('Nice Riviera Stay')" class="text-xs text-white/80 hover:text-amber-300 transition">
-              Enquire for Nice
+            <button onclick="openPlannerModal('Nice Riviera Stay')" class="text-xs uppercase tracking-wider text-amber-300 hover:text-amber-200 transition font-medium">
+              Enquire →
             </button>
           </div>
         </div>
-      </div>
-
-      <!-- Bottom Caption Bar -->
-      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-3.5">
-          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">7</span>
-          <div>
-            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">Destination 4 – Nice</h2>
-            <p class="text-xs md:text-sm text-slate-300/85">The French Riviera, Mediterranean light &amp; coastal arts.</p>
-          </div>
-        </div>
-        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 07 / 10</span>
       </div>
     </section>
 
     <!-- ==========================================
          SCENE 8: OUR OFFERS & PROGRAMMES
          ========================================== -->
-    <section id="sec-8" data-index="8" class="story-section bg-[#112640]">
-      <div class="scene-sky-layer bg-gradient-to-b from-[#152d4a]/85 via-[#1f3b5c]/70 to-[#0b1829]/95"></div>
+    <section id="sec-8" data-index="8" class="story-section bg-[#071324]">
+      <div class="scene-sky-layer bg-[radial-gradient(circle_at_50%_30%,rgba(14,165,233,0.14)_0%,rgba(7,19,36,0.95)_60%,#040a18_100%)]"></div>
 
       <canvas class="scene-bird-canvas" data-scene="7"></canvas>
       <svg class="scene-flight-layer" data-scene-svg="7" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
 
-      <!-- UI CONTENT LAYER: 4 Main Offer Cards -->
-      <div class="scene-ui-layer max-w-6xl w-full mx-auto px-6 md:px-14 mt-12">
-        <div class="text-center mb-8">
-          <span class="text-xs uppercase tracking-widest text-amber-300 font-semibold px-3 py-1 rounded-full bg-white/10 border border-white/20">Client Confirmed Services</span>
-          <h2 class="text-3xl md:text-5xl font-bold text-white mt-3">What We Offer</h2>
+      <!-- Clean Editorial Grid of Offers -->
+      <div class="scene-ui-layer max-w-6xl mx-auto px-6 md:px-14">
+        <div class="text-center mb-10">
+          <span class="text-xs uppercase tracking-[0.2em] text-amber-300 font-semibold px-4 py-1.5 rounded-full bg-white/5 border border-white/15">
+            Confirmed Client Services
+          </span>
+          <h2 class="text-4xl md:text-5xl font-bold text-white mt-3">What We Offer</h2>
+          <p class="text-sm text-slate-300/90 font-light mt-2 max-w-lg mx-auto">
+            Comprehensive educational stays tailored for independent learners, schools, and institutional Erasmus+ partners.
+          </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <!-- Offer 1: French Learning -->
-          <div onclick="openOfferModal('learning')" class="reveal-up delay-100 glass-card-interactive rounded-3xl p-6 flex flex-col justify-between text-left cursor-pointer group min-h-[260px]">
+          <!-- Card 1 -->
+          <div onclick="openOfferModal('learning')" class="reveal-up delay-100 premium-card rounded-3xl p-7 flex flex-col justify-between cursor-pointer group min-h-[280px]">
             <div>
-              <div class="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-400/30 flex items-center justify-center mb-4 text-sky-300">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+              <div class="w-12 h-12 rounded-2xl bg-amber-400/10 border border-amber-300/30 flex items-center justify-center text-amber-300 mb-5 group-hover:scale-105 transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
               </div>
               <h3 class="text-xl font-bold text-white mb-2">Learn French</h3>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Small groups, 1-on-1 ateliers, and online lessons. Focus on confidence, conversational practice, and tailored CEFR levels.
+              <p class="text-xs text-slate-300 leading-relaxed font-light">
+                Small groups, 1-on-1 ateliers, and online lessons. Focus on conversational confidence, FLE pedagogy, and CEFR levels (A1–C2).
               </p>
             </div>
-            <span class="text-xs text-amber-300 font-semibold mt-4 group-hover:underline">Explore Courses →</span>
+            <span class="text-xs font-semibold text-amber-300 pt-4 flex items-center gap-1 group-hover:gap-2 transition-all">
+              <span>View Course Tracks</span> <span>→</span>
+            </span>
           </div>
 
-          <!-- Offer 2: Cultural Experiences -->
-          <div onclick="openOfferModal('culture')" class="reveal-up delay-200 glass-card-interactive rounded-3xl p-6 flex flex-col justify-between text-left cursor-pointer group min-h-[260px]">
+          <!-- Card 2 -->
+          <div onclick="openOfferModal('culture')" class="reveal-up delay-200 premium-card rounded-3xl p-7 flex flex-col justify-between cursor-pointer group min-h-[280px]">
             <div>
-              <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/30 flex items-center justify-center mb-4 text-amber-300">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+              <div class="w-12 h-12 rounded-2xl bg-sky-400/10 border border-sky-300/30 flex items-center justify-center text-sky-300 mb-5 group-hover:scale-105 transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
               </div>
               <h3 class="text-xl font-bold text-white mb-2">Cultural Stays</h3>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Thau lagoon boat tours, oyster tastings, Mediterranean cooking workshops, and guided walking tours in historic quarters.
+              <p class="text-xs text-slate-300 leading-relaxed font-light">
+                Thau lagoon boat ateliers, oyster tastings, Mediterranean culinary masterclasses, and guided heritage excursions.
               </p>
             </div>
-            <span class="text-xs text-amber-300 font-semibold mt-4 group-hover:underline">Explore Activities →</span>
+            <span class="text-xs font-semibold text-sky-300 pt-4 flex items-center gap-1 group-hover:gap-2 transition-all">
+              <span>Explore Activities</span> <span>→</span>
+            </span>
           </div>
 
-          <!-- Offer 3: Au Pair & Host Families -->
-          <div onclick="openOfferModal('aupair')" class="reveal-up delay-300 glass-card-interactive rounded-3xl p-6 flex flex-col justify-between text-left cursor-pointer group min-h-[260px]">
+          <!-- Card 3 -->
+          <div onclick="openOfferModal('aupair')" class="reveal-up delay-300 premium-card rounded-3xl p-7 flex flex-col justify-between cursor-pointer group min-h-[280px]">
             <div>
-              <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center mb-4 text-emerald-300">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+              <div class="w-12 h-12 rounded-2xl bg-emerald-400/10 border border-emerald-300/30 flex items-center justify-center text-emerald-300 mb-5 group-hover:scale-105 transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
               </div>
               <h3 class="text-xl font-bold text-white mb-2">Au Pair &amp; Homestay</h3>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Live with carefully vetted French host families. Total cultural integration, everyday dinner conversations, and safe community care.
+              <p class="text-xs text-slate-300 leading-relaxed font-light">
+                Live with handpicked French host families. Immersive conversation at the dinner table and authentic everyday community living.
               </p>
             </div>
-            <span class="text-xs text-amber-300 font-semibold mt-4 group-hover:underline">Explore Homestays →</span>
+            <span class="text-xs font-semibold text-emerald-300 pt-4 flex items-center gap-1 group-hover:gap-2 transition-all">
+              <span>Explore Homestays</span> <span>→</span>
+            </span>
           </div>
 
-          <!-- Offer 4: Erasmus+ & Organisations -->
-          <div onclick="openOfferModal('organisations')" class="reveal-up delay-400 glass-card-interactive rounded-3xl p-6 flex flex-col justify-between text-left cursor-pointer group min-h-[260px]">
+          <!-- Card 4 -->
+          <div onclick="openOfferModal('organisations')" class="reveal-up delay-400 premium-card rounded-3xl p-7 flex flex-col justify-between cursor-pointer group min-h-[280px]">
             <div>
-              <div class="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-400/30 flex items-center justify-center mb-4 text-purple-300">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+              <div class="w-12 h-12 rounded-2xl bg-indigo-400/10 border border-indigo-300/30 flex items-center justify-center text-indigo-300 mb-5 group-hover:scale-105 transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
               </div>
               <h3 class="text-xl font-bold text-white mb-2">For Organisations</h3>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Erasmus+ mobility reception, tailored group stays, job shadowing for staff, and 24/7 dedicated resident coordination.
+              <p class="text-xs text-slate-300 leading-relaxed font-light">
+                Erasmus+ mobility reception, tailored cohort itineraries, staff job shadowing, and 24/7 on-site coordinator care.
               </p>
             </div>
-            <span class="text-xs text-amber-300 font-semibold mt-4 group-hover:underline">Organisation Services →</span>
+            <span class="text-xs font-semibold text-indigo-300 pt-4 flex items-center gap-1 group-hover:gap-2 transition-all">
+              <span>Organisational Stays</span> <span>→</span>
+            </span>
           </div>
         </div>
-      </div>
-
-      <!-- Bottom Caption Bar -->
-      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-3.5">
-          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">8</span>
-          <div>
-            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">Our Offers</h2>
-            <p class="text-xs md:text-sm text-slate-300/85">Four pillars tailored for individuals and institutions.</p>
-          </div>
-        </div>
-        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 08 / 10</span>
       </div>
     </section>
 
     <!-- ==========================================
          SCENE 9: THE EXPERIENCE & TRUST
          ========================================== -->
-    <section id="sec-9" data-index="9" class="story-section bg-[#1e293b]">
-      <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=2000&q=85" alt="Students in France" class="bg-parallax opacity-80" />
-      <div class="scene-sky-layer bg-gradient-to-r from-slate-950/80 via-slate-900/40 to-transparent"></div>
+    <section id="sec-9" data-index="9" class="story-section bg-[#0a1527]">
+      <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=2000&q=85" alt="Students in France" class="bg-parallax opacity-75" />
+      <div class="scene-sky-layer bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-transparent"></div>
 
       <canvas class="scene-bird-canvas" data-scene="8"></canvas>
       <svg class="scene-flight-layer" data-scene-svg="8" viewBox="0 0 1440 900" preserveAspectRatio="none"></svg>
 
-      <!-- UI CONTENT LAYER -->
-      <div class="scene-ui-layer max-w-7xl w-full mx-auto px-6 md:px-14 flex items-center mt-10">
+      <!-- Editorial Content -->
+      <div class="scene-ui-layer max-w-7xl mx-auto px-6 md:px-16 flex items-center">
         <div class="max-w-xl space-y-6">
-          <span class="reveal-up inline-block text-xs uppercase tracking-widest text-amber-300 font-semibold px-3.5 py-1 rounded-full bg-amber-400/15 border border-amber-300/30">
-            Real People, Authentic Connections
+          <span class="reveal-up inline-block text-xs uppercase tracking-[0.2em] text-amber-300 font-semibold px-4 py-1.5 rounded-full bg-white/5 border border-white/15">
+            Authentic Human Connections
           </span>
           <h2 class="reveal-up delay-100 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-[1.12]">
-            Live, Learn &amp;<br/><span class="font-serif-italic font-normal text-amber-300">Explore in France.</span>
+            Live, Learn &amp;<br/>
+            <span class="font-serif italic font-normal text-amber-300">Explore in France.</span>
           </h2>
-          <p class="reveal-up delay-200 text-base md:text-lg text-white/90 font-light leading-relaxed">
-            Formaskills Travel was born from local roots in Sète and maritime Occitanie. We believe real learning happens around the table, during a sunset lagoon kayak atelier, or while sharing coffee in Montpellier's sunlit squares.
+          <p class="reveal-up delay-200 text-base md:text-lg text-slate-200 font-light leading-relaxed">
+            Formaskills Travel was established in Sète to deliver authentic, small-scale immersion. We believe genuine fluency and growth happen when learners share local tables, engage with coastal artisans, and feel supported around the clock.
           </p>
 
-          <div class="reveal-up delay-300 pt-2 grid grid-cols-2 gap-4">
-            <div class="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
-              <span class="text-2xl font-bold text-amber-300">24/7</span>
-              <p class="text-xs text-slate-300 mt-1">Dedicated Resident Coordination during your stay</p>
+          <div class="reveal-up delay-300 grid grid-cols-2 gap-4 pt-2">
+            <div class="premium-panel p-5 rounded-2xl">
+              <span class="text-3xl font-bold text-amber-300">24/7</span>
+              <p class="text-xs text-slate-300 mt-1 font-light">Dedicated local coordinator accompanies your stay</p>
             </div>
-            <div class="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
-              <span class="text-2xl font-bold text-sky-300">100%</span>
-              <p class="text-xs text-slate-300 mt-1">Bespoke Proposals crafted to your objectives</p>
+            <div class="premium-panel p-5 rounded-2xl">
+              <span class="text-3xl font-bold text-white">100%</span>
+              <p class="text-xs text-slate-300 mt-1 font-light">Custom-crafted proposals tailored to your cohort</p>
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Bottom Caption Bar -->
-      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-3.5">
-          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">9</span>
-          <div>
-            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">The Experience</h2>
-            <p class="text-xs md:text-sm text-slate-300/85">Real people, authentic memories, verified safety.</p>
-          </div>
-        </div>
-        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 09 / 10</span>
       </div>
     </section>
 
     <!-- ==========================================
          SCENE 10: PROJECT PLANNER, CONTACT & FAQ
          ========================================== -->
-    <section id="sec-10" data-index="10" class="story-section bg-[#081224] min-h-[920px]">
-      <div class="scene-sky-layer bg-[radial-gradient(circle_at_50%_20%,rgba(14,165,233,0.18)_0%,rgba(15,23,42,0.92)_55%,#030914_100%)]"></div>
+    <section id="sec-10" data-index="10" class="story-section bg-[#030914] min-h-[960px]">
+      <div class="scene-sky-layer bg-[radial-gradient(circle_at_50%_15%,rgba(14,165,233,0.15)_0%,rgba(6,16,36,0.95)_50%,#030914_100%)]"></div>
 
-      <!-- UI CONTENT LAYER: Full Interactive Intake + FAQ -->
-      <div class="scene-ui-layer max-w-6xl w-full mx-auto px-6 md:px-14 py-16 overflow-y-auto max-h-[85vh]">
+      <!-- Clean Intake & FAQ Hub -->
+      <div class="scene-ui-layer max-w-6xl mx-auto px-6 md:px-14 py-16 overflow-y-auto max-h-[88vh]">
         <div class="text-center mb-10">
-          <span class="text-xs uppercase tracking-widest text-amber-300 font-semibold px-3 py-1 rounded-full bg-white/10 border border-white/20">Client Contact &amp; Inquiry Hub</span>
-          <h2 class="text-4xl md:text-5xl font-bold text-white mt-3">Start Your Project</h2>
-          <p class="text-sm md:text-base text-slate-300 max-w-xl mx-auto mt-2">
+          <span class="text-xs uppercase tracking-[0.2em] text-amber-300 font-semibold px-4 py-1.5 rounded-full bg-white/5 border border-white/15">
+            Bespoke Intake &amp; Coordination Desk
+          </span>
+          <h2 class="text-4xl md:text-5xl font-bold text-white mt-3">Start Planning Your Stay</h2>
+          <p class="text-sm text-slate-300 font-light max-w-xl mx-auto mt-2">
             Sending an enquiry is not a booking: nothing is reserved or charged until we agree on a custom proposal.
           </p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <!-- Left: Direct Details & Policies -->
+          <!-- Left: Coordinates & Client Policies -->
           <div class="lg:col-span-5 space-y-6">
-            <div class="glass-card rounded-3xl p-6 border border-white/20">
-              <h3 class="text-lg font-bold text-white mb-3">Formaskills Travel SAS</h3>
+            <div class="premium-panel rounded-3xl p-7">
+              <h3 class="text-lg font-bold text-white mb-2">Formaskills Travel SAS</h3>
               <p class="text-xs text-slate-300 leading-relaxed mb-4">
-                Coordinated from 6 rue Voltaire, 34200 Sète, France.<br/>
+                Operational Headquarters:<br/>
+                6 rue Voltaire, 34200 Sète, France<br/>
                 SIREN 990 746 430 · RCS Montpellier
               </p>
-              <div class="space-y-3 text-xs text-slate-200">
+              <div class="space-y-2.5 text-xs text-slate-300">
                 <div class="flex items-center gap-2">
                   <span class="text-amber-300 font-semibold">Email:</span>
                   <a href="mailto:contact.skillstravel@gmail.com" class="hover:underline">contact.skillstravel@gmail.com</a>
@@ -968,39 +826,48 @@
               </div>
             </div>
 
-            <!-- Client Policy Box -->
-            <div class="glass-card rounded-3xl p-6 border border-amber-300/30 bg-amber-400/5">
-              <h4 class="text-sm font-semibold text-amber-300 mb-2">Important Client Policies</h4>
-              <ul class="text-xs text-slate-300 space-y-2 list-disc list-inside leading-relaxed">
-                <li><strong>No Public Fixed Prices:</strong> We craft bespoke quotes to fit your dates, cohort size, and requirements.</li>
-                <li><strong>No Placement / Internships:</strong> We provide educational stays, mobility projects, and French courses (not work placements).</li>
-                <li><strong>Fast Response:</strong> Our Sète team replies with tailored options within 24–48 hours.</li>
+            <!-- Client Policies Box -->
+            <div class="premium-panel rounded-3xl p-7 border-amber-400/20 bg-amber-400/5">
+              <h4 class="text-sm font-semibold text-amber-300 mb-2">Our Operating Commitments</h4>
+              <ul class="text-xs text-slate-300 space-y-2 leading-relaxed">
+                <li class="flex items-start gap-2">
+                  <span class="text-amber-300 font-bold">•</span>
+                  <span><strong>No Public Fixed Rates:</strong> Quotes are customized to your exact group size, duration, season, and inclusions.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-amber-300 font-bold">•</span>
+                  <span><strong>Zero Booking Obligation:</strong> Submitting a brief does not commit you or charge anything.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-amber-300 font-bold">•</span>
+                  <span><strong>Educational Focus:</strong> We provide structured stays and language courses (we do not offer work experience/internships).</span>
+                </li>
               </ul>
             </div>
           </div>
 
-          <!-- Right: Interactive Project Planner Form -->
+          <!-- Right: Interactive Planner Form -->
           <div class="lg:col-span-7">
-            <div class="glass-card rounded-3xl p-8 border border-white/25">
-              <h3 class="text-xl font-bold text-white mb-2">Plan Your Custom Stay</h3>
-              <p class="text-xs text-slate-300 mb-6">Tell us what you have in mind. A member of our team will reply personally.</p>
+            <div class="premium-panel rounded-3xl p-8">
+              <h3 class="text-xl font-bold text-white mb-2">Custom Project Planner</h3>
+              <p class="text-xs text-slate-300 mb-6">Tell us about your plans. A resident coordinator will reply within 24 hours.</p>
 
               <form id="mainPlannerForm" onsubmit="handleMainFormSubmit(event)" class="space-y-4">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-xs font-semibold text-slate-200 mb-1.5">Who is this for?</label>
-                    <select id="formWho" class="w-full rounded-xl bg-slate-900/90 border border-white/20 px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-300">
-                      <option value="For myself / family">For myself / individual</option>
-                      <option value="For my school / university">For an educational organisation</option>
-                      <option value="Erasmus+ mobility project">Erasmus+ mobility group</option>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Target Group</label>
+                    <select id="formWho" class="w-full rounded-xl bg-slate-900/90 border border-white/15 px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-300">
+                      <option value="For myself / individual">For myself / individual</option>
+                      <option value="School or university faculty">School or university faculty</option>
+                      <option value="Erasmus+ mobility project">Erasmus+ mobility cohort</option>
                       <option value="Adult / professional group">Adult / professional group</option>
                     </select>
                   </div>
                   <div>
-                    <label class="block text-xs font-semibold text-slate-200 mb-1.5">Destination Hub</label>
-                    <select id="formDest" class="w-full rounded-xl bg-slate-900/90 border border-white/20 px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-300">
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Preferred Hub</label>
+                    <select id="formDest" class="w-full rounded-xl bg-slate-900/90 border border-white/15 px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-300">
                       <option value="Sète (Flagship Coast)">Sète · Mediterranean Coast (HQ)</option>
-                      <option value="Montpellier">Montpellier · Academic City</option>
+                      <option value="Montpellier">Montpellier · Academic Capital</option>
                       <option value="Paris">Paris · Culture &amp; Heritage</option>
                       <option value="Nice">Nice · French Riviera</option>
                       <option value="Multi-Centre">Multi-Centre Immersion</option>
@@ -1010,126 +877,114 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-xs font-semibold text-slate-200 mb-1.5">Primary Interest</label>
-                    <select id="formInterest" class="w-full rounded-xl bg-slate-900/90 border border-white/20 px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-300">
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Primary Focus</label>
+                    <select id="formInterest" class="w-full rounded-xl bg-slate-900/90 border border-white/15 px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-300">
                       <option value="French language courses">French language courses</option>
-                      <option value="Cultural discovery & activities">Cultural discovery &amp; local activities</option>
+                      <option value="Cultural discovery & activities">Cultural discovery &amp; excursions</option>
                       <option value="Au pair & host family stay">Au pair &amp; host family stay</option>
-                      <option value="Group Erasmus+ mobility">Group Erasmus+ mobility</option>
-                      <option value="Custom pedagogical program">Custom pedagogical program</option>
+                      <option value="Erasmus+ group mobility">Erasmus+ group mobility</option>
+                      <option value="Custom pedagogical cohort">Custom pedagogical cohort</option>
                     </select>
                   </div>
                   <div>
-                    <label class="block text-xs font-semibold text-slate-200 mb-1.5">Approximate Timing</label>
-                    <select id="formTiming" class="w-full rounded-xl bg-slate-900/90 border border-white/20 px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-300">
-                      <option value="Next 3 months">Next 3 months</option>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Estimated Timing</label>
+                    <select id="formTiming" class="w-full rounded-xl bg-slate-900/90 border border-white/15 px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-300">
+                      <option value="Next 3 months">In the next 3 months</option>
                       <option value="In 3 to 6 months">In 3 to 6 months</option>
                       <option value="In 6 to 12 months">In 6 to 12 months</option>
-                      <option value="Flexible / exploring dates">Dates are flexible</option>
+                      <option value="Flexible dates">Dates are flexible</option>
                     </select>
                   </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label class="block text-xs font-semibold text-slate-200 mb-1.5">Your Name</label>
-                    <input type="text" id="formName" required placeholder="Full Name" class="w-full rounded-xl bg-slate-900/90 border border-white/20 px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-300" />
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Contact Name</label>
+                    <input type="text" id="formName" required placeholder="Full Name" class="w-full rounded-xl bg-slate-900/90 border border-white/15 px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-300" />
                   </div>
                   <div>
-                    <label class="block text-xs font-semibold text-slate-200 mb-1.5">Your Email</label>
-                    <input type="email" id="formEmail" required placeholder="contact@domain.com" class="w-full rounded-xl bg-slate-900/90 border border-white/20 px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-300" />
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Email Address</label>
+                    <input type="email" id="formEmail" required placeholder="name@institution.com" class="w-full rounded-xl bg-slate-900/90 border border-white/15 px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-300" />
                   </div>
                 </div>
 
                 <div>
-                  <label class="block text-xs font-semibold text-slate-200 mb-1.5">Notes or Special Requirements</label>
-                  <textarea id="formNotes" rows="3" placeholder="Group size, student ages, dietary requirements, specific excursions..." class="w-full rounded-xl bg-slate-900/90 border border-white/20 px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-300"></textarea>
+                  <label class="block text-xs font-semibold text-slate-300 mb-1">Notes &amp; Specific Requirements</label>
+                  <textarea id="formNotes" rows="3" placeholder="Cohort size (e.g., 15 students, 2 teachers), student ages, target CEFR levels, specific excursions..." class="w-full rounded-xl bg-slate-900/90 border border-white/15 px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-amber-300"></textarea>
                 </div>
 
-                <button type="submit" class="w-full py-3.5 rounded-full bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-bold text-sm tracking-wide transition shadow-lg">
-                  Submit Enquiry to Sète Coordination Team →
+                <button type="submit" class="w-full py-3.5 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs uppercase tracking-wider transition-all shadow-lg">
+                  Submit Brief to Sète Resident Team →
                 </button>
 
                 <p id="formStatusNotice" class="hidden text-center text-xs text-emerald-300 font-semibold pt-2">
-                  Merci ! Your request has been recorded. Our team in Sète will review your brief and reply promptly.
+                  Merci ! Your brief has been received. Our Sète coordination desk will review and reply within 24 hours.
                 </p>
               </form>
             </div>
           </div>
         </div>
 
-        <!-- Frequently Asked Questions Accordion -->
-        <div class="mt-14 border-t border-white/15 pt-10">
+        <!-- FAQ Library -->
+        <div class="mt-14 border-t border-white/10 pt-10">
           <h3 class="text-2xl font-bold text-white mb-6 text-center">Frequently Asked Questions</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="glass-card rounded-2xl p-5">
-              <h4 class="text-sm font-semibold text-amber-300 mb-1.5">How does an enquiry work?</h4>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                You tell us your group size, destination interest, and learning goals. Our team reads your brief and proposes tailored dates, lodgings, ateliers, and exact pricing.
+            <div class="premium-panel rounded-2xl p-6">
+              <h4 class="text-sm font-semibold text-amber-300 mb-2">How does an enquiry work?</h4>
+              <p class="text-xs text-slate-300 leading-relaxed font-light">
+                Tell us your cohort size, target dates, and learning goals. Our team evaluates accommodations and ateliers, then provides an all-inclusive proposal with transparent pricing.
               </p>
             </div>
-            <div class="glass-card rounded-2xl p-5">
-              <h4 class="text-sm font-semibold text-amber-300 mb-1.5">Why are prices not listed on the website?</h4>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Because every stay is custom-built (cohort size, season, accommodation type, excursion choices). We provide fully transparent, all-inclusive quotations in our custom proposals.
+            <div class="premium-panel rounded-2xl p-6">
+              <h4 class="text-sm font-semibold text-amber-300 mb-2">Why are prices not listed publicly?</h4>
+              <p class="text-xs text-slate-300 leading-relaxed font-light">
+                Every stay is built uniquely based on cohort size, season, housing choices (host family, residence, villa), and custom excursions.
               </p>
             </div>
-            <div class="glass-card rounded-2xl p-5">
-              <h4 class="text-sm font-semibold text-amber-300 mb-1.5">How do we travel to Sète?</h4>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Sète has a direct TGV station (3h40 from Paris Gare de Lyon). The nearest airports are Montpellier-Méditerranée and Béziers Cap d'Agde. Our coordinator greets you upon arrival.
+            <div class="premium-panel rounded-2xl p-6">
+              <h4 class="text-sm font-semibold text-amber-300 mb-2">How do we travel to Sète?</h4>
+              <p class="text-xs text-slate-300 leading-relaxed font-light">
+                Sète has direct TGV high-speed trains from Paris Gare de Lyon (3h40). The nearest airports are Montpellier-Méditerranée and Béziers. Our coordinator greets you on arrival.
               </p>
             </div>
-            <div class="glass-card rounded-2xl p-5">
-              <h4 class="text-sm font-semibold text-amber-300 mb-1.5">Do you offer internships or work placements?</h4>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                No. Formaskills Travel specializes strictly in educational group mobility, accredited French learning, cultural discovery, and au pair homestays.
+            <div class="premium-panel rounded-2xl p-6">
+              <h4 class="text-sm font-semibold text-amber-300 mb-2">Do you provide work placements or internships?</h4>
+              <p class="text-xs text-slate-300 leading-relaxed font-light">
+                No. Formaskills Travel strictly coordinates language courses, cultural immersion, educational group mobility, and au pair homestays.
               </p>
             </div>
           </div>
         </div>
 
-        <!-- Technical Footer -->
+        <!-- Clean Footer -->
         <footer class="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
           <p>© 2026 Formaskills Travel SAS · SIREN 990 746 430 · RCS Montpellier</p>
           <div class="flex items-center gap-6">
-            <span>6 rue Voltaire, 34200 Sète</span>
+            <span>6 rue Voltaire, 34200 Sète, France</span>
             <a href="mailto:contact.skillstravel@gmail.com" class="hover:text-amber-300">contact.skillstravel@gmail.com</a>
           </div>
         </footer>
-      </div>
-
-      <!-- Bottom Caption Bar -->
-      <div class="absolute bottom-0 left-0 right-0 z-30 bg-slate-950/90 backdrop-blur-md border-t border-white/10 px-6 md:px-14 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-3.5">
-          <span class="w-7 h-7 rounded-full bg-white text-slate-950 font-bold text-sm flex items-center justify-center shrink-0">10</span>
-          <div>
-            <h2 class="text-sm md:text-base font-semibold text-white leading-tight">Plan Your Journey &amp; Contact</h2>
-            <p class="text-xs md:text-sm text-slate-300/85">Bespoke stays crafted by our Sète team.</p>
-          </div>
-        </div>
-        <span class="hidden md:inline-block text-xs text-amber-300/80 font-mono">SCENE 10 / 10</span>
       </div>
     </section>
 
   </main>
 
   <!-- ==========================================
-       INTERACTIVE MODAL FOR DESTINATIONS & OFFERS
+       CLEAN MODAL FOR DESTINATIONS & OFFERS
        ========================================== -->
   <div id="infoModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-    <div class="glass-card rounded-3xl max-w-lg w-full p-8 text-white relative border border-white/30 shadow-2xl transform transition-all max-h-[90vh] overflow-y-auto">
-      <button onclick="closeModal()" aria-label="Close modal" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white/80 hover:text-white transition">
+    <div class="premium-panel rounded-3xl max-w-lg w-full p-8 text-white relative border border-white/25 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <button onclick="closeModal()" aria-label="Close modal" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 hover:text-white transition">
         ✕
       </button>
-      <span id="modalBadge" class="text-xs uppercase tracking-widest text-amber-300 font-semibold">Formaskills Travel</span>
-      <h3 id="modalTitle" class="text-3xl font-bold mt-1 mb-3">Destination</h3>
-      <p id="modalDescription" class="text-sm text-slate-200 font-light leading-relaxed mb-6"></p>
+      <span id="modalBadge" class="text-xs uppercase tracking-[0.2em] text-amber-300 font-semibold">Formaskills Travel</span>
+      <h3 id="modalTitle" class="text-2xl md:text-3xl font-bold mt-1 mb-3">Destination</h3>
+      <p id="modalDescription" class="text-xs md:text-sm text-slate-300 font-light leading-relaxed mb-6"></p>
 
       <div id="modalHighlights" class="space-y-2 mb-6 text-xs text-slate-300 bg-white/5 p-4 rounded-2xl border border-white/10"></div>
 
       <div class="border-t border-white/15 pt-5">
-        <button onclick="transferModalToPlanner()" class="w-full py-3.5 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-lg">
+        <button onclick="transferModalToPlanner()" class="w-full py-3.5 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs uppercase tracking-wider transition-all shadow-lg">
           Plan This Journey with Us →
         </button>
       </div>
@@ -1137,7 +992,7 @@
   </div>
 
   <!-- ==========================================
-       HYBRID SVG + CANVAS IN-PHOTO BIRD ENGINE
+       60FPS FLIGHT ENGINE & SCROLL SYNCHRONIZER
        ========================================== -->
   <script>
     const sectionElements = Array.from(document.querySelectorAll('.story-section'));
@@ -1145,9 +1000,8 @@
     const sceneCanvases = Array.from(document.querySelectorAll('.scene-bird-canvas'));
     const sceneContexts = sceneCanvases.map(c => c.getContext('2d'));
     const stepDots = Array.from(document.querySelectorAll('.step-dot'));
-    const statusBadge = document.getElementById('flightStatusBadge');
 
-    // Upper-Sky Flowing S-Curve Wave Paths across all 9 animated scenes
+    // S-curve wave paths across the 9 animated flight scenes
     const sceneConfigs = [
       { pathD: 'M 40,235 C 420,90 910,305 1390,155', subWaveD: 'M 40,255 C 420,115 910,330 1390,175', birdScale: 1.05, defaultT: 0.28 },
       { pathD: 'M 40,250 C 430,85 920,310 1390,150', subWaveD: 'M 40,272 C 430,110 920,335 1390,172', birdScale: 1.35, defaultT: 0.25 },
@@ -1160,17 +1014,16 @@
       { pathD: 'M 40,235 C 380,85 760,300 1120,195', subWaveD: 'M 40,255 C 380,108 760,320 1120,215', birdScale: 1.15, defaultT: 0.30, endsHere: true }
     ];
 
-    // Build the SVG elements for each section
     const svgSceneHandles = sceneSvgs.map((svgEl, idx) => {
       const cfg = sceneConfigs[idx] || sceneConfigs[0];
       svgEl.innerHTML = `
-        <path d="${cfg.subWaveD}" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.6" stroke-dasharray="5 9" />
-        <path d="${cfg.pathD}" fill="none" stroke="rgba(254,240,138,0.20)" stroke-width="1.8" />
-        <path class="active-gold-ribbon" d="${cfg.pathD}" fill="none" stroke="url(#goldFlowGrad)" stroke-width="5" stroke-linecap="round" filter="url(#goldenTrailGlow)" />
-        <path class="active-white-core" d="${cfg.pathD}" fill="none" stroke="#fffef0" stroke-width="2" stroke-linecap="round" />
+        <path d="${cfg.subWaveD}" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.4" stroke-dasharray="4 8" />
+        <path d="${cfg.pathD}" fill="none" stroke="rgba(245,158,11,0.18)" stroke-width="1.6" />
+        <path class="active-gold-ribbon" d="${cfg.pathD}" fill="none" stroke="url(#goldFlowGrad)" stroke-width="4.5" stroke-linecap="round" filter="url(#goldenTrailGlow)" />
+        <path class="active-white-core" d="${cfg.pathD}" fill="none" stroke="#fffef0" stroke-width="1.8" stroke-linecap="round" />
 
         <g class="svg-bird-actor" filter="url(#birdDropGlow)" transform="translate(300, 180)">
-          <ellipse cx="0" cy="0" rx="46" ry="26" fill="rgba(251, 191, 36, 0.18)" />
+          <ellipse cx="0" cy="0" rx="42" ry="24" fill="rgba(245, 158, 11, 0.16)" />
           <path class="bird-back-wing" d="M -4,-3 Q -22,-38 -52,-46 Q -32,-16 -14,-1 Z" fill="#cbd5e1" stroke="#94a3b8" stroke-width="0.8" />
           <path class="bird-back-tip" d="M -42,-40 L -52,-46 L -44,-31 Z" fill="#1e293b" />
           <path d="M -26,2 L -46,-6 L -42,4 L -47,10 L -24,6 Z" fill="#e2e8f0" />
@@ -1210,7 +1063,6 @@
       };
     });
 
-    // Resize canvas layers for golden stardust
     function resizeAllCanvases() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       sceneCanvases.forEach((canvas, idx) => {
@@ -1266,12 +1118,12 @@
 
       activeSectionIdx = bestIdx;
 
-      // Update right-hand storyboard dots
+      // Update sleek side dot indicators
       stepDots.forEach((dot, idx) => {
         if (idx === activeSectionIdx) {
-          dot.className = 'step-dot w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center transition-all bg-amber-400 text-slate-950 shadow-[0_0_15px_rgba(251,191,36,0.8)] scale-110';
+          dot.className = 'step-dot w-2.5 h-2.5 rounded-full bg-amber-400 scale-125 shadow-[0_0_12px_rgba(245,158,11,0.8)] transition-all';
         } else {
-          dot.className = 'step-dot w-6 h-6 rounded-full text-[10px] font-bold flex items-center justify-center transition-all text-white/70 hover:text-white hover:bg-white/15';
+          dot.className = 'step-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white transition-all';
         }
       });
     }
@@ -1279,7 +1131,7 @@
     window.addEventListener('scroll', updateScrollTargets, { passive: true });
     updateScrollTargets();
 
-    // 60FPS Flight Engine Loop
+    // 60FPS Flight Animation Loop
     let lastTime = performance.now();
     function animateFlightLoop(now) {
       const dt = Math.min((now - lastTime) / 1000, 0.05);
@@ -1295,18 +1147,16 @@
         const len = handle.totalLen;
         const dist = t * len;
 
-        // 1. Dashoffset for progressive golden ribbon
         const offset = Math.max(0, len - dist);
         handle.ribbonPath.style.strokeDashoffset = `${offset}`;
         handle.corePath.style.strokeDashoffset = `${offset}`;
 
-        // 2. Position & angle
         const pt = handle.ribbonPath.getPointAtLength(dist);
         const ptAhead = handle.ribbonPath.getPointAtLength(Math.min(len, dist + 18));
         const angleRad = Math.atan2(ptAhead.y - pt.y, ptAhead.x - pt.x);
         const angleDeg = clamp((angleRad * 180) / Math.PI, -28, 28);
 
-        const hoverBob = Math.sin(now * 0.004 + idx) * 6;
+        const hoverBob = Math.sin(now * 0.0035 + idx) * 5;
         const bx = pt.x;
         const by = pt.y + hoverBob;
 
@@ -1315,18 +1165,18 @@
           `translate(${bx.toFixed(1)}, ${by.toFixed(1)}) rotate(${angleDeg.toFixed(1)}) scale(${cfg.birdScale})`
         );
 
-        // 3. Dynamic Wing Flap
+        // Dynamic wing flapping
         const speedBoost = Math.min(Math.abs(handle.targetT - prevT) * 45, 1.8);
-        const flapCycle = Math.sin(now * (0.0075 + speedBoost * 0.002) + idx * 0.9);
-        const frontWingY = -52 + flapCycle * 28;
-        const backWingY = -44 + Math.sin(now * 0.0075 + idx * 0.9 - 0.35) * 22;
+        const flapCycle = Math.sin(now * (0.007 + speedBoost * 0.002) + idx * 0.9);
+        const frontWingY = -52 + flapCycle * 26;
+        const backWingY = -44 + Math.sin(now * 0.007 + idx * 0.9 - 0.35) * 20;
 
         handle.frontWing.setAttribute('d', `M 2,1 Q -14,${(frontWingY * 0.78).toFixed(1)} -60,${frontWingY.toFixed(1)} Q -30,${(frontWingY * 0.28).toFixed(1)} -8,4 Z`);
         handle.frontTip.setAttribute('d', `M -48,${(frontWingY * 0.86).toFixed(1)} L -60,${frontWingY.toFixed(1)} L -48,${(frontWingY * 0.68).toFixed(1)} Z`);
         handle.backWing.setAttribute('d', `M -4,-3 Q -22,${(backWingY * 0.78).toFixed(1)} -52,${backWingY.toFixed(1)} Q -32,${(backWingY * 0.32).toFixed(1)} -14,-1 Z`);
         handle.backTip.setAttribute('d', `M -42,${(backWingY * 0.86).toFixed(1)} L -52,${backWingY.toFixed(1)} L -44,${(backWingY * 0.68).toFixed(1)} Z`);
 
-        // 4. Stardust particles on canvas
+        // Golden Stardust Particles
         const canvas = sceneCanvases[idx];
         const ctx = sceneContexts[idx];
         if (canvas && ctx) {
@@ -1337,14 +1187,14 @@
           const px = (bx / 1440) * cw;
           const py = (by / 900) * ch;
 
-          if (Math.random() < 0.45) {
+          if (Math.random() < 0.40) {
             handle.particles.push({
-              x: px - 18 + (Math.random() - 0.5) * 14,
-              y: py + (Math.random() - 0.5) * 14,
-              vx: -0.6 - Math.random() * 1.1,
-              vy: (Math.random() - 0.5) * 0.6,
-              r: 1.5 + Math.random() * 2.5,
-              alpha: 0.9
+              x: px - 16 + (Math.random() - 0.5) * 12,
+              y: py + (Math.random() - 0.5) * 12,
+              vx: -0.5 - Math.random() * 1.0,
+              vy: (Math.random() - 0.5) * 0.5,
+              r: 1.2 + Math.random() * 2.2,
+              alpha: 0.85
             });
           }
 
@@ -1352,7 +1202,7 @@
             const p = handle.particles[i];
             p.x += p.vx;
             p.y += p.vy;
-            p.alpha -= 0.018;
+            p.alpha -= 0.016;
             if (p.alpha <= 0) {
               handle.particles.splice(i, 1);
               continue;
@@ -1364,12 +1214,6 @@
           }
         }
       });
-
-      if (statusBadge) {
-        const handle = svgSceneHandles[activeSectionIdx];
-        const pct = Math.round((handle ? handle.currentT : 0.3) * 100);
-        statusBadge.textContent = `Scene ${activeSectionIdx + 1} • Flight ${pct}%`;
-      }
 
       if (isAutoScrolling) {
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -1384,7 +1228,6 @@
     }
     requestAnimationFrame(animateFlightLoop);
 
-    // Navigation and Modals
     function scrollToSection(stepNum) {
       const target = document.getElementById(`sec-${stepNum}`);
       if (target) target.scrollIntoView({ behavior: 'smooth' });
@@ -1399,7 +1242,7 @@
         btnText.textContent = 'Pause';
         dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-ping';
       } else {
-        btnText.textContent = 'Auto-Fly';
+        btnText.textContent = 'Auto-Flight';
         dot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-pulse';
       }
     }
@@ -1409,12 +1252,12 @@
       drawer.classList.toggle('hidden');
     }
 
-    // Modal Knowledge Content (Confirmed)
+    // Modal Knowledge Details
     const modalDetails = {
       sete: {
         badge: 'Destination 01 · Flagship Hub',
         title: 'Sète · Thau Lagoon & Sea',
-        desc: 'Our flagship base between the open Mediterranean and the calm Thau saltwater lagoon. Famous for traditional water jousting tournaments, oyster farming ateliers, Paul Valéry literary heritage, and scenic canals.',
+        desc: 'Our primary base between the open Mediterranean and the calm Thau saltwater lagoon. Famous for traditional water jousting tournaments, oyster farming ateliers, Paul Valéry literary heritage, and scenic canals.',
         highlights: [
           '• Living fishing port with canalside cafés and fresh seafood markets',
           '• Mont Saint-Clair panoramic viewpoint & sandy Mediterranean beaches',
@@ -1517,17 +1360,6 @@
           '• Community activities with fellow international learners'
         ],
         destValue: 'Sète (Flagship Coast)'
-      },
-      'for-org': {
-        badge: 'Audience · Institutions & Group Leaders',
-        title: 'Programmes for Educational Groups',
-        desc: 'End-to-end management for group leaders. Zero administrative stress, tailored syllabus alignment, dedicated resident support, and full quality compliance.',
-        highlights: [
-          '• Vetted student accommodations with safeguarding standards',
-          '• Dedicated private coordinator accompanying daily activities',
-          '• Transparent per-student institutional proposals'
-        ],
-        destValue: 'Multi-Centre'
       }
     };
 
