@@ -161,7 +161,7 @@
   <!-- ========================================================================= -->
   <!-- FLIGHT ANIMATION LAYER: SOARING BIRD & LUMINOUS RIBBON (GSAP SCROLL SYNC) -->
   <!-- ========================================================================= -->
-  <div id="flight-canvas-container" aria-hidden="true">
+  <div id="flight-canvas-container" class="transition-opacity duration-700 ease-out" aria-hidden="true">
     <svg id="global-flight-svg" class="w-full h-full" viewBox="0 0 1440 900" preserveAspectRatio="none">
       <defs>
         <linearGradient id="birdTrailGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -194,23 +194,19 @@
       </defs>
 
       <!-- Dotted Guide Spline -->
-      <path id="flight-guide" d="M 80,220 C 440,90 920,280 1360,180 S 840,480 340,560 S 880,720 1320,680 S 680,820 220,840" fill="none" stroke="rgba(14, 26, 43, 0.08)" stroke-width="1.8" stroke-dasharray="5 7" />
+      <path id="flight-guide" d="M -40,280 C 360,90 840,310 1260,170 C 1380,130 1480,105 1560,95" fill="none" stroke="rgba(14, 26, 43, 0.08)" stroke-width="1.8" stroke-dasharray="5 7" />
 
       <!-- Active Glowing Flight Ribbon -->
-      <path id="flight-ribbon" d="M 80,220 C 440,90 920,280 1360,180 S 840,480 340,560 S 880,720 1320,680 S 680,820 220,840" fill="none" stroke="url(#birdTrailGrad)" stroke-width="4" stroke-linecap="round" filter="url(#trailGlow)" />
-      <path id="flight-core" d="M 80,220 C 440,90 920,280 1360,180 S 840,480 340,560 S 880,720 1320,680 S 680,820 220,840" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" />
+      <path id="flight-ribbon" d="M -40,280 C 360,90 840,310 1260,170 C 1380,130 1480,105 1560,95" fill="none" stroke="url(#birdTrailGrad)" stroke-width="4" stroke-linecap="round" filter="url(#trailGlow)" />
+      <path id="flight-core" d="M -40,280 C 360,90 840,310 1260,170 C 1380,130 1480,105 1560,95" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" />
 
       <!-- Realistic White Seagull Actor -->
-      <g id="flight-bird" filter="url(#birdShadow)" transform="translate(180, 200)">
-        <ellipse cx="0" cy="0" rx="42" ry="22" fill="rgba(245, 158, 11, 0.18)" />
-        <path id="bird-back-wing" d="M -4,-3 Q -22,-38 -52,-46 Q -32,-16 -14,-1 Z" fill="#CBD5E1" stroke="#94A3B8" stroke-width="0.8" />
-        <path id="bird-back-tip" d="M -42,-40 L -52,-46 L -44,-31 Z" fill="#1E293B" />
-        <path d="M -26,2 L -48,-6 L -42,4 L -49,11 L -24,6 Z" fill="#E2E8F0" />
-        <path d="M -28,3 C -14,-7 12,-7 30,-1 C 36,0 39,2 34,5 C 16,12 -10,11 -28,3 Z" fill="url(#birdWingGrad)" stroke="#FEF08A" stroke-width="0.9" />
-        <polygon points="33,0 46,3 33,5" fill="#F59E0B" />
-        <circle cx="24" cy="0.5" r="1.8" fill="#0E1A2B" />
-        <path id="bird-front-wing" d="M 2,1 Q -14,-44 -60,-54 Q -30,-14 -8,4 Z" fill="url(#birdWingGrad)" stroke="#FEF08A" stroke-width="1" />
-        <path id="bird-front-tip" d="M -48,-46 L -60,-54 L -48,-36 Z" fill="#0E1A2B" />
+      <!-- Photorealistic White Seagull Actor (Realistic Mediterranean Gull) -->
+      <g id="flight-bird" class="transition-opacity duration-300" filter="url(#birdShadow)" transform="translate(180, 200)">
+        <!-- Subtle luminous warm aerodynamic halo -->
+        <ellipse cx="0" cy="0" rx="55" ry="32" fill="rgba(245, 158, 11, 0.22)" filter="url(#trailGlow)" />
+        <!-- Photorealistic Soaring White Seagull with realistic feathers & lighting -->
+        <image href="assets/img/realistic_seagull.png" x="-85" y="-58" width="170" height="116" preserveAspectRatio="xMidYMid meet" />
       </g>
     </svg>
     <canvas id="flight-canvas" class="absolute inset-0 w-full h-full"></canvas>
@@ -391,8 +387,7 @@
       
       <!-- Slide 1: Sète (Flagship Hub) -->
       <div class="dest-slide" data-dest="sete">
-        <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=2000&q=85" 
-             alt="Sète harbour and lighthouse at golden hour" 
+        <img src="assets/img/client_sete.jpg" alt="Sète harbour and lighthouse at golden hour" 
              class="absolute inset-0 w-full h-full object-cover opacity-80" />
         <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/30 to-transparent"></div>
 
@@ -416,8 +411,7 @@
 
       <!-- Slide 2: Montpellier (Academic Hub) -->
       <div class="dest-slide" data-dest="montpellier">
-        <img src="https://images.unsplash.com/photo-1549144511-f099e773c147?auto=format&fit=crop&w=2000&q=85" 
-             alt="Montpellier Triumphal Arch and bougainvillea" 
+        <img src="assets/img/client_montpellier.jpg" alt="Montpellier Triumphal Arch and bougainvillea" 
              class="absolute inset-0 w-full h-full object-cover opacity-80" />
         <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/30 to-transparent"></div>
 
@@ -441,8 +435,7 @@
 
       <!-- Slide 3: Paris (Capital & Arts) -->
       <div class="dest-slide" data-dest="paris">
-        <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=2000&q=85" 
-             alt="Paris Eiffel Tower sunset over the Seine" 
+        <img src="assets/img/client_paris.jpg" alt="Paris Eiffel Tower and Seine river at sunset" 
              class="absolute inset-0 w-full h-full object-cover opacity-80" />
         <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/30 to-transparent"></div>
 
@@ -1075,22 +1068,50 @@
     if (flightRibbon) flightRibbon.style.strokeDasharray = `${pathTotal}`;
     if (flightCore) flightCore.style.strokeDasharray = `${pathTotal}`;
 
-    let targetFlightProg = 0.15;
-    let currentFlightProg = 0.15;
+    let targetFlightProg = 0.12;
+    let currentFlightProg = 0.12;
+    const flightContainer = document.getElementById('flight-canvas-container');
 
-    // Track scroll with ScrollTrigger
+    // FLIGHT ANIMATION CONFINED TO SECTION 1 (HERO) & SECTION 2 (PLACES / DESTINATIONS)
+    // The flight starts at top of Hero, guides through Sète, Montpellier, Paris, and ENDS in Section 2!
     ScrollTrigger.create({
+      trigger: 'body',
       start: 'top top',
+      endTrigger: '#destinations-pin',
       end: 'bottom bottom',
       onUpdate: (self) => {
-        targetFlightProg = Math.max(0.05, Math.min(0.98, self.progress));
+        // Progress 0.0 (top Hero) -> 1.0 (end of Section 2 Places)
+        targetFlightProg = Math.max(0.04, Math.min(1.0, self.progress));
+
+        // When scrolling beyond Section 2 into subsequent sections (Offers, Erasmus, Why Sète, Planner),
+        // smoothly hide the bird and flight ribbon completely.
+        if (flightContainer) {
+          if (self.progress >= 0.98) {
+            flightContainer.style.opacity = '0';
+            flightContainer.style.pointerEvents = 'none';
+          } else {
+            flightContainer.style.opacity = '1';
+          }
+        }
       }
     });
 
-    // 60FPS Flight Physics Loop
+    // Also watch when scrolling past Section 2 with an exit trigger
+    ScrollTrigger.create({
+      trigger: '#programmes',
+      start: 'top 85%',
+      onEnter: () => {
+        if (flightContainer) flightContainer.style.opacity = '0';
+      },
+      onLeaveBack: () => {
+        if (flightContainer) flightContainer.style.opacity = '1';
+      }
+    });
+
+    // 60FPS Realistic Aerodynamic Flight Physics Loop
     function animateFlight(now) {
       const prev = currentFlightProg;
-      currentFlightProg += (targetFlightProg - currentFlightProg) * 0.08;
+      currentFlightProg += (targetFlightProg - currentFlightProg) * 0.085;
 
       const dist = currentFlightProg * pathTotal;
       const offset = Math.max(0, pathTotal - dist);
@@ -1100,33 +1121,24 @@
 
       if (flightRibbon && flightBird) {
         const pt = flightRibbon.getPointAtLength(dist);
-        const ptAhead = flightRibbon.getPointAtLength(Math.min(pathTotal, dist + 16));
+        const ptAhead = flightRibbon.getPointAtLength(Math.min(pathTotal, dist + 20));
         const angleRad = Math.atan2(ptAhead.y - pt.y, ptAhead.x - pt.x);
         const angleDeg = (angleRad * 180) / Math.PI;
 
-        const hover = Math.sin(now * 0.0035) * 5;
+        // Realistic atmospheric lift and natural glide tilt
+        const hover = Math.sin(now * 0.003) * 6;
         const bx = pt.x;
         const by = pt.y + hover;
 
+        // Realistic seabird banking angle with subtle wing camber
+        const bankAngle = angleDeg * 0.72;
+        const wingCamber = 1.0 + Math.sin(now * 0.005) * 0.04;
+        const scaleVal = 1.15;
+
         flightBird.setAttribute(
           'transform',
-          `translate(${bx.toFixed(1)}, ${by.toFixed(1)}) rotate(${angleDeg.toFixed(1)}) scale(1.15)`
+          `translate(${bx.toFixed(1)}, ${by.toFixed(1)}) rotate(${bankAngle.toFixed(1)}) scale(${scaleVal}, ${(scaleVal * wingCamber).toFixed(3)})`
         );
-
-        // Flapping wings
-        const speed = Math.abs(currentFlightProg - prev) * 50;
-        const flap = Math.sin(now * (0.007 + speed * 0.003));
-        const frontY = -52 + flap * 26;
-        const backY = -44 + Math.sin(now * 0.007 - 0.3) * 20;
-
-        if (wingFront && tipFront) {
-          wingFront.setAttribute('d', `M 2,1 Q -14,${(frontY * 0.78).toFixed(1)} -60,${frontY.toFixed(1)} Q -30,${(frontY * 0.28).toFixed(1)} -8,4 Z`);
-          tipFront.setAttribute('d', `M -48,${(frontY * 0.86).toFixed(1)} L -60,${frontY.toFixed(1)} L -48,${(frontY * 0.68).toFixed(1)} Z`);
-        }
-        if (wingBack && tipBack) {
-          wingBack.setAttribute('d', `M -4,-3 Q -22,${(backY * 0.78).toFixed(1)} -52,${backY.toFixed(1)} Q -32,${(backY * 0.32).toFixed(1)} -14,-1 Z`);
-          tipBack.setAttribute('d', `M -42,${(backY * 0.86).toFixed(1)} L -52,${backY.toFixed(1)} L -44,${(backY * 0.68).toFixed(1)} Z`);
-        }
       }
 
       requestAnimationFrame(animateFlight);
