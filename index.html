@@ -602,7 +602,7 @@
       </g>
     </svg>
     <!-- WebGL 3D Canvas Layer for Cinema-Grade White Bird -->
-    <canvas id="flight-webgl-canvas" class="w-full h-full absolute inset-0 z-20 pointer-events-none"></canvas>
+    <canvas id="flight-webgl-canvas" class="w-full h-full absolute inset-0 z-20 pointer-events-none" style="display:none;"></canvas>
 
   </div>
 
@@ -2967,7 +2967,7 @@
           }
           // Hide fallback 2D SVG bird once 3D bird is verified active in WebGL
           const svgBird = document.getElementById('flight-bird');
-          if (svgBird) svgBird.style.display = 'none';
+          // keep SVG bird visible
           console.log('Cinema-Grade 3D White Bird initialized in WebGL (60/120FPS)!');
         }, (err) => {
           console.warn('3D model load note (using fallback flight rig):', err);
