@@ -210,10 +210,10 @@
       height: 100vh;
       height: 100dvh;
       pointer-events: none;
-      z-index: 12;
+      z-index: 20; /* Fixed above destination background panoramas (z:0) */
       overflow: hidden;
       opacity: 1;
-      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
       contain: layout style paint;
       transform: translateZ(0);
     }
@@ -231,16 +231,16 @@
       }
     }
 
-    /* Waypoint city labels should never float over the destination UI cards */
+    /* Waypoint beacons & city labels remain crisp and readable in sky */
     #flight-canvas-container.labels-hidden #waypoint-nodes text {
-      opacity: 0 !important;
+      opacity: 0.85 !important;
     }
 
-    /* Keep the pinned destination stage above the decorative flight layer so
-       the seagull never draws on top of cards, pills or controls */
+    /* Allow flight animation layer (z:20) to soar across the sky above background panoramas (z:0),
+       while UI glass cards (z:25) and controls (z:30) remain clearly interactable */
     #destinations-pin {
       position: relative;
-      z-index: 13;
+      z-index: auto;
     }
 
     /* Multi-Layer Moving Cloud Animations in Hero Section */
@@ -2588,8 +2588,8 @@
 
             targetFlightProg = 0.38 + progress * 0.585;
             if (flightContainer) {
-              if (progress > 0.95) {
-                flightContainer.style.opacity = Math.max(0, 1 - (progress - 0.95) / 0.05).toFixed(2);
+              if (progress > 0.98) {
+                flightContainer.style.opacity = Math.max(0, 1 - (progress - 0.98) / 0.02).toFixed(2);
               } else {
                 flightContainer.style.opacity = '1';
               }
@@ -2621,10 +2621,7 @@
           }
         },
         onLeave: () => {
-          if (flightContainer) {
-            flightContainer.style.opacity = '0';
-            flightContainer.classList.remove('labels-hidden');
-          }
+          // Hand-off cleanly to Section 3 ScrollTrigger
         },
         onEnterBack: () => {
           if (flightContainer) {
@@ -2660,7 +2657,7 @@
       if (!isMobileLayout && pinScrollTrigger) {
         const startY = pinScrollTrigger.start;
         const endY = pinScrollTrigger.end;
-        const ratios = [0.005, 0.50, 0.995];
+        const ratios = [0.005, 0.50, 0.95];
         lenis.scrollTo(startY + (endY - startY) * ratios[clamped], { duration: 1.4 });
       } else {
         const destSec = document.getElementById('destinations-pin');
