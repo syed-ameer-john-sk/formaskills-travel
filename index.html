@@ -236,6 +236,9 @@
     }
   </style>
   <link rel="preload" as="image" href="assets/img/hero_clouds.webp" type="image/webp" fetchpriority="high" />
+  <!-- Three.js & GLTFLoader for Cinema-Grade 3D White Bird -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 
 <body class="paper-texture selection:bg-amber-200 selection:text-primary">
@@ -243,114 +246,85 @@
   <!-- ========================================================================= -->
   <!-- FLIGHT ANIMATION LAYER: UPPER-SKY S-WAVE & ARTICULATED WING-FLAPPING BIRD -->
   <!-- ========================================================================= -->
-  <div id="flight-canvas-container" aria-hidden="true">
-    <canvas id="flight-sparkle-canvas" class="absolute inset-0 w-full h-full"></canvas>
-
-    <svg id="global-flight-svg" class="w-full h-full relative z-10" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+    <!-- ========================================================================= -->
+  <!-- 2. FLIGHT ANIMATION LAYER: CINEMA-GRADE 3D REALISTIC WHITE BIRD (WEBGL)   -->
+  <!-- ========================================================================= -->
+  <div id="flight-canvas-container" aria-hidden="true" class="fixed inset-0 w-full h-full pointer-events-none z-20 overflow-hidden transition-opacity duration-700">
+    <!-- Glowing Golden Flight Ribbon & Waypoint Guide (Draws behind 3D Bird) -->
+    <svg id="global-flight-svg" class="w-full h-full absolute inset-0 z-10 overflow-visible" viewBox="0 0 1440 900" preserveAspectRatio="none">
       <defs>
-        <linearGradient id="birdTrailGrad" x1="0%" y1="50%" x2="100%" y2="50%">
-          <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.0" />
-          <stop offset="18%" stop-color="#60A5FA" stop-opacity="0.38" />
-          <stop offset="52%" stop-color="#F59E0B" stop-opacity="0.88" />
-          <stop offset="84%" stop-color="#FDE047" stop-opacity="0.96" />
-          <stop offset="100%" stop-color="#FFFFFF" stop-opacity="1" />
-        </linearGradient>
-
-        <linearGradient id="gullBodyGrad" x1="15%" y1="0%" x2="85%" y2="100%">
-          <stop offset="0%" stop-color="#FFFFFF" />
-          <stop offset="48%" stop-color="#F8FAFC" />
-          <stop offset="78%" stop-color="#E2E8F0" />
-          <stop offset="100%" stop-color="#FDE68A" />
-        </linearGradient>
-
-        <linearGradient id="gullNearWingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#FFFFFF" />
-          <stop offset="55%" stop-color="#F1F5F9" />
-          <stop offset="85%" stop-color="#CBD5E1" />
-          <stop offset="100%" stop-color="#FEF08A" />
-        </linearGradient>
-
-        <linearGradient id="gullFarWingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#E2E8F0" />
-          <stop offset="65%" stop-color="#94A3B8" />
-          <stop offset="100%" stop-color="#F59E0B" />
+        <linearGradient id="birdTrailGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#93C5FD" stop-opacity="0.0" />
+          <stop offset="25%" stop-color="#F5B841" stop-opacity="0.3" />
+          <stop offset="65%" stop-color="#F5B841" stop-opacity="0.75" />
+          <stop offset="90%" stop-color="#FEF08A" stop-opacity="0.9" />
+          <stop offset="100%" stop-color="#FFFDF7" stop-opacity="0.95" />
         </linearGradient>
 
         <radialGradient id="beaconGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1" />
-          <stop offset="35%" stop-color="#FDE047" stop-opacity="0.9" />
-          <stop offset="70%" stop-color="#F59E0B" stop-opacity="0.45" />
+          <stop offset="0%" stop-color="#FFFDF7" stop-opacity="0.9" />
+          <stop offset="35%" stop-color="#FDE68A" stop-opacity="0.5" />
+          <stop offset="70%" stop-color="#F59E0B" stop-opacity="0.18" />
           <stop offset="100%" stop-color="#F59E0B" stop-opacity="0" />
         </radialGradient>
 
-        <filter id="trailGlow" x="-25%" y="-40%" width="150%" height="180%">
-          <feGaussianBlur stdDeviation="4" result="b1" />
-          <feGaussianBlur stdDeviation="11" result="b2" />
+        <filter id="trailGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3.0" result="softBlur" />
           <feMerge>
-            <feMergeNode in="b2" />
-            <feMergeNode in="b1" />
+            <feMergeNode in="softBlur" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
-
-        <filter id="birdGoldenShadow" x="-50%" y="-50%" width="200%" height="200%">
-          <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#F59E0B" flood-opacity="0.42" />
-          <feDropShadow dx="-2" dy="3" stdDeviation="3" flood-color="#0E1A2B" flood-opacity="0.32" />
-        </filter>
       </defs>
 
-      <!-- Upper-Sky Flowing S-Wave Guide Spline (Clean left-to-right arc, never dips into cards) -->
-      <path id="flight-guide" d="M 180,240 C 420,130 720,270 980,165 C 1150,100 1300,185 1420,150" fill="none" stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="1.8" stroke-dasharray="6 8" stroke-linecap="round"
+      <!-- Delicate Upper-Sky Flight Guide & Golden Vapor Ribbon -->
+      <path id="flight-guide"
+            d="M 60,310 C 320,135 620,265 920,165 C 1140,95 1280,200 1420,150"
             fill="none"
-            stroke="rgba(255, 255, 255, 0.16)"
-            stroke-width="1.6"
-            stroke-dasharray="5 9" />
+            stroke="rgba(255, 255, 255, 0.12)"
+            stroke-width="1.2"
+            stroke-dasharray="3 8" />
 
-      <path id="flight-ribbon" d="M 180,240 C 420,130 720,270 980,165 C 1150,100 1300,185 1420,150" fill="none" stroke="url(#birdTrailGrad)" stroke-width="4.5" stroke-linecap="round" filter="url(#trailGlow)"
+      <path id="flight-ribbon"
+            d="M 60,310 C 320,135 620,265 920,165 C 1140,95 1280,200 1420,150"
             fill="none"
             stroke="url(#birdTrailGrad)"
-            stroke-width="4.2"
+            stroke-width="2.8"
             stroke-linecap="round"
             filter="url(#trailGlow)" />
 
-      <path id="flight-core" d="M 180,240 C 420,130 720,270 980,165 C 1150,100 1300,185 1420,150" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"
+      <path id="flight-core"
+            d="M 60,310 C 320,135 620,265 920,165 C 1140,95 1280,200 1420,150"
             fill="none"
-            stroke="#FFFFFF"
-            stroke-width="1.7"
+            stroke="#FFFDF7"
+            stroke-width="1.1"
             stroke-linecap="round"
-            opacity="0.92" />
+            opacity="0.88" />
 
-      <!-- Waypoint Beacons Along Upper-Sky Flight Path -->
+      <!-- Waypoint Beacons Along Mediterranean Route (Sète -> Montpellier -> Paris) -->
       <g id="waypoint-nodes">
-        <g id="wp-node-0" class="transition-opacity duration-500" opacity="0.4" transform="translate(520, 210)">
-          <circle r="18" fill="url(#beaconGlow)" />
-          <circle r="4.5" fill="#FFFFFF" stroke="#F59E0B" stroke-width="2" />
-          <text id="wp-label-0" x="0" y="-16" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="700" letter-spacing="1.5" class="uppercase opacity-0 transition-opacity duration-300" style="text-shadow: 0 2px 8px rgba(0,0,0,0.85);">SÈTE</text>
+        <g id="wp-node-0" class="transition-opacity duration-500" opacity="0.35" transform="translate(480, 215)">
+          <circle r="16" fill="url(#beaconGlow)" />
+          <circle r="3.5" fill="#FFFDF7" stroke="#F59E0B" stroke-width="1.6" />
+          <text id="wp-label-0" x="0" y="-14" text-anchor="middle" fill="#FFFDF7" font-size="10" font-weight="600" letter-spacing="2" class="uppercase opacity-0 transition-opacity duration-500" style="text-shadow: 0 2px 10px rgba(10,19,32,0.95);">SÈTE</text>
         </g>
 
-        <g id="wp-node-1" class="transition-opacity duration-500" opacity="0.4" transform="translate(910, 145)">
-          <circle r="18" fill="url(#beaconGlow)" />
-          <circle r="4.5" fill="#FFFFFF" stroke="#38BDF8" stroke-width="2" />
-          <text id="wp-label-1" x="0" y="-16" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="700" letter-spacing="1.5" class="uppercase opacity-0 transition-opacity duration-300" style="text-shadow: 0 2px 8px rgba(0,0,0,0.85);">MONTPELLIER</text>
+        <g id="wp-node-1" class="transition-opacity duration-500" opacity="0.35" transform="translate(880, 155)">
+          <circle r="16" fill="url(#beaconGlow)" />
+          <circle r="3.5" fill="#FFFDF7" stroke="#38BDF8" stroke-width="1.6" />
+          <text id="wp-label-1" x="0" y="-14" text-anchor="middle" fill="#FFFDF7" font-size="10" font-weight="600" letter-spacing="2" class="uppercase opacity-0 transition-opacity duration-500" style="text-shadow: 0 2px 10px rgba(10,19,32,0.95);">MONTPELLIER</text>
         </g>
 
-        <g id="wp-node-2" class="transition-opacity duration-500" opacity="0.4" transform="translate(1335, 152)">
-          <circle r="24" fill="url(#beaconGlow)" />
-          <circle r="5.5" fill="#FFFFFF" stroke="#F59E0B" stroke-width="2.2" />
-          <text id="wp-label-2" x="0" y="-18" text-anchor="middle" fill="#FEF08A" font-size="11" font-weight="700" letter-spacing="1.5" class="uppercase opacity-0 transition-opacity duration-300" style="text-shadow: 0 2px 8px rgba(0,0,0,0.85);">PARIS</text>
+        <g id="wp-node-2" class="transition-opacity duration-500" opacity="0.35" transform="translate(1330, 155)">
+          <circle r="20" fill="url(#beaconGlow)" />
+          <circle r="4" fill="#FFFDF7" stroke="#F59E0B" stroke-width="1.8" />
+          <text id="wp-label-2" x="0" y="-15" text-anchor="middle" fill="#FEF08A" font-size="10" font-weight="600" letter-spacing="2" class="uppercase opacity-0 transition-opacity duration-500" style="text-shadow: 0 2px 10px rgba(10,19,32,0.95);">PARIS</text>
         </g>
-      </g>
-
-      <!-- Articulated Mediterranean Seagull Actor -->
-      <!-- Prominent Photorealistic Mediterranean Seagull Actor -->
-      <g id="flight-bird" filter="url(#birdGoldenShadow)" transform="translate(180, 240)">
-        <!-- Radiant golden aerodynamic sunlit halo -->
-        <ellipse cx="0" cy="0" rx="75" ry="38" fill="url(#beaconGlow)" opacity="0.6" filter="url(#trailGlow)" />
-        <circle cx="0" cy="0" r="16" fill="rgba(251, 191, 36, 0.4)" filter="url(#trailGlow)" />
-        <!-- High-Definition Soaring White Seagull Image (Clear, Sharp, Photorealistic) -->
-        <image id="gull-photo" href="assets/img/realistic_seagull.png" x="-110" y="-75" width="220" height="150" preserveAspectRatio="xMidYMid meet" />
       </g>
     </svg>
+
+    <!-- WebGL 3D Hardware-Accelerated Canvas for True Animated Flying White Bird -->
+    <canvas id="flight-webgl-canvas" class="w-full h-full absolute inset-0 z-20 pointer-events-none"></canvas>
   </div>
 
   <!-- ========================================================================= -->
@@ -2426,21 +2400,16 @@
       }
     }
 
-    // =========================================================================
-    // 4. PRECOMPUTED SPLINE TABLE & HIGH-PERFORMANCE FLIGHT PHYSICS
-    // =========================================================================
+    // PRECOMPUTE SPLINE LOOKUP TABLE (1,000 equidistant points)
+    // Eliminates expensive DOM getPointAtLength() queries from the 60/120fps render loop
+    const SPLINE_SAMPLES = 1000;
+    const splineTableX = new Float32Array(SPLINE_SAMPLES);
+    const splineTableY = new Float32Array(SPLINE_SAMPLES);
+    const splineTableAngle = new Float32Array(SPLINE_SAMPLES);
+
     const flightRibbon = document.getElementById('flight-ribbon');
     const flightCore = document.getElementById('flight-core');
     const flightGuide = document.getElementById('flight-guide');
-    const flightBird = document.getElementById('flight-bird');
-
-    const gullNearWing = document.getElementById('gull-near-wing');
-    const gullNearTip = document.getElementById('gull-near-tip');
-    const gullNearHighlight = document.getElementById('gull-near-highlight');
-    const gullFarWing = document.getElementById('gull-far-wing');
-    const gullFarTip = document.getElementById('gull-far-tip');
-    const gullTail = document.getElementById('gull-tail');
-
     const wpNodes = [document.getElementById('wp-node-0'), document.getElementById('wp-node-1'), document.getElementById('wp-node-2')];
     const wpLabels = [document.getElementById('wp-label-0'), document.getElementById('wp-label-1'), document.getElementById('wp-label-2')];
     const wpFractions = [0.40, 0.69, 0.965];
@@ -2448,13 +2417,6 @@
     const pathTotal = flightRibbon ? (flightRibbon.getTotalLength() || 1650) : 1650;
     if (flightRibbon) flightRibbon.style.strokeDasharray = `${pathTotal}`;
     if (flightCore) flightCore.style.strokeDasharray = `${pathTotal}`;
-
-    // PRECOMPUTE SPLINE LOOKUP TABLE (1,000 equidistant points)
-    // Eliminates expensive DOM getPointAtLength() queries from the 60/120fps render loop
-    const SPLINE_SAMPLES = 1000;
-    const splineTableX = new Float32Array(SPLINE_SAMPLES);
-    const splineTableY = new Float32Array(SPLINE_SAMPLES);
-    const splineTableAngle = new Float32Array(SPLINE_SAMPLES);
 
     if (flightRibbon) {
       for (let i = 0; i < SPLINE_SAMPLES; i++) {
@@ -2465,7 +2427,6 @@
         splineTableY[i] = p.y;
         splineTableAngle[i] = Math.atan2(pAhead.y - p.y, pAhead.x - p.x) * (180 / Math.PI);
       }
-      // Position the 3 destination waypoint beacons along the path
       wpFractions.forEach((frac, i) => {
         const sampleIdx = Math.round(frac * (SPLINE_SAMPLES - 1));
         if (wpNodes[i]) {
@@ -2478,17 +2439,96 @@
     }
 
     // =========================================================================
-    // REALISTIC AERODYNAMIC FLIGHT PHYSICS & SKELETAL WING ARTICULATION
+    // 4. CINEMA-GRADE 3D REALISTIC WHITE BIRD ENGINE (THREE.JS WEBGL)
     // =========================================================================
+    const webglCanvas = document.getElementById('flight-webgl-canvas');
+    let threeScene, threeCamera, threeRenderer, birdModelGroup, birdMixer, birdAction;
+    const threeClock = (typeof THREE !== 'undefined') ? new THREE.Clock() : null;
+
+    if (typeof THREE !== 'undefined' && webglCanvas) {
+      threeScene = new THREE.Scene();
+      threeCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+      threeCamera.position.set(0, 0, 100);
+
+      threeRenderer = new THREE.WebGLRenderer({ canvas: webglCanvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+      threeRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      threeRenderer.setSize(window.innerWidth, window.innerHeight);
+      threeRenderer.outputEncoding = THREE.sRGBEncoding;
+
+      // Cinematic Sunset & Sky Lighting
+      const ambLight = new THREE.AmbientLight(0xE2E8F0, 1.5);
+      threeScene.add(ambLight);
+
+      const sunKeyLight = new THREE.DirectionalLight(0xFDE68A, 2.4);
+      sunKeyLight.position.set(45, 45, 60);
+      threeScene.add(sunKeyLight);
+
+      const seaBounce = new THREE.DirectionalLight(0x38BDF8, 0.75);
+      seaBounce.position.set(-20, -50, 15);
+      threeScene.add(seaBounce);
+
+      // Load 3D White Bird (75 KB Stork.glb with Skeletal Morph Flight Animation)
+      const gltfLoader = new THREE.GLTFLoader();
+      gltfLoader.load('assets/models/Stork.glb', (gltf) => {
+        const model = gltf.scene;
+        model.traverse((child) => {
+          if (child.isMesh) {
+            child.material = new THREE.MeshStandardMaterial({
+              vertexColors: true,
+              roughness: 0.52,
+              metalness: 0.05,
+              morphTargets: true
+            });
+          }
+        });
+
+        const scaleVal = (window.innerWidth < 1024) ? 0.062 : 0.088;
+        model.scale.set(scaleVal, scaleVal, scaleVal);
+        model.rotation.y = Math.PI / 2; // Orient along flight direction
+
+        birdModelGroup = new THREE.Group();
+        birdModelGroup.add(model);
+        threeScene.add(birdModelGroup);
+
+        birdMixer = new THREE.AnimationMixer(model);
+        if (gltf.animations.length > 0) {
+          birdAction = birdMixer.clipAction(gltf.animations[0]);
+          birdAction.play();
+        }
+      }, undefined, (err) => {
+        console.warn('Could not load 3D bird model, falling back to clean route ribbon:', err);
+      });
+
+      window.addEventListener('resize', () => {
+        if (!threeCamera || !threeRenderer) return;
+        threeCamera.aspect = window.innerWidth / window.innerHeight;
+        threeCamera.updateProjectionMatrix();
+        threeRenderer.setSize(window.innerWidth, window.innerHeight);
+        if (birdModelGroup && birdModelGroup.children[0]) {
+          const s = (window.innerWidth < 1024) ? 0.062 : 0.088;
+          birdModelGroup.children[0].scale.set(s, s, s);
+        }
+      }, { passive: true });
+    }
+
+    function screenToWorld(screenX, screenY) {
+      if (!threeCamera) return new THREE.Vector3(0,0,0);
+      const xNorm = (screenX / window.innerWidth) * 2 - 1;
+      const yNorm = -(screenY / window.innerHeight) * 2 + 1;
+      const v = new THREE.Vector3(xNorm, yNorm, 0.5);
+      v.unproject(threeCamera);
+      const dir = v.sub(threeCamera.position).normalize();
+      const dist = -threeCamera.position.z / dir.z;
+      return threeCamera.position.clone().add(dir.multiplyScalar(dist));
+    }
+
     let lastTime = performance.now();
-    let flapPhase = 0;
-    let glideTimer = 0;
     const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     function animateFlight(now) {
       requestAnimationFrame(animateFlight);
 
-      // Check if container is hidden (e.g. past Section 2 Places)
+      // Save GPU/battery when user leaves Section 2 (Places) into lower sections
       const containerOpacity = flightContainer ? parseFloat(flightContainer.style.opacity || '1') : 1;
       if (document.hidden || containerOpacity <= 0.01) {
         lastTime = now;
@@ -2526,107 +2566,50 @@
         }
       });
 
-      if (flightBird) {
+      // Update 3D Bird in WebGL
+      if (threeClock && birdMixer) {
+        // Dynamic wing flap speed: flaps actively when moving/scrolling, soars in graceful glide when stationary
+        if (birdAction) {
+          birdAction.timeScale = prefersReducedMotion ? 0.2 : (0.78 + Math.min(1.4, speed * 26));
+        }
+        birdMixer.update(threeClock.getDelta());
+      }
+
+      if (birdModelGroup && splineTableX.length > 0) {
         const sampleIdx = Math.min(SPLINE_SAMPLES - 1, Math.max(0, Math.round(currentFlightProg * (SPLINE_SAMPLES - 1))));
-        const bx = splineTableX[sampleIdx] || 180;
-        const baseBy = splineTableY[sampleIdx] || 240;
-        const angleDeg = splineTableAngle[sampleIdx] || 0;
+        const sampleAheadIdx = Math.min(SPLINE_SAMPLES - 1, sampleIdx + 12);
 
-        // Aerodynamic Flight Dynamics: Flapping vs Soaring Glides
-        // When user scrolls / moves fast, seagull flaps with active power (3.2 - 4.5 Hz)
-        // When stationary or reading, seagull locks into a majestic dihedral soaring glide
-        glideTimer += dt;
-        const isCruising = speed < 0.0015;
-        const flapFrequency = 3.2 + Math.min(3.8, speed * 42); // Hz
+        // Convert 1440x900 SVG coordinates to current screen pixels
+        const screenX = (splineTableX[sampleIdx] / 1440) * window.innerWidth;
+        const screenY = (splineTableY[sampleIdx] / 900) * window.innerHeight;
+        const screenAheadX = (splineTableX[sampleAheadIdx] / 1440) * window.innerWidth;
+        const screenAheadY = (splineTableY[sampleAheadIdx] / 900) * window.innerHeight;
 
-        flapPhase += flapFrequency * dt * Math.PI * 2;
-        const rawFlap = Math.sin(flapPhase);
+        const worldPos = screenToWorld(screenX, screenY);
+        const worldAhead = screenToWorld(screenAheadX, screenAheadY);
 
-        // Wing deflection (-1.0 = downstroke, +1.0 = upstroke, 0.0 = neutral soaring glide)
-        const wingDeflection = prefersReducedMotion 
-          ? 0.0 
-          : (isCruising ? (0.12 + 0.22 * Math.sin(glideTimer * 1.4)) : rawFlap);
+        // Atmospheric hover lift bobbing (natural flight heave)
+        const liftHeave = Math.sin(now * 0.003) * 1.2;
+        worldPos.y += liftHeave;
+        birdModelGroup.position.copy(worldPos);
 
-        // Aerodynamic lift coupling: downstroke (-wing) creates positive lift (pushes bird UP in SVG = -Y)
-        const liftHeave = isCruising ? Math.sin(glideTimer * 1.1) * 2.5 : (wingDeflection * 5.8);
+        // Compute 3D direction vector and bank into curve
+        const dir = worldAhead.clone().sub(worldPos).normalize();
+        const pitchAngle = Math.atan2(dir.y, dir.x);
+        const rollAngle = (dir.y * 0.42);
 
-        // 3D Banking: bird rolls naturally into the curve derivative
-        const bankingAngle = angleDeg * 0.78 + (wingDeflection * 2.6);
+        birdModelGroup.rotation.z = pitchAngle;
+        birdModelGroup.rotation.x = rollAngle;
+      }
 
-        // Responsive perspective scale
-        const baseScale = isMobileLayout ? 0.74 : 1.0;
-        const perspectiveScale = baseScale * (1.14 - currentFlightProg * 0.14);
-
-        // Update Near Wing (foreground anatomical articulation)
-        if (gullNearWing && gullNearTip && gullNearHighlight) {
-          const nearRootY = -25 - wingDeflection * 22;
-          const nearMidY = -65 - wingDeflection * 48;
-          const nearTipX = -105 + (wingDeflection * 10);
-          const nearTipY = -75 - wingDeflection * 52;
-
-          gullNearWing.setAttribute('d', 
-            `M 8,0 C -12,${nearRootY.toFixed(1)} -45,${nearMidY.toFixed(1)} ${nearTipX.toFixed(1)},${nearTipY.toFixed(1)} ` +
-            `C -80,${(nearMidY + 36).toFixed(1)} -45,-14 -12,4 Z`
-          );
-          gullNearTip.setAttribute('d',
-            `M ${(nearTipX + 27).toFixed(1)},${(nearTipY + 10).toFixed(1)} ` +
-            `C ${(nearTipX + 17).toFixed(1)},${(nearTipY + 5).toFixed(1)} ${(nearTipX + 7).toFixed(1)},${(nearTipY + 2).toFixed(1)} ${nearTipX.toFixed(1)},${nearTipY.toFixed(1)} ` +
-            `C ${(nearTipX + 10).toFixed(1)},${(nearTipY + 18).toFixed(1)} -82,${(nearMidY + 32).toFixed(1)} -70,-42 ` +
-            `C -73,-56 -75,-70 ${(nearTipX + 27).toFixed(1)},${(nearTipY + 10).toFixed(1)} Z`
-          );
-          gullNearHighlight.setAttribute('d',
-            `M 8,0 C -12,${nearRootY.toFixed(1)} -45,${nearMidY.toFixed(1)} ${nearTipX.toFixed(1)},${nearTipY.toFixed(1)}`
-          );
-        }
-
-        // Update Far Wing (background perspective depth)
-        if (gullFarWing && gullFarTip) {
-          const farRootY = -22 - wingDeflection * 18;
-          const farMidY = -55 - wingDeflection * 40;
-          const farTipX = -92 + (wingDeflection * 8);
-          const farTipY = -62 - wingDeflection * 44;
-
-          gullFarWing.setAttribute('d',
-            `M -6,-4 C -22,${farRootY.toFixed(1)} -55,${farMidY.toFixed(1)} ${farTipX.toFixed(1)},${farTipY.toFixed(1)} ` +
-            `C -78,${(farMidY + 26).toFixed(1)} -48,-24 -18,-2 Z`
-          );
-          gullFarTip.setAttribute('d',
-            `M ${(farTipX + 20).toFixed(1)},${(farTipY + 8).toFixed(1)} ` +
-            `C ${(farTipX + 11).toFixed(1)},${(farTipY + 4).toFixed(1)} ${(farTipX + 5).toFixed(1)},${(farTipY + 2).toFixed(1)} ${farTipX.toFixed(1)},${farTipY.toFixed(1)} ` +
-            `C ${(farTipX + 9).toFixed(1)},${(farTipY + 14).toFixed(1)} -77,${(farMidY + 24).toFixed(1)} -68,-42 ` +
-            `C -70,-52 -72,-62 ${(farTipX + 20).toFixed(1)},${(farTipY + 8).toFixed(1)} Z`
-          );
-        }
-
-        // Tail pitch stabilization
-        if (gullTail) {
-          const tailPitch = wingDeflection * 3.2;
-          gullTail.setAttribute('transform', `rotate(${tailPitch.toFixed(1)} -28 3)`);
-        }
-
-        // Set Main Bird Rig Transform (Coordinates + Lift Bobbing + Banking + Perspective Scale)
-        const posX = bx;
-        const posY = baseBy + liftHeave;
-        flightBird.setAttribute(
-          'transform',
-          `translate(${posX.toFixed(1)}, ${posY.toFixed(1)}) rotate(${bankingAngle.toFixed(1)}) scale(${perspectiveScale.toFixed(3)})`
-        );
-
-        // Companion Distant Seagull (Atmospheric Depth)
-        const compBird = document.getElementById('flight-bird-companion');
-        if (compBird) {
-          const compX = posX - (isMobileLayout ? 48 : 88);
-          const compY = posY - (isMobileLayout ? 26 : 42);
-          const compBank = bankingAngle * 0.88;
-          compBird.setAttribute(
-            'transform',
-            `translate(${compX.toFixed(1)}, ${compY.toFixed(1)}) rotate(${compBank.toFixed(1)}) scale(${(perspectiveScale * 0.44).toFixed(3)})`
-          );
-        }
+      if (threeRenderer && threeScene && threeCamera) {
+        threeRenderer.render(threeScene, threeCamera);
       }
     }
     requestAnimationFrame(animateFlight);
 
+    // =========================================================================
+    // REALISTIC AERODYNAMIC FLIGHT PHYSICS & SKELETAL WING ARTICULATION
     // =========================================================================
     // 5. INTERACTIVE FORM & UI HANDLERS
     // =========================================================================
