@@ -20,8 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentLang = 'en';
   let heroVisible = true;
   let destVisible = false;
-  let targetFlightProg = 0.18;
-  let currentFlightProg = 0.18;
+  let targetFlightProg = 0.26;
+  let currentFlightProg = 0.26;
   let rafId = null;
   let autoFlyTimer = null;
   let pinScrollTrigger = null;
@@ -103,10 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (flightSvg) flightSvg.setAttribute('viewBox', `0 0 ${viewW} ${viewH}`);
 
     const d = isPhone
-      ? `M -12,${(viewH * 0.22).toFixed(1)} C ${(viewW * 0.24).toFixed(1)},${(viewH * 0.12).toFixed(1)} ${(viewW * 0.50).toFixed(1)},${(viewH * 0.21).toFixed(1)} ${(viewW * 0.68).toFixed(1)},${(viewH * 0.15).toFixed(1)} C ${(viewW * 0.82).toFixed(1)},${(viewH * 0.11).toFixed(1)} ${(viewW * 0.90).toFixed(1)},${(viewH * 0.19).toFixed(1)} ${(viewW * 0.95).toFixed(1)},${(viewH * 0.16).toFixed(1)}`
-      : `M -40,${(viewH * 0.29).toFixed(1)} C ${(viewW * 0.18).toFixed(1)},${(viewH * 0.13).toFixed(1)} ${(viewW * 0.38).toFixed(1)},${(viewH * 0.25).toFixed(1)} ${(viewW * 0.59).toFixed(1)},${(viewH * 0.16).toFixed(1)} C ${(viewW * 0.75).toFixed(1)},${(viewH * 0.10).toFixed(1)} ${(viewW * 0.87).toFixed(1)},${(viewH * 0.20).toFixed(1)} ${(viewW * 0.96).toFixed(1)},${(viewH * 0.15).toFixed(1)}`;
+      ? `M -15,${(viewH * 0.55).toFixed(1)} C ${(viewW * 0.15).toFixed(1)},${(viewH * 0.38).toFixed(1)} ${(viewW * 0.32).toFixed(1)},${(viewH * 0.48).toFixed(1)} ${(viewW * 0.48).toFixed(1)},${(viewH * 0.40).toFixed(1)} C ${(viewW * 0.60).toFixed(1)},${(viewH * 0.28).toFixed(1)} ${(viewW * 0.72).toFixed(1)},${(viewH * 0.22).toFixed(1)} ${(viewW * 0.82).toFixed(1)},${(viewH * 0.24).toFixed(1)} C ${(viewW * 0.90).toFixed(1)},${(viewH * 0.26).toFixed(1)} ${(viewW * 0.96).toFixed(1)},${(viewH * 0.45).toFixed(1)} ${(viewW * 1.04).toFixed(1)},${(viewH * 0.75).toFixed(1)}`
+      : `M ${(viewW * -0.02).toFixed(1)},${(viewH * 0.63).toFixed(1)} C ${(viewW * 0.10).toFixed(1)},${(viewH * 0.44).toFixed(1)} ${(viewW * 0.22).toFixed(1)},${(viewH * 0.54).toFixed(1)} ${(viewW * 0.38).toFixed(1)},${(viewH * 0.55).toFixed(1)} C ${(viewW * 0.46).toFixed(1)},${(viewH * 0.42).toFixed(1)} ${(viewW * 0.52).toFixed(1)},${(viewH * 0.24).toFixed(1)} ${(viewW * 0.69).toFixed(1)},${(viewH * 0.245).toFixed(1)} C ${(viewW * 0.82).toFixed(1)},${(viewH * 0.24).toFixed(1)} ${(viewW * 0.89).toFixed(1)},${(viewH * 0.46).toFixed(1)} ${(viewW * 1.04).toFixed(1)},${(viewH * 0.84).toFixed(1)}`;
 
-    wpFractions = isPhone ? [0.34, 0.62, 0.88] : [0.40, 0.69, 0.95];
+    wpFractions = isPhone ? [0.28, 0.58, 0.84] : [0.26, 0.56, 0.83];
     [flightGuide, flightRibbon, flightCore].forEach(el => el && el.setAttribute('d', d));
     pathTotal = flightRibbon ? (flightRibbon.getTotalLength() || viewW) : viewW;
     if (flightRibbon) flightRibbon.style.strokeDasharray = `${pathTotal}`;
@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (shouldScroll && destPinEl) scroller.scrollTo(destPinEl, { offset: -72 });
       if (cardsTrack) cardsTrack.style.transform = `translate3d(-${clamped * 100}%, 0, 0)`;
       updateActiveIndicators(clamped);
-      targetFlightProg = [0.38, 0.68, 0.94][clamped];
+      targetFlightProg = [0.26, 0.56, 0.83][clamped];
     }
   }
 
@@ -355,7 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const mapped = Math.min(1, Math.max(0, (p - 0.02) / 0.96));
           gsap.set([track, cardsTrack], { xPercent: -mapped * 200 });
           updateActiveIndicators(Math.min(2, Math.floor(p * 2.99)));
-          targetFlightProg = 0.36 + p * 0.58;
+          targetFlightProg = 0.26 + p * (0.83 - 0.26);
         }
       });
       return () => { if (pinScrollTrigger) { pinScrollTrigger.kill(); pinScrollTrigger = null; } };
