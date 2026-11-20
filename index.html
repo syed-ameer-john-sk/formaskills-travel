@@ -267,27 +267,59 @@
 
     @media (max-width: 1023px) {
       #destinations-pin {
+        position: relative;
+        z-index: 10;
+        isolation: isolate;
+        overflow: hidden;
         height: 100svh;
-        min-height: 640px;
-        max-height: 960px;
+        min-height: 600px;
+        max-height: 920px;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
       }
       /* Mobile-only transition on swipe (GSAP pin is strictly disabled <1024px) */
       #destinations-track,
       #destinations-cards-track {
         height: 100%;
         transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
       }
       .dest-slide,
       .dest-card-slide {
         height: 100%;
         align-items: flex-end;
         padding-top: 4.75rem;
-        padding-bottom: 6.25rem;
+        padding-bottom: 5.5rem;
       }
       .dest-slide img,
       .dest-slide.is-active img {
         transform: none;
         transition: none;
+      }
+    }
+
+    #hero-section {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+    }
+
+    #programmes,
+    #erasmus,
+    #why-sete,
+    #faq,
+    #planner {
+      position: relative;
+      z-index: 30;
+      isolation: isolate;
+    }
+
+    /* Desktop-only destinations pin stack (behind bird z-15 / cards z-25) */
+    @media (min-width: 1024px) {
+      #destinations-pin {
+        position: relative;
+        z-index: auto;
       }
     }
 
@@ -335,10 +367,6 @@
     }
     #flight-canvas-container.labels-hidden #waypoint-nodes text {
       opacity: 0.85 !important;
-    }
-    #destinations-pin {
-      position: relative;
-      z-index: auto;
     }
 
     /* Multi-Layer Moving Cloud Animations in Hero Section (Paused when .is-offscreen) */
@@ -1339,7 +1367,7 @@
     <!-- ========================================================================= -->
     <!-- SECTION 3: THE THREE OFFERS (CRISP ENTERPRISE CARDS + LOCALIZED MODAL)    -->
     <!-- ========================================================================= -->
-    <section id="programmes" class="relative z-20 py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-surface">
+    <section id="programmes" class="relative z-30 py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-surface">
       <div class="max-w-7xl mx-auto">
 
         <div class="text-center max-w-3xl mx-auto mb-14 sm:mb-16" data-reveal>
@@ -1421,7 +1449,7 @@
     <!-- ========================================================================= -->
     <!-- SECTION 4: ERASMUS+ MOBILITY + INTERACTIVE COHORT GRANT ESTIMATOR         -->
     <!-- ========================================================================= -->
-    <section id="erasmus" class="relative z-20 py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-linen border-t border-border">
+    <section id="erasmus" class="relative z-30 py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-linen border-t border-border">
       <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
 
         <div class="lg:col-span-6 flex flex-col gap-6" data-reveal>
@@ -1565,7 +1593,7 @@
     <!-- ========================================================================= -->
     <!-- SECTION 5: WHY SÈTE + RELOCATED FRANCE ROUTE GEOGRAPHY CARD               -->
     <!-- ========================================================================= -->
-    <section id="why-sete" class="relative z-20 py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-surface">
+    <section id="why-sete" class="relative z-30 py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-surface">
       <div class="max-w-7xl mx-auto">
 
         <!-- Full-Bleed Rounded Experience Banner -->
@@ -1673,7 +1701,7 @@
     <!-- ========================================================================= -->
     <!-- SECTION 5B: ENTERPRISE INTERACTIVE FAQ EXPLORER (100% LOCALIZED)          -->
     <!-- ========================================================================= -->
-    <section id="faq" class="relative z-20 py-20 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white border-t border-border">
+    <section id="faq" class="relative z-30 py-20 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white border-t border-border">
       <div class="max-w-4xl mx-auto">
         <div class="text-center mb-10" data-reveal>
           <span class="text-xs font-semibold uppercase tracking-widest text-amber-600 block mb-2" data-i18n="faq_kicker">Institutional & Learner Answers</span>
@@ -1702,7 +1730,7 @@
     <!-- ========================================================================= -->
     <!-- SECTION 6: PLAN YOUR EXPERIENCE + STANDARDIZED ENGLISH BRIEF GENERATOR    -->
     <!-- ========================================================================= -->
-    <section id="planner" class="relative z-20 py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-linen border-t border-border">
+    <section id="planner" class="relative z-30 py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-linen border-t border-border">
       <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
 
         <div class="lg:col-span-5 flex flex-col gap-6 lg:sticky lg:top-24 self-start" data-reveal>
@@ -3412,7 +3440,7 @@
             destVisible = entry.isIntersecting;
           }
         });
-      }, { threshold: 0.01 });
+      }, { rootMargin: '250px 0px 250px 0px', threshold: 0.01 });
       if (heroSectionEl) visObs.observe(heroSectionEl);
       if (destPinEl) visObs.observe(destPinEl);
     }
@@ -3543,8 +3571,8 @@
       updateActiveIndicators(currentDestIndex, currentDestIndex === 2);
       const st = ScrollTrigger.create({
         trigger: '#destinations-pin',
-        start: 'top 75%',
-        end: 'bottom 20%',
+        start: 'top 85%',
+        end: 'bottom 15%',
         scrub: 0.65,
         onEnter: () => { showFlight(); },
         onEnterBack: () => { showFlight(); },
@@ -3553,10 +3581,6 @@
           const startFrac = (wpFractions && wpFractions[0]) ? wpFractions[0] : 0.34;
           const endFrac = (wpFractions && wpFractions[2]) ? wpFractions[2] : 0.88;
           targetFlightProg = startFrac + p * (endFrac - startFrac);
-          const activeIndex = Math.min(2, Math.floor(p * 2.99));
-          updateActiveIndicators(activeIndex, p > 0.92);
-          if (track) track.style.transform = `translate3d(-${activeIndex * 100}%, 0, 0)`;
-          if (cardsTrack) cardsTrack.style.transform = `translate3d(-${activeIndex * 100}%, 0, 0)`;
         }
       });
       return () => { st.kill(); };
