@@ -1,0 +1,261 @@
+/* Formaskills Travel — Enterprise Stylesheet */
+html, body {
+  overflow-x: clip;
+  margin: 0;
+  padding: 0;
+  background-color: #FAF9F5;
+  color: #0E1A2B;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+.paper-texture {
+  background-image: radial-gradient(rgba(14, 26, 43, 0.032) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Core Web Vitals: Skip off-screen layout/paint for below-the-fold sections */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 720px;
+}
+
+/* Disciplined Surface Tokens */
+.surface-dark-overlay {
+  background: rgba(14, 26, 43, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 24px 55px -16px rgba(0, 0, 0, 0.5);
+}
+.surface-light-card {
+  background: #FFFFFF;
+  border: 1px solid #E2DED4;
+  box-shadow: 0 14px 36px -12px rgba(14, 26, 43, 0.07);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+.surface-light-card:hover {
+  border-color: rgba(245, 158, 11, 0.45);
+  box-shadow: 0 20px 44px -14px rgba(14, 26, 43, 0.12);
+}
+.nav-blur {
+  background: rgba(14, 26, 43, 0.90);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+/* Auto-collapsing Super-Bar on Scroll */
+#super-bar {
+  max-height: 36px;
+  opacity: 1;
+  overflow: hidden;
+  transition: max-height 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease, padding 0.32s ease;
+}
+header.is-scrolled #super-bar {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-bottom-width: 0;
+}
+header .nav-inner { transition: padding 0.28s ease; }
+header.is-scrolled .nav-inner { padding-top: 0.55rem; padding-bottom: 0.55rem; }
+header.is-scrolled { box-shadow: 0 14px 36px -18px rgba(0, 0, 0, 0.55); }
+
+/* GPU-Only Scroll Progress Bar (Zero Layout Thrashing) */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  z-index: 60;
+  transform-origin: left center;
+  transform: scaleX(0);
+  will-change: transform;
+  background: linear-gradient(90deg, #FCD34D, #F59E0B 60%, #FBBF24);
+  pointer-events: none;
+}
+
+/* Flicker-Free Fixed Flight Animation Layer (100svh prevents mobile URL-bar snaps) */
+#flight-canvas-container {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100svh;
+  pointer-events: none;
+  z-index: 20;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  contain: strict;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+#flight-bird, #flight-bird-companion { will-change: transform; }
+
+/* Hero Cloud Drift */
+@keyframes cloudDriftSlow {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.06); }
+  50% { transform: translate3d(-3%, -1%, 0) scale(1.10); }
+}
+@keyframes cloudFlowRightToLeft {
+  0% { transform: translate3d(0%, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+.hero-sky-bg { animation: cloudDriftSlow 34s ease-in-out infinite; will-change: transform; }
+.cloud-ribbon-slow { width: 200%; animation: cloudFlowRightToLeft 58s linear infinite; will-change: transform; }
+.cloud-ribbon-mid { width: 200%; animation: cloudFlowRightToLeft 38s linear infinite; will-change: transform; }
+
+/* Pause off-screen hero animations when scrolled away */
+#hero-section.is-offscreen .hero-sky-bg,
+#hero-section.is-offscreen .cloud-ribbon-slow,
+#hero-section.is-offscreen .cloud-ribbon-mid {
+  animation-play-state: paused;
+}
+
+/* Strip expensive live SVG/CSS blurs on mobile & coarse-pointer devices */
+@media (max-width: 1023px), (pointer: coarse) {
+  .cloud-ribbon-slow, .cloud-ribbon-mid {
+    filter: none !important;
+    will-change: auto;
+  }
+  #flight-ribbon, #flight-bird { filter: none !important; }
+  .surface-dark-overlay, .nav-blur {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}
+
+/* Desktop Pinned Destinations Track */
+@media (min-width: 1024px) {
+  #destinations-pin { height: 100vh; }
+  #destinations-track, #destinations-cards-track {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+  }
+  #destinations-track { position: relative; z-index: 0; }
+  #destinations-cards-track { position: absolute; inset: 0; z-index: 25; pointer-events: none; }
+  .dest-slide, .dest-card-slide {
+    width: 100%;
+    height: 100%;
+    flex: 0 0 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .dest-card-slide .surface-dark-overlay { pointer-events: auto; }
+  .dest-card-inner {
+    opacity: 0.35;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .dest-card-slide.is-active .dest-card-inner { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile Destinations: Normal Document Flow (Zero Section Overlap) */
+@media (max-width: 1023px) {
+  #destinations-track { display: none; }
+  #destinations-cards-track {
+    display: flex;
+    flex-wrap: nowrap;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .dest-card-slide {
+    width: 100%;
+    flex: 0 0 100%;
+  }
+  input, select, textarea { font-size: 16px !important; }
+}
+
+/* Cursor Spotlight on Desktop Offer Cards */
+.spotlight-card { position: relative; overflow: hidden; }
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(245, 158, 11, 0.11), transparent 65%);
+}
+@media (pointer: fine) {
+  .spotlight-card:hover::before { opacity: 1; }
+}
+
+/* Smooth CSS Grid FAQ Accordion */
+.faq-grid {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.faq-item[data-open="true"] .faq-grid { grid-template-rows: 1fr; }
+.faq-grid > div { overflow: hidden; }
+.faq-item[data-open="true"] .faq-chevron { transform: rotate(180deg); }
+
+/* Navigation & Accessibility */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+section[id] { scroll-margin-top: 5.5rem; }
+:focus-visible { outline: 2px solid #F59E0B; outline-offset: 3px; border-radius: 6px; }
+button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none; }
+
+.nav-link { position: relative; }
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -4px;
+  height: 1.5px;
+  background: #FBBF24;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nav-link:hover::after, .nav-link.is-current::after { transform: scaleX(1); }
+.nav-link.is-current { color: #FCD34D; }
+
+/* Masked Editorial Headline Reveal */
+.headline-mask { overflow: hidden; display: block; }
+.headline-line { display: inline-block; will-change: transform, opacity; }
+
+/* Range Slider */
+input[type="range"].erasmus-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(to right, #F59E0B 0%, #F59E0B var(--pct, 30%), #E2DED4 var(--pct, 30%), #E2DED4 100%);
+}
+input[type="range"].erasmus-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: #0E1A2B;
+  border: 3px solid #F59E0B;
+  cursor: pointer;
+}
+input[type="range"].erasmus-slider::-moz-range-thumb {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: #0E1A2B;
+  border: 3px solid #F59E0B;
+  cursor: pointer;
+}
+
+.safe-bottom { padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
