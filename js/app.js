@@ -56,6 +56,24 @@ document.addEventListener('DOMContentLoaded', () => {
   })();
 
   // 3. GPU-ONLY SCROLL PROGRESS & CONDENSED HEADER
+  function updateSectionFlightContext() {
+    if (!destPinEl) return;
+    const rect = destPinEl.getBoundingClientRect();
+    if (rect.top <= window.innerHeight * 0.45 && rect.bottom >= window.innerHeight * 0.25) {
+      if (typeof setTargetCurve === 'function') {
+        const curveName = currentDestIndex === 0 ? 'sete' : (currentDestIndex === 1 ? 'montpellier' : 'paris');
+        setTargetCurve(curveName);
+      }
+    } else if (rect.top > window.innerHeight * 0.45) {
+      if (typeof setTargetCurve === 'function') {
+        setTargetCurve('hero');
+        const heroHeight = heroSectionEl ? heroSectionEl.offsetHeight : window.innerHeight;
+        const heroP = Math.min(1, Math.max(0, window.scrollY / (heroHeight * 0.8)));
+        targetFlightProg = 0.26 + heroP * 0.16;
+      }
+    }
+  }
+
   let scrollTicking = false;
   function refreshScrollUi() {
     const doc = document.documentElement;
@@ -63,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
     if (progressEl) progressEl.style.transform = `scaleX(${p.toFixed(4)})`;
     if (headerEl) headerEl.classList.toggle('is-scrolled', window.scrollY > 28);
+    updateSectionFlightContext();
     scrollTicking = false;
   }
   window.addEventListener('scroll', () => {
@@ -91,33 +110,84 @@ document.addEventListener('DOMContentLoaded', () => {
   const sparkleCanvas = document.getElementById('flight-sparkle-canvas');
   const sCtx = (sparkleCanvas && isFinePointer) ? sparkleCanvas.getContext('2d') : null;
   let sparkles = [];
-  let wpFractions = [0.38, 0.68, 0.94];
-  let pathTotal = 1500;
   let viewW = window.innerWidth;
   let viewH = window.innerHeight;
+
+  // Landmark-aligned Bezier control points (normalized to viewport width & height)
+  // Derived directly from the user's hand-drawn trajectories across Hero and the 3 Destination slides:
+  const FLIGHT_CURVES = {
+    hero: [
+      [-0.02, 0.630], [0.120, 0.400], [0.190, 0.540], [0.400, 0.560],
+      [0.450, 0.410], [0.500, 0.240], [0.685, 0.245],
+      [0.860, 0.230], [0.870, 0.480], [1.040, 0.880]
+    ],
+    sete: [
+      [-0.02, 0.235], [0.281, 0.185], [0.251, 0.248], [0.401, 0.447],
+      [0.464, 0.559], [0.686, 0.571], [0.759, 0.539],
+      [0.938, 0.439], [0.915, 0.229], [1.020, 0.119]
+    ],
+    montpellier: [
+      [-0.02, 0.250], [0.254, 0.209], [0.255, 0.228], [0.450, 0.350],
+      [0.528, 0.427], [0.680, 0.459], [0.789, 0.455],
+      [0.933, 0.414], [0.946, 0.333], [1.020, 0.212]
+    ],
+    paris: [
+      [-0.02, 0.470], [0.131, 0.329], [0.237, 0.280], [0.432, 0.290],
+      [0.543, 0.346], [0.607, 0.440], [0.792, 0.450],
+      [0.868, 0.431], [0.943, 0.316], [1.020, 0.251]
+    ]
+  };
+
+  const WAYPOINT_FRACTIONS = {
+    hero: [0.30, 0.68, 0.88],
+    sete: [0.36, 0.65, 0.90],
+    montpellier: [0.28, 0.62, 0.88],
+    paris: [0.28, 0.58, 0.88]
+  };
+
+  let targetCurveName = 'hero';
+  let currentControlPoints = FLIGHT_CURVES.hero.map(p => [...p]);
+  let targetControlPoints = FLIGHT_CURVES.hero.map(p => [...p]);
+  let wpFractions = [...WAYPOINT_FRACTIONS.hero];
+  let targetWpFractions = [...WAYPOINT_FRACTIONS.hero];
+  let pathTotal = 1500;
+  let needsPathUpdate = true;
+
+  function setTargetCurve(name) {
+    if (!FLIGHT_CURVES[name] || targetCurveName === name) return;
+    targetCurveName = name;
+    targetControlPoints = FLIGHT_CURVES[name];
+    targetWpFractions = WAYPOINT_FRACTIONS[name] || WAYPOINT_FRACTIONS.hero;
+    needsPathUpdate = true;
+  }
+
+  function formatPathD(pts, w, h) {
+    return `M ${(pts[0][0] * w).toFixed(1)},${(pts[0][1] * h).toFixed(1)} ` +
+           `C ${(pts[1][0] * w).toFixed(1)},${(pts[1][1] * h).toFixed(1)} ${(pts[2][0] * w).toFixed(1)},${(pts[2][1] * h).toFixed(1)} ${(pts[3][0] * w).toFixed(1)},${(pts[3][1] * h).toFixed(1)} ` +
+           `C ${(pts[4][0] * w).toFixed(1)},${(pts[4][1] * h).toFixed(1)} ${(pts[5][0] * w).toFixed(1)},${(pts[5][1] * h).toFixed(1)} ${(pts[6][0] * w).toFixed(1)},${(pts[6][1] * h).toFixed(1)} ` +
+           `C ${(pts[7][0] * w).toFixed(1)},${(pts[7][1] * h).toFixed(1)} ${(pts[8][0] * w).toFixed(1)},${(pts[8][1] * h).toFixed(1)} ${(pts[9][0] * w).toFixed(1)},${(pts[9][1] * h).toFixed(1)}`;
+  }
+
+  function updateWaypointPositions() {
+    if (!flightRibbon || pathTotal <= 0) return;
+    wpFractions.forEach((frac, i) => {
+      const pt = flightRibbon.getPointAtLength(frac * pathTotal);
+      if (wpNodes[i]) wpNodes[i].setAttribute('transform', `translate(${pt.x.toFixed(1)}, ${pt.y.toFixed(1)})`);
+    });
+  }
 
   function updateFlightGeometry() {
     viewW = window.innerWidth;
     viewH = window.innerHeight;
-    const isPhone = viewW < 768;
     if (flightSvg) flightSvg.setAttribute('viewBox', `0 0 ${viewW} ${viewH}`);
 
-    const d = isPhone
-      ? `M -15,${(viewH * 0.55).toFixed(1)} C ${(viewW * 0.15).toFixed(1)},${(viewH * 0.38).toFixed(1)} ${(viewW * 0.32).toFixed(1)},${(viewH * 0.48).toFixed(1)} ${(viewW * 0.48).toFixed(1)},${(viewH * 0.40).toFixed(1)} C ${(viewW * 0.60).toFixed(1)},${(viewH * 0.28).toFixed(1)} ${(viewW * 0.72).toFixed(1)},${(viewH * 0.22).toFixed(1)} ${(viewW * 0.82).toFixed(1)},${(viewH * 0.24).toFixed(1)} C ${(viewW * 0.90).toFixed(1)},${(viewH * 0.26).toFixed(1)} ${(viewW * 0.96).toFixed(1)},${(viewH * 0.45).toFixed(1)} ${(viewW * 1.04).toFixed(1)},${(viewH * 0.75).toFixed(1)}`
-      : `M ${(viewW * -0.02).toFixed(1)},${(viewH * 0.63).toFixed(1)} C ${(viewW * 0.10).toFixed(1)},${(viewH * 0.44).toFixed(1)} ${(viewW * 0.22).toFixed(1)},${(viewH * 0.54).toFixed(1)} ${(viewW * 0.38).toFixed(1)},${(viewH * 0.55).toFixed(1)} C ${(viewW * 0.46).toFixed(1)},${(viewH * 0.42).toFixed(1)} ${(viewW * 0.52).toFixed(1)},${(viewH * 0.24).toFixed(1)} ${(viewW * 0.69).toFixed(1)},${(viewH * 0.245).toFixed(1)} C ${(viewW * 0.82).toFixed(1)},${(viewH * 0.24).toFixed(1)} ${(viewW * 0.89).toFixed(1)},${(viewH * 0.46).toFixed(1)} ${(viewW * 1.04).toFixed(1)},${(viewH * 0.84).toFixed(1)}`;
-
-    wpFractions = isPhone ? [0.28, 0.58, 0.84] : [0.26, 0.56, 0.83];
+    const d = formatPathD(currentControlPoints, viewW, viewH);
     [flightGuide, flightRibbon, flightCore].forEach(el => el && el.setAttribute('d', d));
     pathTotal = flightRibbon ? (flightRibbon.getTotalLength() || viewW) : viewW;
     if (flightRibbon) flightRibbon.style.strokeDasharray = `${pathTotal}`;
     if (flightCore) flightCore.style.strokeDasharray = `${pathTotal}`;
 
-    if (flightRibbon) {
-      wpFractions.forEach((frac, i) => {
-        const pt = flightRibbon.getPointAtLength(frac * pathTotal);
-        if (wpNodes[i]) wpNodes[i].setAttribute('transform', `translate(${pt.x.toFixed(1)}, ${pt.y.toFixed(1)})`);
-      });
-    }
+    updateWaypointPositions();
 
     if (sparkleCanvas && sCtx) {
       const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
@@ -151,6 +221,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const dt = Math.min(0.05, Math.max(0.001, (now - lastFrameTime) / 1000));
     lastFrameTime = now;
+
+    // Organic morphing of control points toward target landmark curve
+    const morphFactor = 1 - Math.exp(-6.5 * dt);
+    let maxDelta = 0;
+    for (let i = 0; i < 10; i++) {
+      const dx = targetControlPoints[i][0] - currentControlPoints[i][0];
+      const dy = targetControlPoints[i][1] - currentControlPoints[i][1];
+      currentControlPoints[i][0] += dx * morphFactor;
+      currentControlPoints[i][1] += dy * morphFactor;
+      const d = Math.abs(dx) + Math.abs(dy);
+      if (d > maxDelta) maxDelta = d;
+    }
+    for (let i = 0; i < 3; i++) {
+      wpFractions[i] += (targetWpFractions[i] - wpFractions[i]) * morphFactor;
+    }
+
+    if (maxDelta > 0.0003 || needsPathUpdate) {
+      needsPathUpdate = false;
+      const d = formatPathD(currentControlPoints, viewW, viewH);
+      [flightGuide, flightRibbon, flightCore].forEach(el => el && el.setAttribute('d', d));
+      pathTotal = flightRibbon ? (flightRibbon.getTotalLength() || viewW) : viewW;
+      if (flightRibbon) flightRibbon.style.strokeDasharray = `${pathTotal}`;
+      if (flightCore) flightCore.style.strokeDasharray = `${pathTotal}`;
+      updateWaypointPositions();
+    }
 
     const followEase = 1 - Math.exp(-4.8 * dt);
     const deltaProg = targetFlightProg - currentFlightProg;
@@ -275,10 +370,18 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.dest-card-slide').forEach((s, i) => s.classList.toggle('is-active', i === idx));
     if (statusReadout) statusReadout.textContent = `Flight · ${destNames[idx]}`;
     announce(`Viewing destination ${destNames[idx]}`);
+
+    if (destVisible || (destPinEl && window.scrollY >= destPinEl.offsetTop - window.innerHeight * 0.45)) {
+      const curveName = idx === 0 ? 'sete' : (idx === 1 ? 'montpellier' : 'paris');
+      setTargetCurve(curveName);
+    }
   }
 
   function flyToDestination(idx, shouldScroll = true) {
     const clamped = Math.max(0, Math.min(2, idx));
+    const curveName = clamped === 0 ? 'sete' : (clamped === 1 ? 'montpellier' : 'paris');
+    setTargetCurve(curveName);
+    targetFlightProg = [0.36, 0.62, 0.88][clamped];
     if (!isMobileLayout && pinScrollTrigger) {
       const ratios = [0.01, 0.50, 0.96];
       scroller.scrollTo(pinScrollTrigger.start + (pinScrollTrigger.end - pinScrollTrigger.start) * ratios[clamped]);
@@ -286,7 +389,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (shouldScroll && destPinEl) scroller.scrollTo(destPinEl, { offset: -72 });
       if (cardsTrack) cardsTrack.style.transform = `translate3d(-${clamped * 100}%, 0, 0)`;
       updateActiveIndicators(clamped);
-      targetFlightProg = [0.26, 0.56, 0.83][clamped];
     }
   }
 
@@ -354,8 +456,18 @@ document.addEventListener('DOMContentLoaded', () => {
           const p = self.progress;
           const mapped = Math.min(1, Math.max(0, (p - 0.02) / 0.96));
           gsap.set([track, cardsTrack], { xPercent: -mapped * 200 });
-          updateActiveIndicators(Math.min(2, Math.floor(p * 2.99)));
-          targetFlightProg = 0.26 + p * (0.83 - 0.26);
+          const activeIdx = Math.min(2, Math.floor(p * 2.99));
+          updateActiveIndicators(activeIdx);
+          const curveName = activeIdx === 0 ? 'sete' : (activeIdx === 1 ? 'montpellier' : 'paris');
+          setTargetCurve(curveName);
+          const localP = (p * 3) - activeIdx;
+          if (activeIdx === 0) {
+            targetFlightProg = 0.24 + localP * 0.26;
+          } else if (activeIdx === 1) {
+            targetFlightProg = 0.42 + localP * 0.26;
+          } else {
+            targetFlightProg = 0.58 + localP * 0.32;
+          }
         }
       });
       return () => { if (pinScrollTrigger) { pinScrollTrigger.kill(); pinScrollTrigger = null; } };
