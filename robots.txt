@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://formaskillstravel.fr/sitemap.xml
+Sitemap: https://formaskillstravel.com/sitemap.xml
