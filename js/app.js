@@ -26,6 +26,61 @@ document.addEventListener('DOMContentLoaded', () => {
   let autoFlyTimer = null;
   let pinScrollTrigger = null;
 
+  // Landmark-aligned Bezier control points (normalized to viewport width & height)
+  // Derived directly from the user's hand-drawn trajectories across Hero and the 3 Destination slides:
+  const FLIGHT_CURVES = {
+    hero: [
+      [-0.02, 0.630], [0.120, 0.400], [0.190, 0.540], [0.400, 0.560],
+      [0.450, 0.410], [0.500, 0.240], [0.685, 0.245],
+      [0.860, 0.230], [0.870, 0.480], [1.040, 0.880]
+    ],
+    sete: [
+      [-0.02, 0.235], [0.281, 0.185], [0.251, 0.248], [0.401, 0.447],
+      [0.464, 0.559], [0.686, 0.571], [0.759, 0.539],
+      [0.938, 0.439], [0.915, 0.229], [1.020, 0.119]
+    ],
+    montpellier: [
+      [-0.02, 0.250], [0.254, 0.209], [0.255, 0.228], [0.450, 0.350],
+      [0.528, 0.427], [0.680, 0.459], [0.789, 0.455],
+      [0.933, 0.414], [0.946, 0.333], [1.020, 0.212]
+    ],
+    paris: [
+      [-0.02, 0.470], [0.131, 0.329], [0.237, 0.280], [0.432, 0.290],
+      [0.543, 0.346], [0.607, 0.440], [0.792, 0.450],
+      [0.868, 0.431], [0.943, 0.316], [1.020, 0.251]
+    ]
+  };
+
+  const WAYPOINT_FRACTIONS = {
+    hero: [0.30, 0.68, 0.88],
+    sete: [0.36, 0.65, 0.90],
+    montpellier: [0.28, 0.62, 0.88],
+    paris: [0.28, 0.58, 0.88]
+  };
+
+  let targetCurveName = 'hero';
+  let currentControlPoints = FLIGHT_CURVES.hero.map(p => [...p]);
+  let targetControlPoints = FLIGHT_CURVES.hero.map(p => [...p]);
+  let wpFractions = [...WAYPOINT_FRACTIONS.hero];
+  let targetWpFractions = [...WAYPOINT_FRACTIONS.hero];
+  let pathTotal = 1500;
+  let needsPathUpdate = true;
+
+  function setTargetCurve(name) {
+    if (!FLIGHT_CURVES[name] || targetCurveName === name) return;
+    targetCurveName = name;
+    targetControlPoints = FLIGHT_CURVES[name];
+    targetWpFractions = WAYPOINT_FRACTIONS[name] || WAYPOINT_FRACTIONS.hero;
+    needsPathUpdate = true;
+  }
+
+  function formatPathD(pts, w, h) {
+    return `M ${(pts[0][0] * w).toFixed(1)},${(pts[0][1] * h).toFixed(1)} ` +
+           `C ${(pts[1][0] * w).toFixed(1)},${(pts[1][1] * h).toFixed(1)} ${(pts[2][0] * w).toFixed(1)},${(pts[2][1] * h).toFixed(1)} ${(pts[3][0] * w).toFixed(1)},${(pts[3][1] * h).toFixed(1)} ` +
+           `C ${(pts[4][0] * w).toFixed(1)},${(pts[4][1] * h).toFixed(1)} ${(pts[5][0] * w).toFixed(1)},${(pts[5][1] * h).toFixed(1)} ${(pts[6][0] * w).toFixed(1)},${(pts[6][1] * h).toFixed(1)} ` +
+           `C ${(pts[7][0] * w).toFixed(1)},${(pts[7][1] * h).toFixed(1)} ${(pts[8][0] * w).toFixed(1)},${(pts[8][1] * h).toFixed(1)} ${(pts[9][0] * w).toFixed(1)},${(pts[9][1] * h).toFixed(1)}`;
+  }
+
   function announce(msg) {
     if (announcerEl) announcerEl.textContent = msg;
   }
@@ -113,61 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let viewW = window.innerWidth;
   let viewH = window.innerHeight;
 
-  // Landmark-aligned Bezier control points (normalized to viewport width & height)
-  // Derived directly from the user's hand-drawn trajectories across Hero and the 3 Destination slides:
-  const FLIGHT_CURVES = {
-    hero: [
-      [-0.02, 0.630], [0.120, 0.400], [0.190, 0.540], [0.400, 0.560],
-      [0.450, 0.410], [0.500, 0.240], [0.685, 0.245],
-      [0.860, 0.230], [0.870, 0.480], [1.040, 0.880]
-    ],
-    sete: [
-      [-0.02, 0.235], [0.281, 0.185], [0.251, 0.248], [0.401, 0.447],
-      [0.464, 0.559], [0.686, 0.571], [0.759, 0.539],
-      [0.938, 0.439], [0.915, 0.229], [1.020, 0.119]
-    ],
-    montpellier: [
-      [-0.02, 0.250], [0.254, 0.209], [0.255, 0.228], [0.450, 0.350],
-      [0.528, 0.427], [0.680, 0.459], [0.789, 0.455],
-      [0.933, 0.414], [0.946, 0.333], [1.020, 0.212]
-    ],
-    paris: [
-      [-0.02, 0.470], [0.131, 0.329], [0.237, 0.280], [0.432, 0.290],
-      [0.543, 0.346], [0.607, 0.440], [0.792, 0.450],
-      [0.868, 0.431], [0.943, 0.316], [1.020, 0.251]
-    ]
-  };
-
-  const WAYPOINT_FRACTIONS = {
-    hero: [0.30, 0.68, 0.88],
-    sete: [0.36, 0.65, 0.90],
-    montpellier: [0.28, 0.62, 0.88],
-    paris: [0.28, 0.58, 0.88]
-  };
-
-  let targetCurveName = 'hero';
-  let currentControlPoints = FLIGHT_CURVES.hero.map(p => [...p]);
-  let targetControlPoints = FLIGHT_CURVES.hero.map(p => [...p]);
-  let wpFractions = [...WAYPOINT_FRACTIONS.hero];
-  let targetWpFractions = [...WAYPOINT_FRACTIONS.hero];
-  let pathTotal = 1500;
-  let needsPathUpdate = true;
-
-  function setTargetCurve(name) {
-    if (!FLIGHT_CURVES[name] || targetCurveName === name) return;
-    targetCurveName = name;
-    targetControlPoints = FLIGHT_CURVES[name];
-    targetWpFractions = WAYPOINT_FRACTIONS[name] || WAYPOINT_FRACTIONS.hero;
-    needsPathUpdate = true;
-  }
-
-  function formatPathD(pts, w, h) {
-    return `M ${(pts[0][0] * w).toFixed(1)},${(pts[0][1] * h).toFixed(1)} ` +
-           `C ${(pts[1][0] * w).toFixed(1)},${(pts[1][1] * h).toFixed(1)} ${(pts[2][0] * w).toFixed(1)},${(pts[2][1] * h).toFixed(1)} ${(pts[3][0] * w).toFixed(1)},${(pts[3][1] * h).toFixed(1)} ` +
-           `C ${(pts[4][0] * w).toFixed(1)},${(pts[4][1] * h).toFixed(1)} ${(pts[5][0] * w).toFixed(1)},${(pts[5][1] * h).toFixed(1)} ${(pts[6][0] * w).toFixed(1)},${(pts[6][1] * h).toFixed(1)} ` +
-           `C ${(pts[7][0] * w).toFixed(1)},${(pts[7][1] * h).toFixed(1)} ${(pts[8][0] * w).toFixed(1)},${(pts[8][1] * h).toFixed(1)} ${(pts[9][0] * w).toFixed(1)},${(pts[9][1] * h).toFixed(1)}`;
-  }
-
   function updateWaypointPositions() {
     if (!flightRibbon || pathTotal <= 0) return;
     wpFractions.forEach((frac, i) => {
@@ -247,11 +247,16 @@ document.addEventListener('DOMContentLoaded', () => {
       updateWaypointPositions();
     }
 
+    glideTimer += dt;
     const followEase = 1 - Math.exp(-4.8 * dt);
     const deltaProg = targetFlightProg - currentFlightProg;
     currentFlightProg += deltaProg * followEase;
 
-    const dist = Math.max(0, Math.min(pathTotal, currentFlightProg * pathTotal));
+    // Ambient soaring glide along the active landmark curve
+    const ambientGlide = prefersReducedMotion ? 0 : Math.sin(glideTimer * 0.75) * 0.016;
+    const effectiveProg = Math.max(0.01, Math.min(0.99, currentFlightProg + ambientGlide));
+
+    const dist = Math.max(0, Math.min(pathTotal, effectiveProg * pathTotal));
     const dashOffset = Math.max(0, pathTotal - dist);
     if (flightRibbon) flightRibbon.style.strokeDashoffset = `${dashOffset.toFixed(1)}`;
     if (flightCore) flightCore.style.strokeDashoffset = `${dashOffset.toFixed(1)}`;
@@ -260,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const node = wpNodes[idx];
       const label = wpLabels[idx];
       if (!node) return;
-      const active = currentFlightProg >= frac - 0.05;
+      const active = effectiveProg >= frac - 0.05;
       node.setAttribute('opacity', active ? '1' : '0.32');
       if (label) label.style.opacity = active ? '0.9' : '0';
     });
@@ -270,7 +275,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const ptAhead = flightRibbon.getPointAtLength(Math.min(pathTotal, dist + 20));
       const angleDeg = (Math.atan2(ptAhead.y - pt.y, ptAhead.x - pt.x) * 180) / Math.PI;
 
-      glideTimer += dt;
       const wingEnergy = prefersReducedMotion ? 0.1 : (0.55 + 0.35 * Math.sin(glideTimer * 0.95));
       flapPhase += dt * (prefersReducedMotion ? 1 : 4.2);
 
@@ -491,13 +495,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const key = el.getAttribute('data-i18n');
       if (dict[key]) el.textContent = dict[key];
     });
-    try { localStorage.setItem('formaskills_lang', lang); } catch (_) {}
+    try { localStorage.setItem('formaskills_lang', lang); } catch (_) { }
   }
 
   try {
     const saved = localStorage.getItem('formaskills_lang');
     if (saved && I18N[saved]) applyLanguage(saved);
-  } catch (_) {}
+  } catch (_) { }
 
   // 7. SITE-WIDE DUAL-PERSONA SWITCHER
   function setPersona(persona) {
