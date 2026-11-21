@@ -76,9 +76,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function formatPathD(pts, w, h) {
     return `M ${(pts[0][0] * w).toFixed(1)},${(pts[0][1] * h).toFixed(1)} ` +
-           `C ${(pts[1][0] * w).toFixed(1)},${(pts[1][1] * h).toFixed(1)} ${(pts[2][0] * w).toFixed(1)},${(pts[2][1] * h).toFixed(1)} ${(pts[3][0] * w).toFixed(1)},${(pts[3][1] * h).toFixed(1)} ` +
-           `C ${(pts[4][0] * w).toFixed(1)},${(pts[4][1] * h).toFixed(1)} ${(pts[5][0] * w).toFixed(1)},${(pts[5][1] * h).toFixed(1)} ${(pts[6][0] * w).toFixed(1)},${(pts[6][1] * h).toFixed(1)} ` +
-           `C ${(pts[7][0] * w).toFixed(1)},${(pts[7][1] * h).toFixed(1)} ${(pts[8][0] * w).toFixed(1)},${(pts[8][1] * h).toFixed(1)} ${(pts[9][0] * w).toFixed(1)},${(pts[9][1] * h).toFixed(1)}`;
+      `C ${(pts[1][0] * w).toFixed(1)},${(pts[1][1] * h).toFixed(1)} ${(pts[2][0] * w).toFixed(1)},${(pts[2][1] * h).toFixed(1)} ${(pts[3][0] * w).toFixed(1)},${(pts[3][1] * h).toFixed(1)} ` +
+      `C ${(pts[4][0] * w).toFixed(1)},${(pts[4][1] * h).toFixed(1)} ${(pts[5][0] * w).toFixed(1)},${(pts[5][1] * h).toFixed(1)} ${(pts[6][0] * w).toFixed(1)},${(pts[6][1] * h).toFixed(1)} ` +
+      `C ${(pts[7][0] * w).toFixed(1)},${(pts[7][1] * h).toFixed(1)} ${(pts[8][0] * w).toFixed(1)},${(pts[8][1] * h).toFixed(1)} ${(pts[9][0] * w).toFixed(1)},${(pts[9][1] * h).toFixed(1)}`;
   }
 
   function announce(msg) {

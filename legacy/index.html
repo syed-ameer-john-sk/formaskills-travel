@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Formaskills Travel — France begins before you land</title>
+  <meta name="description"
+    content="Boutique French language immersion, accredited Erasmus+ KA1/KA2 mobility, and cultural journeys in Sète, Montpellier, and Paris. Coordinated from Sète, Occitanie." />
+  <meta name="theme-color" content="#0E1A2B" />
+  <link rel="canonical" href="https://formaskillstravel.com/en/" />
+  <link rel="alternate" hreflang="en" href="https://formaskillstravel.com/en/" />
+  <link rel="alternate" hreflang="fr" href="https://formaskillstravel.com/fr/" />
+  <link rel="alternate" hreflang="es" href="https://formaskillstravel.com/es/" />
+  <link rel="alternate" hreflang="de" href="https://formaskillstravel.com/de/" />
+  <link rel="alternate" hreflang="it" href="https://formaskillstravel.com/it/" />
+  <link rel="alternate" hreflang="pl" href="https://formaskillstravel.com/pl/" />
+  <link rel="alternate" hreflang="zh" href="https://formaskillstravel.com/zh/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Formaskills Travel" />
+  <meta property="og:title" content="Formaskills Travel — France begins before you land" />
+  <meta property="og:description"
+    content="Accredited French immersion, Erasmus+ KA1/KA2 mobility, and cultural journeys in Sète, Montpellier and Paris." />
+  <meta property="og:image" content="assets/hero-clouds.webp" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%230E1A2B'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23FBBF24'%3EF%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": ["TravelAgency", "EducationalOrganization", "LocalBusiness"],
+        "name": "Formaskills Travel SAS",
+        "url": "https://formaskillstravel.com",
+        "telephone": "+33 9 75 46 22 81",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "6 rue Voltaire",
+          "addressLocality": "Sète",
+          "postalCode": "34200",
+          "addressRegion": "Occitanie",
+          "addressCountry": "FR"
+        },
+        "identifier": [
+          { "@type": "PropertyValue", "name": "SIREN", "value": "990 746 430" },
+          { "@type": "PropertyValue", "name": "Atout France", "value": "IM034230008" },
+          { "@type": "PropertyValue", "name": "Erasmus+ PIC", "value": "8991204" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Tailwind CSS (Compile statically via Vite/PostCSS for production) -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            linen: "#F4F3ED",
+            "linen-dark": "#ECE9DF",
+            surface: "#FAF9F5",
+            primary: "#0E1A2B",
+            navy: "#13233A",
+            gold: "#F59E0B",
+            "gold-light": "#FBBF24",
+            terracotta: "#9C4A2B",
+            border: "#E2DED4"
+          },
+          fontFamily: {
+            serif: ["Newsreader", "Georgia", "serif"],
+            sans: ["Plus Jakarta Sans", "-apple-system", "BlinkMacSystemFont", "sans-serif"]
+          },
+          boxShadow: {
+            soft: "0 12px 35px -8px rgba(14, 26, 43, 0.08)",
+            luxury: "0 25px 60px -15px rgba(14, 26, 43, 0.25)",
+            glow: "0 0 32px rgba(245, 158, 11, 0.30)"
+          }
+        }
+      }
+    };
+  </script>
+
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <script defer src="https://unpkg.com/lenis@1.3.21/dist/lenis.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script defer src="js/i18n.js"></script>
+  <script defer src="js/app.js"></script>
+</head>
+
+<body class="paper-texture selection:bg-amber-200 selection:text-primary pb-20 lg:pb-0">
+  <a href="#main-content"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2.5 focus:rounded-full focus:bg-amber-400 focus:text-primary focus:font-bold focus:text-xs">
+    Skip to main content
+  </a>
+
+  <div id="scroll-progress" aria-hidden="true"></div>
+  <div id="live-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- FLICKER-FREE, ZERO-IDLE SEAGULL FLIGHT ENGINE -->
+  <div id="flight-canvas-container" aria-hidden="true">
+    <canvas id="flight-sparkle-canvas" class="hidden lg:block absolute inset-0 w-full h-full"></canvas>
+    <svg id="global-flight-svg" class="w-full h-full relative z-10 overflow-visible" viewBox="0 0 1440 900"
+      preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="birdTrailGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+          <stop offset="0%" stop-color="#93C5FD" stop-opacity="0" />
+          <stop offset="28%" stop-color="#E2E8F0" stop-opacity="0.22" />
+          <stop offset="66%" stop-color="#F5B841" stop-opacity="0.65" />
+          <stop offset="100%" stop-color="#FFFDF7" stop-opacity="0.92" />
+        </linearGradient>
+        <linearGradient id="gullBodyGrad" x1="10%" y1="0%" x2="90%" y2="100%">
+          <stop offset="0%" stop-color="#FFFFFF" />
+          <stop offset="65%" stop-color="#F8F5EE" />
+          <stop offset="100%" stop-color="#FDE68A" />
+        </linearGradient>
+        <linearGradient id="gullNearWingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#FFFFFF" />
+          <stop offset="55%" stop-color="#F8F5EE" />
+          <stop offset="100%" stop-color="#CBD5E1" />
+        </linearGradient>
+        <linearGradient id="gullFarWingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#E2E8F0" />
+          <stop offset="100%" stop-color="#64748B" />
+        </linearGradient>
+        <radialGradient id="beaconGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#FFFDF7" stop-opacity="0.85" />
+          <stop offset="45%" stop-color="#FDE68A" stop-opacity="0.40" />
+          <stop offset="100%" stop-color="#F59E0B" stop-opacity="0" />
+        </radialGradient>
+        <filter id="trailGlow" x="-15%" y="-30%" width="130%" height="160%">
+          <feGaussianBlur stdDeviation="2.8" result="softBlur" />
+          <feMerge>
+            <feMergeNode in="softBlur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+        <filter id="birdGoldenShadow" x="-35%" y="-35%" width="170%" height="170%">
+          <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#0E1A2B" flood-opacity="0.24" />
+        </filter>
+      </defs>
+
+      <path id="flight-guide"
+        d="M -29,567 C 144,396 317,486 547,495 C 662,378 749,216 994,220 C 1181,216 1282,414 1498,756" fill="none"
+        stroke="rgba(255,255,255,0.14)" stroke-width="1.15" stroke-dasharray="3 8" />
+      <path id="flight-ribbon"
+        d="M -29,567 C 144,396 317,486 547,495 C 662,378 749,216 994,220 C 1181,216 1282,414 1498,756" fill="none"
+        stroke="url(#birdTrailGrad)" stroke-width="2.6" stroke-linecap="round" filter="url(#trailGlow)" />
+      <path id="flight-core"
+        d="M -29,567 C 144,396 317,486 547,495 C 662,378 749,216 994,220 C 1181,216 1282,414 1498,756" fill="none"
+        stroke="#FFFDF7" stroke-width="1" stroke-linecap="round" opacity="0.82" />
+
+      <g id="waypoint-nodes">
+        <g id="wp-node-0" opacity="0.85" transform="translate(547,495)">
+          <circle r="15" fill="url(#beaconGlow)" />
+          <circle r="3.4" fill="#FFFDF7" stroke="#F59E0B" stroke-width="1.6" />
+          <text id="wp-label-0" x="0" y="-14" text-anchor="middle" fill="#FFFDF7" font-size="10" font-weight="600"
+            letter-spacing="2">SÈTE</text>
+        </g>
+        <g id="wp-node-1" opacity="0.35" transform="translate(994,220)">
+          <circle r="15" fill="url(#beaconGlow)" />
+          <circle r="3.4" fill="#FFFDF7" stroke="#38BDF8" stroke-width="1.6" />
+          <text id="wp-label-1" x="0" y="-14" text-anchor="middle" fill="#FFFDF7" font-size="10" font-weight="600"
+            letter-spacing="2" opacity="0">MONTPELLIER</text>
+        </g>
+        <g id="wp-node-2" opacity="0.35" transform="translate(1354,526)">
+          <circle r="18" fill="url(#beaconGlow)" />
+          <circle r="4" fill="#FFFDF7" stroke="#F59E0B" stroke-width="1.8" />
+          <text id="wp-label-2" x="0" y="-15" text-anchor="middle" fill="#FEF08A" font-size="10" font-weight="600"
+            letter-spacing="2" opacity="0">PARIS</text>
+        </g>
+      </g>
+
+      <g id="flight-bird-companion" opacity="0.45" transform="translate(480,480) scale(0.46)">
+        <path id="comp-far-wing" d="M -2,-2 C -14,-24 -36,-42 -66,-48 C -52,-30 -32,-14 -12,-2 Z" fill="#CBD5E1"
+          opacity="0.72" />
+        <path d="M -22,2 C -10,-4 8,-5 24,-1 C 28,1 30,3 28,5 C 15,9 -5,8 -22,2 Z" fill="#F8FAFC" />
+        <path id="comp-near-wing" d="M 5,1 C -8,-26 -30,-52 -72,-60 C -54,-34 -30,-10 -8,3 Z" fill="#FFFFFF" />
+      </g>
+
+      <g id="flight-bird" filter="url(#birdGoldenShadow)" transform="translate(547,495)">
+        <g id="gull-rig">
+          <path id="gull-far-wing" d="M -4,-3 C -18,-34 -46,-58 -84,-68 C -68,-44 -42,-20 -16,-2 Z"
+            fill="url(#gullFarWingGrad)" />
+          <path id="gull-far-tip"
+            d="M -64,-60 C -72,-64 -78,-66 -84,-68 C -77,-56 -69,-46 -60,-37 C -61,-45 -62,-53 -64,-60 Z" fill="#334155"
+            opacity="0.82" />
+          <path id="gull-tail" d="M -26,2 L -52,-6 L -48,1.5 L -54,8.5 L -24,6 Z" fill="#E2E8F0" />
+          <path id="gull-body" d="M -30,2.5 C -14,-7 12,-8.5 34,-2 C 41,0 44,2.8 41,5.5 C 23,13 -8,11.5 -30,2.5 Z"
+            fill="url(#gullBodyGrad)" />
+          <circle cx="37.5" cy="-1.2" r="4.8" fill="#FFFFFF" />
+          <circle cx="39.8" cy="-2" r="1.15" fill="#0F172A" />
+          <path d="M 42,-2 L 53,0.4 L 51,2.2 L 41.8,1 Z" fill="#F59E0B" />
+          <path id="gull-near-wing" d="M 8,1 C -10,-36 -42,-74 -96,-86 C -74,-50 -42,-15 -12,4 Z"
+            fill="url(#gullNearWingGrad)" />
+          <path id="gull-near-tip"
+            d="M -72,-78 C -81,-82 -88,-84 -96,-86 C -87,-70 -76,-54 -65,-42 C -67,-54 -70,-66 -72,-78 Z" fill="#1E293B"
+            opacity="0.86" />
+          <path id="gull-near-highlight" d="M 8,1 C -10,-36 -42,-74 -94,-85" fill="none" stroke="#FFFBEB"
+            stroke-width="1.6" stroke-linecap="round" opacity="0.92" />
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <!-- SLIMMED ENTERPRISE HEADER -->
+  <header class="fixed top-0 left-0 w-full z-40 nav-blur text-white">
+    <div id="super-bar" class="bg-primary/95 text-slate-300 text-[11px] py-1.5 px-4 border-b border-white/10">
+      <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0" aria-hidden="true"></span>
+          <span class="font-medium text-white truncate" data-i18n="top_hq">Sète Maritime Operational HQ · 6 rue
+            Voltaire, 34200 Sète</span>
+        </div>
+        <a href="tel:+33975462281"
+          class="text-white hover:text-amber-300 transition-colors flex items-center gap-1.5 font-semibold shrink-0">
+          <svg class="w-3.5 h-3.5 text-amber-300" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path
+              d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+          </svg>
+          <span>+33 9 75 46 22 81</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="nav-inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-3">
+      <a href="#hero-section" class="flex items-center gap-2.5 shrink-0" aria-label="Formaskills Travel Home">
+        <div class="flex flex-col">
+          <svg class="w-24 h-4 -mb-1 text-amber-400 overflow-visible" viewBox="0 0 120 24" fill="none"
+            aria-hidden="true">
+            <path d="M 18,18 Q 62,-2 102,12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            <path d="M 100,6 L 111,13 L 99,16 L 102,12 Z" fill="#FFFFFF" />
+          </svg>
+          <span class="font-serif text-lg sm:text-2xl tracking-tight text-white font-medium leading-none">
+            Formaskills <span class="text-amber-300 font-normal">Travel</span>
+          </span>
+        </div>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-5 text-[13px] font-medium text-slate-200" aria-label="Primary">
+        <a href="#destinations-pin" class="nav-link hover:text-amber-300 transition-colors"
+          data-i18n="nav_destinations">Destinations</a>
+        <a href="#programmes" class="nav-link hover:text-amber-300 transition-colors" data-i18n="nav_offers">Our
+          Offers</a>
+        <a href="#erasmus" class="nav-link hover:text-amber-300 transition-colors" data-i18n="nav_erasmus">Erasmus+</a>
+        <a href="#why-sete" class="nav-link hover:text-amber-300 transition-colors" data-i18n="nav_why_sete">Why
+          Sète</a>
+        <a href="#faq" class="nav-link hover:text-amber-300 transition-colors" data-i18n="nav_faq">FAQ</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <div
+          class="hidden md:inline-flex items-center bg-white/10 border border-white/15 rounded-full p-1 text-xs font-semibold"
+          role="group" aria-label="Audience mode">
+          <button type="button" data-action="set-persona" data-persona="learner" aria-pressed="true"
+            class="persona-btn px-3 py-1.5 rounded-full bg-amber-400 text-primary transition-all min-h-[34px]"
+            data-i18n="nav_for_me">For me</button>
+          <button type="button" data-action="set-persona" data-persona="organisation" aria-pressed="false"
+            class="persona-btn px-3 py-1.5 rounded-full text-slate-200 hover:text-white transition-all min-h-[34px]"
+            data-i18n="nav_for_org">For organisation</button>
+        </div>
+
+        <div class="relative" id="langSwitcherWrap">
+          <button type="button" id="langDropdownBtn" data-action="toggle-lang" aria-haspopup="true"
+            aria-expanded="false" aria-controls="langDropdownMenu"
+            class="flex items-center gap-1.5 px-3 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white transition min-h-[44px]">
+            <svg class="w-4 h-4 text-amber-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+              <path
+                d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            <span id="currentLangCode">EN</span>
+            <svg class="w-3.5 h-3.5 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" aria-hidden="true">
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+          <div id="langDropdownMenu" role="menu"
+            class="hidden absolute right-0 mt-2 w-44 rounded-2xl surface-dark-overlay p-1.5 z-50">
+            <button type="button" role="menuitem" data-action="set-lang" data-lang="en"
+              class="lang-opt w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-white hover:bg-white/10 min-h-[40px]"><span>English</span><span
+                class="text-[10px] text-amber-300 font-bold">EN</span></button>
+            <button type="button" role="menuitem" data-action="set-lang" data-lang="fr"
+              class="lang-opt w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-white hover:bg-white/10 min-h-[40px]"><span>Français</span><span
+                class="text-[10px] text-slate-400">FR</span></button>
+            <button type="button" role="menuitem" data-action="set-lang" data-lang="es"
+              class="lang-opt w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-white hover:bg-white/10 min-h-[40px]"><span>Español</span><span
+                class="text-[10px] text-slate-400">ES</span></button>
+            <button type="button" role="menuitem" data-action="set-lang" data-lang="de"
+              class="lang-opt w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-white hover:bg-white/10 min-h-[40px]"><span>Deutsch</span><span
+                class="text-[10px] text-slate-400">DE</span></button>
+            <button type="button" role="menuitem" data-action="set-lang" data-lang="it"
+              class="lang-opt w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-white hover:bg-white/10 min-h-[40px]"><span>Italiano</span><span
+                class="text-[10px] text-slate-400">IT</span></button>
+            <button type="button" role="menuitem" data-action="set-lang" data-lang="pl"
+              class="lang-opt w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-white hover:bg-white/10 min-h-[40px]"><span>Polski</span><span
+                class="text-[10px] text-slate-400">PL</span></button>
+            <button type="button" role="menuitem" data-action="set-lang" data-lang="zh"
+              class="lang-opt w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-white hover:bg-white/10 min-h-[40px]"><span>中文</span><span
+                class="text-[10px] text-slate-400">ZH</span></button>
+          </div>
+        </div>
+
+        <button type="button" data-action="open-planner" data-context="General Enquiry"
+          class="hidden sm:inline-flex items-center px-5 py-2.5 rounded-full bg-amber-400 hover:bg-amber-300 text-primary text-xs font-bold uppercase tracking-wider shadow-glow transition min-h-[44px]"
+          data-i18n="nav_cta">
+          Plan Your Stay
+        </button>
+
+        <button type="button" id="mobileMenuBtn" data-action="toggle-drawer" aria-label="Open menu"
+          aria-controls="mobileDrawer" aria-expanded="false"
+          class="lg:hidden w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Drawer -->
+  <div id="mobileDrawerBackdrop" data-action="toggle-drawer"
+    class="fixed inset-0 bg-primary/70 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+  </div>
+  <aside id="mobileDrawer" aria-label="Mobile navigation" aria-hidden="true"
+    class="fixed top-0 right-0 h-full w-[86vw] max-w-sm bg-primary text-white z-50 transform translate-x-full transition-transform duration-300 ease-out border-l border-white/15 flex flex-col justify-between p-6 overflow-y-auto">
+    <div>
+      <div class="flex items-center justify-between pb-4 border-b border-white/15 mb-5">
+        <span class="font-serif text-xl text-white">Formaskills <span class="text-amber-300">Travel</span></span>
+        <button type="button" data-action="toggle-drawer" aria-label="Close menu"
+          class="w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6 6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="mb-5">
+        <span class="text-[10px] uppercase tracking-widest text-amber-300 font-semibold block mb-2">Journey Mode</span>
+        <div class="grid grid-cols-2 gap-2 p-1 bg-white/10 rounded-xl">
+          <button type="button" data-action="set-persona" data-persona="learner"
+            class="persona-btn py-2.5 rounded-lg bg-amber-400 text-primary text-xs font-bold min-h-[44px]">For
+            Me</button>
+          <button type="button" data-action="set-persona" data-persona="organisation"
+            class="persona-btn py-2.5 rounded-lg text-slate-200 text-xs font-semibold min-h-[44px]">School /
+            Erasmus+</button>
+        </div>
+      </div>
+
+      <nav class="flex flex-col gap-1 text-base font-medium mb-6">
+        <a href="#destinations-pin" data-action="close-drawer"
+          class="px-4 py-3 rounded-xl hover:bg-white/10 min-h-[44px] flex items-center justify-between"><span
+            data-i18n="nav_destinations">Destinations</span><span class="text-amber-300">→</span></a>
+        <a href="#programmes" data-action="close-drawer"
+          class="px-4 py-3 rounded-xl hover:bg-white/10 min-h-[44px] flex items-center justify-between"><span
+            data-i18n="nav_offers">Our Offers</span><span class="text-amber-300">→</span></a>
+        <a href="#erasmus" data-action="close-drawer"
+          class="px-4 py-3 rounded-xl hover:bg-white/10 min-h-[44px] flex items-center justify-between"><span
+            data-i18n="nav_erasmus">Erasmus+ Mobility</span><span class="text-amber-300">→</span></a>
+        <a href="#why-sete" data-action="close-drawer"
+          class="px-4 py-3 rounded-xl hover:bg-white/10 min-h-[44px] flex items-center justify-between"><span
+            data-i18n="nav_why_sete">Why Sète</span><span class="text-amber-300">→</span></a>
+        <a href="#faq" data-action="close-drawer"
+          class="px-4 py-3 rounded-xl hover:bg-white/10 min-h-[44px] flex items-center justify-between"><span
+            data-i18n="nav_faq">FAQ</span><span class="text-amber-300">→</span></a>
+      </nav>
+    </div>
+
+    <div class="pt-4 border-t border-white/15 flex flex-col gap-3">
+      <button type="button" data-action="open-planner-drawer"
+        class="w-full py-3.5 rounded-full bg-amber-400 text-primary font-bold text-xs uppercase tracking-wider min-h-[44px]">Plan
+        Your Stay</button>
+      <a href="tel:+33975462281"
+        class="w-full py-3 rounded-full bg-white/10 border border-white/15 text-center text-xs font-semibold text-white min-h-[44px] flex items-center justify-center gap-2">
+        <svg class="w-4 h-4 text-amber-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+        </svg>
+        <span>+33 9 75 46 22 81 (Sète HQ)</span>
+      </a>
+    </div>
+  </aside>
+
+  <main id="main-content">
+    <!-- SECTION 1: HERO & QUICK EXPERIENCE FINDER -->
+    <section id="hero-section"
+      class="relative min-h-[92svh] flex items-center pt-28 sm:pt-32 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden bg-primary text-white">
+      <div id="hero-parallax" class="absolute inset-0 z-0 overflow-hidden">
+        <img src="assets/hero-clouds.webp" width="1920" height="1080" loading="eager" fetchpriority="high"
+          decoding="async" alt="Golden hour cloud sea at sunrise over the Mediterranean"
+          class="w-full h-full object-cover hero-sky-bg opacity-85" />
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/65 to-primary/35"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-primary/50"></div>
+      </div>
+
+      <div class="absolute inset-x-0 bottom-0 h-[36vh] pointer-events-none z-10 overflow-hidden" aria-hidden="true">
+        <div class="cloud-ribbon-slow absolute bottom-8 left-0 h-44 flex opacity-35">
+          <svg class="w-1/2 h-full" viewBox="0 0 1440 200" preserveAspectRatio="none">
+            <path fill="rgba(253,230,138,0.28)"
+              d="M0,200 L0,120 Q180,55 360,110 T720,90 T1080,120 T1440,120 L1440,200 Z" />
+          </svg>
+          <svg class="w-1/2 h-full" viewBox="0 0 1440 200" preserveAspectRatio="none">
+            <path fill="rgba(253,230,138,0.28)"
+              d="M0,200 L0,120 Q180,55 360,110 T720,90 T1080,120 T1440,120 L1440,200 Z" />
+          </svg>
+        </div>
+        <div class="cloud-ribbon-mid absolute -bottom-2 left-0 h-32 flex opacity-50">
+          <svg class="w-1/2 h-full" viewBox="0 0 1440 160" preserveAspectRatio="none">
+            <path fill="rgba(14,26,43,0.72)" d="M0,160 L0,90 Q240,35 480,85 T960,70 T1440,95 L1440,160 Z" />
+          </svg>
+          <svg class="w-1/2 h-full" viewBox="0 0 1440 160" preserveAspectRatio="none">
+            <path fill="rgba(14,26,43,0.72)" d="M0,160 L0,90 Q240,35 480,85 T960,70 T1440,95 L1440,160 Z" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-30">
+        <div class="lg:col-span-7 flex flex-col gap-5">
+          <div
+            class="inline-flex items-center gap-2.5 self-start px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-[11px] sm:text-xs font-medium text-amber-200 tracking-wide hero-stagger">
+            <span class="w-2 h-2 rounded-full bg-amber-400 shrink-0" aria-hidden="true"></span>
+            <span data-i18n="hero_badge">Accredited French Immersion & Erasmus+ Mobility · Sète HQ</span>
+          </div>
+
+          <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-light text-white tracking-tight leading-[1.06]">
+            <span class="headline-mask"><span class="headline-line" data-i18n="hero_title_1">France begins</span></span>
+            <span class="headline-mask"><em class="headline-line italic font-normal text-amber-300"
+                data-i18n="hero_title_2">before you land.</em></span>
+          </h1>
+
+          <p id="hero-persona-subtitle"
+            class="text-sm sm:text-lg text-slate-200 max-w-xl font-light leading-relaxed hero-stagger"
+            data-i18n="hero_subtitle">
+            Learn French, discover its culture, and live a unique accredited educational journey in France — soaring
+            from our Mediterranean headquarters in Sète to Montpellier and Paris.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-3 pt-1 hero-stagger">
+            <button type="button" data-action="focus-finder"
+              class="w-full sm:w-auto px-7 py-3.5 rounded-full bg-amber-400 hover:bg-amber-300 text-primary font-bold text-xs tracking-wider uppercase transition shadow-glow min-h-[46px]">
+              <span data-i18n="hero_cta_primary">Start Planning Your Stay</span>
+            </button>
+            <a href="#destinations-pin"
+              class="w-full sm:w-auto px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 text-white text-xs font-semibold tracking-wider uppercase transition text-center min-h-[46px] flex items-center justify-center"
+              data-i18n="hero_cta_secondary">
+              Explore 3 Destinations
+            </a>
+          </div>
+
+          <div class="grid grid-cols-3 gap-4 pt-5 border-t border-white/15 max-w-lg hero-stagger">
+            <div>
+              <strong class="text-amber-300 font-serif text-2xl sm:text-3xl block"><span class="kpi-num"
+                  data-target="48" data-suffix="h">48h</span></strong>
+              <span class="text-slate-300 text-[11px]" data-i18n="stat_quote">Tailored Proposal</span>
+            </div>
+            <div>
+              <strong class="text-white font-serif text-2xl sm:text-3xl block">24/7</strong>
+              <span class="text-slate-300 text-[11px]" data-i18n="stat_coord">Sète Coordinator</span>
+            </div>
+            <div>
+              <strong class="text-emerald-300 font-serif text-2xl sm:text-3xl block"><span class="kpi-num"
+                  data-target="100" data-suffix="%">100%</span></strong>
+              <span class="text-slate-300 text-[11px]" data-i18n="stat_vetted">Vetted Hosts & FLE</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="quick-finder-card"
+          class="lg:col-span-5 surface-dark-overlay rounded-3xl p-5 sm:p-7 text-white hero-stagger">
+          <div class="flex items-center justify-between pb-4 border-b border-white/15 mb-4">
+            <span class="text-xs uppercase tracking-widest text-amber-300 font-semibold" data-i18n="finder_title">Quick
+              Experience Finder</span>
+            <span
+              class="text-[11px] text-amber-200 bg-white/10 border border-white/15 px-2.5 py-1 rounded-full font-medium"
+              data-i18n="finder_badge">48h Bespoke Quote</span>
+          </div>
+
+          <div class="mb-4">
+            <span class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2"
+              data-i18n="finder_role_label">I am travelling as:</span>
+            <div class="grid grid-cols-2 gap-2 p-1 bg-primary/70 border border-white/15 rounded-xl text-xs font-medium">
+              <button type="button" data-action="set-persona" data-persona="learner"
+                class="persona-btn py-2.5 rounded-lg bg-amber-400 text-primary font-bold min-h-[44px]"
+                data-i18n="finder_role_me">For Me (Learner)</button>
+              <button type="button" data-action="set-persona" data-persona="organisation"
+                class="persona-btn py-2.5 rounded-lg text-slate-300 hover:text-white min-h-[44px]"
+                data-i18n="finder_role_org">School / Erasmus+</button>
+            </div>
+          </div>
+
+          <div class="mb-3.5">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" for="quick-dest"
+              data-i18n="finder_dest_label">Destination Hub</label>
+            <select id="quick-dest"
+              class="w-full bg-navy border border-white/20 rounded-xl px-4 py-3 text-sm text-white font-medium min-h-[44px]">
+              <option value="Sète">Sète · Maritime Flagship Hub</option>
+              <option value="Montpellier">Montpellier · University Hub</option>
+              <option value="Paris">Paris · Latin Quarter & Arts</option>
+              <option value="Multi-Hub">Occitanie Circuit (Sète + Montpellier)</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5"
+                for="quick-season" data-i18n="finder_season_label">Target Season</label>
+              <select id="quick-season"
+                class="w-full bg-navy border border-white/20 rounded-xl px-3 py-2.5 text-xs text-white min-h-[44px]">
+                <option value="Spring (Mar – May)">Spring (Mar – May)</option>
+                <option value="Summer (Jun – Aug)">Summer (Jun – Aug)</option>
+                <option value="Autumn (Sep – Nov)">Autumn (Sep – Nov)</option>
+                <option value="Winter (Dec – Feb)">Winter (Dec – Feb)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5"
+                for="quick-focus" data-i18n="finder_focus_label">Primary Focus</label>
+              <select id="quick-focus"
+                class="w-full bg-navy border border-white/20 rounded-xl px-3 py-2.5 text-xs text-white min-h-[44px]">
+                <option value="FLE + Culture">French Immersion (FLE)</option>
+                <option value="Cultural Excursions">Cultural Excursions</option>
+                <option value="Host Family Homestay">Host Family Homestay</option>
+                <option value="Erasmus+ KA1/KA2">Erasmus+ KA1/KA2 Project</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="quick-rate-preview"
+            class="hidden mb-4 p-3.5 rounded-2xl bg-white/10 border border-amber-300/35 text-xs">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-amber-300 font-semibold uppercase tracking-wider text-[10px]">Indicative Estimate</span>
+              <span id="quick-rate-cohort" class="text-emerald-300 font-medium">Next cohort open</span>
+            </div>
+            <p id="quick-rate-value" class="font-serif text-lg text-white font-medium"></p>
+            <p class="text-[11px] text-slate-300 mt-1">Includes FLE syllabus, vetted lodging & 24/7 Sète coordinator.
+            </p>
+          </div>
+
+          <button type="button" data-action="apply-quick-finder"
+            class="w-full py-3.5 rounded-full bg-white hover:bg-amber-300 text-primary font-bold text-xs uppercase tracking-wider transition min-h-[46px]"
+            data-i18n="finder_cta">
+            Find Availability & Rates
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Institutional Accreditation Strip -->
+    <div class="bg-linen border-y border-border py-3.5 px-4">
+      <div
+        class="max-w-7xl mx-auto flex flex-wrap items-center justify-center sm:justify-between gap-x-6 gap-y-2 text-[11px] sm:text-xs text-slate-700 font-medium">
+        <span><strong>Atout France:</strong> IM034230008</span>
+        <span><strong>Erasmus+ PIC:</strong> 8991204</span>
+        <span><strong>SIREN:</strong> 990 746 430 (SAS)</span>
+        <span><strong>HQ:</strong> 6 rue Voltaire, 34200 Sète</span>
+      </div>
+    </div>
+
+    <!-- SECTION 2: DESTINATIONS -->
+    <section id="destinations-pin" class="relative w-full overflow-hidden bg-primary text-white py-12 lg:py-0">
+      <h2 class="sr-only">Three destinations: Sète, Montpellier and Paris</h2>
+
+      <div
+        class="relative lg:absolute lg:top-24 lg:left-1/2 lg:-translate-x-1/2 z-30 flex items-center justify-center flex-wrap gap-2 px-4 mb-6 lg:mb-0">
+        <div class="flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 rounded-full surface-dark-overlay text-xs">
+          <button type="button" data-action="fly-dest" data-index="0"
+            class="dest-pill-btn px-2.5 py-1.5 rounded-full text-white font-bold min-h-[38px]" data-pill="0">01
+            Sète</button>
+          <span class="text-white/25">/</span>
+          <button type="button" data-action="fly-dest" data-index="1"
+            class="dest-pill-btn px-2.5 py-1.5 rounded-full text-white/60 hover:text-white min-h-[38px]"
+            data-pill="1">02 Montpellier</button>
+          <span class="text-white/25">/</span>
+          <button type="button" data-action="fly-dest" data-index="2"
+            class="dest-pill-btn px-2.5 py-1.5 rounded-full text-white/60 hover:text-white min-h-[38px]"
+            data-pill="2">03 Paris</button>
+          <button type="button" id="autoFlyBtn" data-action="toggle-autofly" aria-pressed="false"
+            class="ml-1 px-3 py-1.5 rounded-full bg-amber-400/20 hover:bg-amber-400 hover:text-primary border border-amber-300/40 text-amber-200 font-semibold transition min-h-[38px]">
+            Auto-Fly
+          </button>
+        </div>
+        <a href="#programmes"
+          class="hidden lg:inline-flex items-center px-3.5 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-[11px] font-semibold text-slate-200 transition">
+          Skip to Programmes ↓
+        </a>
+      </div>
+
+      <div id="destinations-track" aria-hidden="true">
+        <div class="dest-slide is-active"><img src="assets/sete-harbour.webp" width="1920" height="1080" loading="lazy"
+            decoding="async" alt="Sète harbour at golden hour" class="absolute inset-0 w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-r from-primary/85 via-primary/40 to-transparent"></div>
+        </div>
+        <div class="dest-slide"><img src="assets/montpellier-peyrou.webp" width="1920" height="1080" loading="lazy"
+            decoding="async" alt="Montpellier Porte du Peyrou at sunset"
+            class="absolute inset-0 w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-r from-primary/85 via-primary/40 to-transparent"></div>
+        </div>
+        <div class="dest-slide"><img src="assets/paris-seine.webp" width="1920" height="1080" loading="lazy"
+            decoding="async" alt="Paris Seine river and Eiffel Tower at sunset"
+            class="absolute inset-0 w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-r from-primary/85 via-primary/40 to-transparent"></div>
+        </div>
+      </div>
+
+      <div id="destinations-cards-track">
+        <article class="dest-card-slide is-active px-4 sm:px-6 lg:px-16">
+          <div class="dest-card-inner surface-dark-overlay rounded-3xl overflow-hidden max-w-lg w-full mx-auto lg:mx-0">
+            <img src="assets/sete-harbour.webp" width="800" height="450" loading="lazy" decoding="async"
+              alt="Sète harbour" class="lg:hidden w-full h-48 object-cover" />
+            <div class="p-6 sm:p-8">
+              <span class="text-[11px] uppercase tracking-widest text-amber-300 font-semibold"
+                data-i18n="dest_sete_badge">01 · Maritime Flagship HQ</span>
+              <h3 class="font-serif text-3xl sm:text-4xl text-white mt-1 mb-3">Sète, Occitanie</h3>
+              <p class="text-sm text-slate-200 font-light leading-relaxed mb-5" data-i18n="dest_sete_desc">Our
+                operational headquarters on the Mediterranean coast. Safe walkable canals, authentic French conversation
+                outside tourist crowds, and Bassin de Thau maritime heritage.</p>
+              <button type="button" data-action="open-planner" data-context="Sète — Maritime Flagship Experience"
+                class="px-5 py-3 rounded-full bg-amber-400 hover:bg-amber-300 text-primary text-xs font-bold uppercase tracking-wider min-h-[44px]">Plan
+                Sète Stay →</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="dest-card-slide px-4 sm:px-6 lg:px-16">
+          <div class="dest-card-inner surface-dark-overlay rounded-3xl overflow-hidden max-w-lg w-full mx-auto lg:mx-0">
+            <img src="assets/montpellier-peyrou.webp" width="800" height="450" loading="lazy" decoding="async"
+              alt="Montpellier historic core" class="lg:hidden w-full h-48 object-cover" />
+            <div class="p-6 sm:p-8">
+              <span class="text-[11px] uppercase tracking-widest text-sky-300 font-semibold"
+                data-i18n="dest_mtp_badge">02 · University & Innovation Hub</span>
+              <h3 class="font-serif text-3xl sm:text-4xl text-white mt-1 mb-3">Montpellier</h3>
+              <p class="text-sm text-slate-200 font-light leading-relaxed mb-5" data-i18n="dest_mtp_desc">Just 20
+                minutes by regional rail from Sète HQ. Vibrant medieval pedestrian squares, university-level FLE
+                workshops, and UNESCO heritage excursions.</p>
+              <button type="button" data-action="open-planner"
+                data-context="Montpellier — University Culture Experience"
+                class="px-5 py-3 rounded-full bg-amber-400 hover:bg-amber-300 text-primary text-xs font-bold uppercase tracking-wider min-h-[44px]">Plan
+                Montpellier Stay →</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="dest-card-slide px-4 sm:px-6 lg:px-16">
+          <div class="dest-card-inner surface-dark-overlay rounded-3xl overflow-hidden max-w-lg w-full mx-auto lg:mx-0">
+            <img src="assets/paris-seine.webp" width="800" height="450" loading="lazy" decoding="async"
+              alt="Paris Seine and Eiffel Tower" class="lg:hidden w-full h-48 object-cover" />
+            <div class="p-6 sm:p-8">
+              <span class="text-[11px] uppercase tracking-widest text-amber-200 font-semibold"
+                data-i18n="dest_paris_badge">03 · Capital Arts & Seminars</span>
+              <h3 class="font-serif text-3xl sm:text-4xl text-white mt-1 mb-3">Paris</h3>
+              <p class="text-sm text-slate-200 font-light leading-relaxed mb-5" data-i18n="dest_paris_desc">Curated
+                academic seminars in the Latin Quarter, guided museum tracks at the Louvre and Orsay, and seamlessly
+                supervised rail transfers from Occitanie.</p>
+              <button type="button" data-action="open-planner" data-context="Paris — Capital Arts Experience"
+                class="px-5 py-3 rounded-full bg-amber-400 hover:bg-amber-300 text-primary text-xs font-bold uppercase tracking-wider min-h-[44px]">Plan
+                Paris Stay →</button>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div
+        class="relative lg:absolute lg:bottom-7 lg:left-1/2 lg:-translate-x-1/2 z-30 mt-6 lg:mt-0 flex justify-center px-4">
+        <div class="flex items-center gap-3 px-4 py-2.5 rounded-2xl surface-dark-overlay">
+          <button type="button" data-action="step-dest" data-delta="-1" aria-label="Previous destination"
+            class="lg:hidden w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white">‹</button>
+          <div class="flex items-center gap-2.5">
+            <button type="button" data-action="fly-dest" data-index="0" aria-label="Go to Sète"
+              class="dest-dot p-2"><span
+                class="block w-2.5 h-2.5 rounded-full bg-amber-400 scale-125 transition"></span></button>
+            <button type="button" data-action="fly-dest" data-index="1" aria-label="Go to Montpellier"
+              class="dest-dot p-2"><span class="block w-2.5 h-2.5 rounded-full bg-white/40 transition"></span></button>
+            <button type="button" data-action="fly-dest" data-index="2" aria-label="Go to Paris"
+              class="dest-dot p-2"><span class="block w-2.5 h-2.5 rounded-full bg-white/40 transition"></span></button>
+            <span id="flight-status-readout"
+              class="text-[11px] text-amber-200 font-medium pl-2.5 border-l border-white/15 whitespace-nowrap">Flight ·
+              Sète (01/03)</span>
+          </div>
+          <button type="button" data-action="step-dest" data-delta="1" aria-label="Next destination"
+            class="lg:hidden w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white">›</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: OUR OFFERS -->
+    <section id="programmes" class="cv-auto py-14 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="max-w-2xl mb-8 sm:mb-12" data-reveal>
+        <span class="text-xs uppercase tracking-widest text-amber-700 font-semibold">Three Academic Pillars</span>
+        <h2 class="font-serif text-3xl sm:text-5xl text-primary mt-2">Structured Immersion, Built Around Real France
+        </h2>
+      </div>
+
+      <div
+        class="flex lg:grid lg:grid-cols-3 gap-5 overflow-x-auto lg:overflow-visible snap-x snap-mandatory pb-4 lg:pb-0 no-scrollbar">
+        <article
+          class="spotlight-card surface-light-card rounded-3xl p-6 sm:p-8 min-w-[84vw] sm:min-w-[360px] lg:min-w-0 snap-center flex flex-col justify-between"
+          data-reveal>
+          <div>
+            <span class="text-xs font-bold text-amber-700 uppercase tracking-wider">Pillar 01</span>
+            <h3 class="font-serif text-2xl text-primary mt-2 mb-3">French Learning (FLE)</h3>
+            <p class="text-sm text-slate-600 font-light leading-relaxed mb-5">15–20 hours/week of CEFR-aligned workshops
+              in small groups (max 12), paired with real-world field interviews across Sète and Montpellier.</p>
+          </div>
+          <button type="button" data-action="open-offer" data-offer="fle"
+            class="self-start text-xs font-bold uppercase tracking-wider text-primary hover:text-amber-700 py-2 min-h-[44px]">View
+            Syllabus Details →</button>
+        </article>
+
+        <article
+          class="spotlight-card surface-light-card rounded-3xl p-6 sm:p-8 min-w-[84vw] sm:min-w-[360px] lg:min-w-0 snap-center flex flex-col justify-between"
+          data-reveal>
+          <div>
+            <span class="text-xs font-bold text-amber-700 uppercase tracking-wider">Pillar 02</span>
+            <h3 class="font-serif text-2xl text-primary mt-2 mb-3">Cultural Experiences</h3>
+            <p class="text-sm text-slate-600 font-light leading-relaxed mb-5">Curated regional immersion: Bassin de Thau
+              oyster cooperatives, Pont du Gard, Carcassonne, cooking ateliers, and Paris museum tracks.</p>
+          </div>
+          <button type="button" data-action="open-offer" data-offer="culture"
+            class="self-start text-xs font-bold uppercase tracking-wider text-primary hover:text-amber-700 py-2 min-h-[44px]">View
+            Excursions →</button>
+        </article>
+
+        <article
+          class="spotlight-card surface-light-card rounded-3xl p-6 sm:p-8 min-w-[84vw] sm:min-w-[360px] lg:min-w-0 snap-center flex flex-col justify-between"
+          data-reveal>
+          <div>
+            <span class="text-xs font-bold text-amber-700 uppercase tracking-wider">Pillar 03</span>
+            <h3 class="font-serif text-2xl text-primary mt-2 mb-3">Vetted Accommodation</h3>
+            <p class="text-sm text-slate-600 font-light leading-relaxed mb-5">In-person inspected French host families
+              and seaside residences with strict minor safeguarding, dietary coordination, and 24/7 support.</p>
+          </div>
+          <button type="button" data-action="open-offer" data-offer="housing"
+            class="self-start text-xs font-bold uppercase tracking-wider text-primary hover:text-amber-700 py-2 min-h-[44px]">View
+            Safeguarding Standards →</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION 4: ERASMUS+ MOBILITY SCOPE BUILDER -->
+    <section id="erasmus" class="cv-auto py-14 sm:py-24 px-4 sm:px-6 lg:px-8 bg-linen/70 border-y border-border">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-5" data-reveal>
+          <span class="text-xs uppercase tracking-widest text-amber-700 font-semibold">Erasmus+ PIC 8991204 · KA1 &
+            KA2</span>
+          <h2 class="font-serif text-3xl sm:text-5xl text-primary mt-2 mb-4">Institutional Mobility Scope Builder</h2>
+          <p class="text-sm sm:text-base text-slate-600 font-light leading-relaxed mb-5">Configure your school cohort to
+            preview recommended FLE classroom splits, Europass Mobility hours, and accompanying teacher ratios.</p>
+          <ul class="space-y-2 text-xs sm:text-sm text-slate-700">
+            <li>• Learning Agreements & Europass Mobility Passports included</li>
+            <li>• Atout France licensed operator (IM034230008)</li>
+            <li>• Educational & cultural immersion only (no corporate internships)</li>
+          </ul>
+        </div>
+
+        <div class="lg:col-span-7 surface-light-card rounded-3xl p-6 sm:p-8" data-reveal>
+          <div class="space-y-5 mb-6">
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-2">
+                <label for="estStudents">Cohort Size</label>
+                <span id="estStudentsVal" class="text-amber-700">24 students</span>
+              </div>
+              <input id="estStudents" type="range" min="8" max="60" value="24" class="erasmus-slider w-full" />
+            </div>
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-2">
+                <label for="estDays">Mobility Duration</label>
+                <span id="estDaysVal" class="text-amber-700">7 days</span>
+              </div>
+              <input id="estDays" type="range" min="5" max="21" value="7" class="erasmus-slider w-full" />
+            </div>
+            <div>
+              <label for="estHub" class="block text-xs font-semibold mb-1.5">Primary Hub</label>
+              <select id="estHub"
+                class="w-full bg-surface border border-border rounded-xl px-4 py-2.5 text-sm text-primary min-h-[44px]">
+                <option value="Sète">Sète · Maritime Flagship HQ</option>
+                <option value="Montpellier">Montpellier · University Hub</option>
+                <option value="Paris">Paris · Capital Arts Track</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-linen border border-border mb-6 text-center">
+            <div><span class="block text-[11px] text-slate-500">FLE Groups</span><strong id="estOutGroups"
+                class="font-serif text-xl sm:text-2xl text-primary">2 classes</strong></div>
+            <div><span class="block text-[11px] text-slate-500">Instruction</span><strong id="estOutHours"
+                class="font-serif text-xl sm:text-2xl text-primary">21 hrs</strong></div>
+            <div><span class="block text-[11px] text-slate-500">Staff Ratio</span><strong id="estOutTeachers"
+                class="font-serif text-xl sm:text-2xl text-primary">2 teachers</strong></div>
+          </div>
+
+          <button type="button" data-action="apply-erasmus"
+            class="w-full py-3.5 rounded-full bg-primary hover:bg-navy text-white font-bold text-xs uppercase tracking-wider transition min-h-[46px]">
+            Transfer Scope to Institutional Proposal →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: WHY SÈTE + SCROLL-DRAWN FRANCE CORRIDOR MAP -->
+    <section id="why-sete" class="cv-auto py-14 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        <div class="lg:col-span-6" data-reveal>
+          <span class="text-xs uppercase tracking-widest text-amber-700 font-semibold">Our Operational Anchor</span>
+          <h2 class="font-serif text-3xl sm:text-5xl text-primary mt-2 mb-4">Why Sète Connects All Three Hubs</h2>
+          <p class="text-sm sm:text-base text-slate-600 font-light leading-relaxed mb-6">Anchored at 6 rue Voltaire in
+            Sète, our coordinators personally oversee every arrival, host family check-in, and high-speed TGV connection
+            to Montpellier and Paris.</p>
+          <img src="assets/sete-students.webp" width="900" height="600" loading="lazy" decoding="async"
+            alt="International students conversing along the sunlit Mediterranean quay in Sète"
+            class="w-full h-56 sm:h-64 object-cover rounded-3xl border border-border shadow-soft" />
+        </div>
+
+        <div class="lg:col-span-6 surface-dark-overlay rounded-3xl p-6 sm:p-8 text-white" data-reveal>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs uppercase tracking-widest text-amber-300 font-semibold">France Mobility Corridor</span>
+            <span class="text-[11px] text-slate-300">Direct Rail · Sète → Montpellier → Paris</span>
+          </div>
+          <svg id="france-corridor-svg" viewBox="0 0 400 380" class="w-full max-w-sm mx-auto overflow-visible"
+            role="img"
+            aria-label="Map of France showing the Formaskills Travel route from Sète HQ to Montpellier and Paris">
+            <path
+              d="M 195,28 L 235,42 L 285,72 L 332,105 L 315,155 L 335,202 L 318,255 L 342,292 L 292,322 L 245,312 L 222,340 L 148,338 L 118,315 L 122,248 L 95,188 L 62,145 L 68,115 L 118,118 L 135,78 L 178,66 Z"
+              fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.38)" stroke-width="1.6" />
+            <path id="corridor-route-path" d="M 232,320 Q 246,300 244,298 Q 252,205 215,115" fill="none"
+              stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round" />
+            <g class="corridor-beacon" transform="translate(232,320)">
+              <circle r="13" fill="rgba(245,158,11,0.30)" />
+              <circle r="4.5" fill="#FDE047" stroke="#FFFFFF" stroke-width="1.5" />
+              <text x="-12" y="18" text-anchor="end" fill="#FEF08A" font-size="11" font-weight="700">SÈTE HQ</text>
+            </g>
+            <g class="corridor-beacon" transform="translate(244,298)">
+              <circle r="10" fill="rgba(56,189,248,0.28)" />
+              <circle r="4" fill="#38BDF8" stroke="#FFFFFF" stroke-width="1.5" />
+              <text x="12" y="4" fill="#E0F2FE" font-size="10" font-weight="600">MONTPELLIER (20 min)</text>
+            </g>
+            <g class="corridor-beacon" transform="translate(215,115)">
+              <circle r="14" fill="rgba(245,158,11,0.35)" />
+              <circle r="5" fill="#FFFFFF" stroke="#F59E0B" stroke-width="2" />
+              <text x="14" y="4" fill="#FFFFFF" font-size="11" font-weight="700">PARIS (TGV)</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: FAQ -->
+    <section id="faq" class="cv-auto py-14 sm:py-24 px-4 sm:px-6 lg:px-8 bg-linen/50 border-t border-border">
+      <div class="max-w-3xl mx-auto">
+        <div class="mb-8" data-reveal>
+          <span class="text-xs uppercase tracking-widest text-amber-700 font-semibold">Transparency &
+            Safeguarding</span>
+          <h2 class="font-serif text-3xl sm:text-5xl text-primary mt-2">Frequently Asked Questions</h2>
+        </div>
+
+        <div class="flex flex-wrap gap-2 mb-6">
+          <button type="button" data-action="faq-cat" data-cat="all"
+            class="faq-cat-btn px-4 py-2 rounded-full bg-primary text-white text-xs font-semibold min-h-[40px]">All</button>
+          <button type="button" data-action="faq-cat" data-cat="erasmus"
+            class="faq-cat-btn px-4 py-2 rounded-full bg-white border border-border text-slate-700 text-xs font-semibold min-h-[40px]">Erasmus+</button>
+          <button type="button" data-action="faq-cat" data-cat="fle"
+            class="faq-cat-btn px-4 py-2 rounded-full bg-white border border-border text-slate-700 text-xs font-semibold min-h-[40px]">FLE
+            Courses</button>
+          <button type="button" data-action="faq-cat" data-cat="safety"
+            class="faq-cat-btn px-4 py-2 rounded-full bg-white border border-border text-slate-700 text-xs font-semibold min-h-[40px]">Safety
+            & Quotes</button>
+        </div>
+
+        <div id="faqList" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 7: PLAN YOUR EXPERIENCE -->
+    <section id="planner" class="cv-auto py-14 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+      <div class="surface-light-card rounded-3xl p-6 sm:p-10" data-reveal>
+        <span class="text-xs uppercase tracking-widest text-amber-700 font-semibold">Zero Obligation · 48h SLA</span>
+        <h2 class="font-serif text-3xl sm:text-4xl text-primary mt-1 mb-6">Plan Your French Immersion Stay</h2>
+
+        <form id="plannerForm" class="space-y-5" novalidate>
+          <div class="grid grid-cols-2 gap-3">
+            <label
+              class="flex items-center gap-2.5 p-3.5 rounded-xl border border-border bg-surface cursor-pointer min-h-[46px]">
+              <input type="radio" name="audience" value="For me" checked class="accent-amber-500" />
+              <span class="text-xs sm:text-sm font-semibold text-primary">For me (Learner)</span>
+            </label>
+            <label
+              class="flex items-center gap-2.5 p-3.5 rounded-xl border border-border bg-surface cursor-pointer min-h-[46px]">
+              <input type="radio" name="audience" value="For my organisation" class="accent-amber-500" />
+              <span class="text-xs sm:text-sm font-semibold text-primary">School / Erasmus+</span>
+            </label>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div><label for="contact_name" class="block text-xs font-semibold mb-1.5">Full Name *</label><input
+                id="contact_name" required type="text"
+                class="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm min-h-[44px]" /></div>
+            <div><label for="contact_email" class="block text-xs font-semibold mb-1.5">Email *</label><input
+                id="contact_email" required type="email"
+                class="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm min-h-[44px]" /></div>
+            <div><label for="school_name" class="block text-xs font-semibold mb-1.5">School / Institution
+                (optional)</label><input id="school_name" type="text"
+                class="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm min-h-[44px]" /></div>
+            <div><label for="plan_dest" class="block text-xs font-semibold mb-1.5">Destination Hub</label>
+              <select id="plan_dest"
+                class="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm min-h-[44px]">
+                <option value="Sète">Sète</option>
+                <option value="Montpellier">Montpellier</option>
+                <option value="Paris">Paris</option>
+                <option value="Multi-Hub">Occitanie Circuit</option>
+              </select>
+            </div>
+            <div><label for="plan_focus" class="block text-xs font-semibold mb-1.5">Programme Focus</label>
+              <select id="plan_focus"
+                class="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm min-h-[44px]">
+                <option value="FLE + Culture">FLE + Culture</option>
+                <option value="Host Family Homestay">Host Family Homestay</option>
+                <option value="Erasmus+ KA1/KA2">Erasmus+ KA1/KA2</option>
+              </select>
+            </div>
+            <div><label for="plan_pax" class="block text-xs font-semibold mb-1.5">Participants</label><input
+                id="plan_pax" type="number" min="1" max="120" value="1"
+                class="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm min-h-[44px]" /></div>
+          </div>
+
+          <div>
+            <label for="plan_notes" class="block text-xs font-semibold mb-1.5">Project Notes & Target Dates</label>
+            <textarea id="plan_notes" rows="3"
+              class="w-full rounded-xl border border-border bg-surface px-4 py-3 text-sm"></textarea>
+          </div>
+
+          <label class="flex items-start gap-2.5 text-xs text-slate-600 cursor-pointer">
+            <input id="gdpr_consent" type="checkbox" required class="mt-0.5 accent-amber-500 w-4 h-4 shrink-0" />
+            <span>I consent to Formaskills Travel SAS processing this enquiry solely to prepare my educational stay
+              proposal in accordance with EU GDPR and French CNIL regulations.</span>
+          </label>
+
+          <p id="planner_error" class="hidden text-xs text-red-700 font-semibold" role="alert"></p>
+
+          <button id="submit_planner_btn" type="submit"
+            class="w-full py-3.5 rounded-full bg-amber-400 hover:bg-amber-300 text-primary font-bold text-xs uppercase tracking-wider shadow-glow transition min-h-[46px]">
+            Request Tailored 48h Proposal →
+          </button>
+
+          <div id="planner_success_alert"
+            class="hidden p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950">
+            <p class="font-semibold text-sm mb-2">Coordination brief prepared for Sète HQ.</p>
+            <pre id="englishBriefText"
+              class="text-xs bg-white p-3 rounded-xl border border-emerald-200 overflow-x-auto mb-3"></pre>
+            <button id="copyBriefBtn" type="button" data-action="copy-brief"
+              class="px-4 py-2 rounded-full bg-primary text-white text-xs font-semibold min-h-[40px]">Copy
+              Brief</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-primary text-slate-300 py-12 px-4 sm:px-6 lg:px-8 border-t border-white/10">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-xs leading-relaxed">
+      <div>
+        <span class="font-serif text-xl text-white block mb-2">Formaskills <span
+            class="text-amber-300">Travel</span></span>
+        <p>Formaskills Travel SAS — 6 rue Voltaire, 34200 Sète, Occitanie, France.</p>
+        <p class="mt-1">Tel: <a href="tel:+33975462281" class="text-amber-300 hover:underline">+33 9 75 46 22 81</a></p>
+      </div>
+      <div>
+        <strong class="text-white uppercase tracking-wider block mb-2">Accreditations & Guarantees</strong>
+        <p>SIREN 990 746 430 · Atout France IM034230008 · Erasmus+ PIC 8991204.</p>
+        <p class="mt-1">Financial Guarantee & RCP Professional Liability details published in Mentions Légales & CGV.
+        </p>
+      </div>
+      <div>
+        <strong class="text-white uppercase tracking-wider block mb-2">Legal & Compliance (FR / EU)</strong>
+        <div class="flex flex-wrap gap-x-4 gap-y-2">
+          <a href="#planner" class="hover:text-amber-300">Mentions Légales</a>
+          <a href="#planner" class="hover:text-amber-300">CGV</a>
+          <a href="#planner" class="hover:text-amber-300">Privacy & GDPR</a>
+          <a href="https://www.mtv.travel/" target="_blank" rel="noopener noreferrer"
+            class="hover:text-amber-300">Médiateur du Tourisme (MTV)</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Sticky Bottom Thumb-Zone Action Bar -->
+  <div
+    class="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-primary/95 border-t border-white/15 px-4 pt-2.5 safe-bottom flex items-center gap-3">
+    <button type="button" data-action="open-planner" data-context="General Enquiry"
+      class="flex-1 py-3 rounded-full bg-amber-400 text-primary font-bold text-xs uppercase tracking-wider min-h-[44px]">Plan
+      Stay</button>
+    <a href="tel:+33975462281"
+      class="flex-1 py-3 rounded-full bg-white/10 border border-white/20 text-white font-semibold text-xs text-center min-h-[44px] flex items-center justify-center">Call
+      Sète HQ</a>
+  </div>
+
+  <!-- Offer Detail Modal -->
+  <div id="offerModalBackdrop" data-action="close-offer" aria-hidden="true"
+    class="fixed inset-0 bg-primary/75 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+    <div id="offerModalCard" role="dialog" aria-modal="true" aria-labelledby="offerModalTitle"
+      class="bg-white text-primary rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-luxury transform scale-95 transition-transform duration-300">
+      <div class="flex items-start justify-between gap-4 mb-3">
+        <div>
+          <span id="offerModalKicker" class="text-[11px] uppercase tracking-widest text-amber-700 font-semibold"></span>
+          <h3 id="offerModalTitle" class="font-serif text-2xl sm:text-3xl text-primary mt-1"></h3>
+        </div>
+        <button type="button" data-action="close-offer" aria-label="Close modal"
+          class="w-10 h-10 rounded-full bg-linen flex items-center justify-center text-primary">✕</button>
+      </div>
+      <p id="offerModalDesc" class="text-sm text-slate-600 font-light leading-relaxed mb-4"></p>
+      <ul id="offerModalBullets" class="space-y-2 text-xs sm:text-sm text-slate-700 mb-6"></ul>
+      <button type="button" id="offerModalCta"
+        class="w-full py-3.5 rounded-full bg-amber-400 hover:bg-amber-300 text-primary font-bold text-xs uppercase tracking-wider min-h-[46px]">Include
+        in My Proposal →</button>
+    </div>
+  </div>
+</body>
+
+</html>

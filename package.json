@@ -1,0 +1,11 @@
+{
+  "name": "formaskills-travel-website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build/build.mjs",
+    "start": "node build/build.mjs && node build/serve.mjs",
+    "serve": "node build/serve.mjs"
+  },
+  "engines": { "node": ">=20" }
+}
