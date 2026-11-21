@@ -115,7 +115,7 @@ ${ld}
 export const header = (path, { overlay = false } = {}) => `
 <header class="hdr ${overlay ? 'hdr--overlay' : ''}" data-hdr>
   <div class="hdr__in">
-    <a class="hdr__brand" href="/" aria-label="Formaskills Travel, home" data-logo-slot>${logo()}</a>
+    <a class="hdr__brand" href="/" aria-label="Formaskills Travel, home" data-logo-slot>${logo()}<img class="logo logo--white" src="/assets/img/logo.png" width="2000" height="467" alt="" aria-hidden="true"></a>
     <nav class="hdr__nav" aria-label="Main">
       <ul>${NAV.map(n => `<li><a href="${n.href}" ${isActive(path, n.href) ? 'aria-current="page"' : ''}>${n.label}</a></li>`).join('')}</ul>
     </nav>
@@ -218,6 +218,7 @@ export const footer = (scripts = []) => `
 <div class="toast" role="status" aria-live="polite" data-toast></div>
 
 <script src="/assets/vendor/lenis.min.js" defer></script>
+<script src="/assets/js/birds.js?v=__V__" defer></script>
 <script src="/assets/js/site.js?v=__V__" defer></script>
 ${scripts.map(s => `<script src="${s}?v=__V__" defer></script>`).join('\n')}
 </body>

@@ -2,7 +2,14 @@
    Sequence (progress 0 → 1 over a sticky stage):
    logo → logo flies to the header → cabin window frames the sky → headline in the window →
    push through the window → descend through clouds ("France begins before you land.") →
-   clouds part over Sète → birds and the coast come closer → page continues. */
+   clouds part over Sète → birds and the coast come closer → page continues.
+
+   Performance contract
+   - Per frame only transform (translate3d / scale3d) and opacity are written, plus canvas draws.
+   - No layout reads in scroll: runway and viewport metrics are cached on load and in a debounced
+     resize; the scroll listener only schedules one requestAnimationFrame tick.
+   - Smooth lerp (0.14) towards the scroll target; canvases skip work when hidden or transparent;
+     dt is clamped to 33 ms; canvas DPR capped at 1.5 on mobile, 2 on desktop. */
 (() => {
   const root = document.querySelector('[data-flight]');
   if (!root) return;
@@ -13,11 +20,12 @@
   const el = {
     cabin: $('[data-cabin]'), svg: $('[data-cabin-svg]'), clouds: $('[data-clouds]'), france: $('[data-france]'),
     franceImg: $('[data-france-img]'), haze: $('[data-haze]'), layer: $('[data-cloudlayer]'), flock: $('[data-flock]'),
-    gull: $('[data-gull]'), intro: $('[data-intro]'), introLogo: $('[data-intro-logo]'), c1: $('[data-copy1]'),
+    intro: $('[data-intro]'), introLogo: $('[data-intro-logo]'), introTag: $('.fl-intro__tag'), c1: $('[data-copy1]'),
     c2: $('[data-copy2]'), c3: $('[data-copy3]'), alt: $('[data-alt]'), bar: $('[data-bar]'), cue: $('[data-cue]'),
-    glare: $('[data-glare]'), skip: $('[data-skip]'),
+    skip: $('[data-skip]'),
   };
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const coarse = matchMedia('(pointer: coarse)').matches;
   const ai = document.querySelector('[data-ai]');
 
   // ---------- helpers ----------
@@ -27,48 +35,57 @@
   const eio = (t) => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   const eout = (t) => 1 - Math.pow(1 - t, 3);
   const ein = (t) => t * t * t;
-  const fade = (p, a, b, c, d) => Math.min(seg(p, a, b), 1 - seg(p, c, d)); // in a→b, out c→d
+  const fade = (p, a, b, c, d) => Math.min(seg(p, a, b), 1 - seg(p, c, d));
+  const f3 = (n) => Math.round(n * 1000) / 1000;
+  // write a style only when it changes (avoids redundant style invalidation)
+  const set = (node, prop, v) => { const k = `_fs_${prop}`; if (node[k] !== v) { node[k] = v; node.style[prop] = v; } };
+  const tx = (x, y, s = 1) => `translate3d(${f3(x)}px, ${f3(y)}px, 0) scale3d(${f3(s)}, ${f3(s)}, 1)`;
 
-  let W = 0, H = 0, win = { w: 0, h: 0, cx: 0, cy: 0 }, S0 = 5, flip = { dx: 0, dy: 0, s: 1 };
+  // ---------- cached metrics (refreshed on load + debounced resize only) ----------
+  const M = { W: 0, H: 0, top: 0, runway: 1, portrait: false };
+  let S0 = 5, flip = { dx: 0, dy: 0, s: 1 };
+  let dpr = 1;
 
-  // ---------- cabin wall with window (SVG, built to the viewport) ----------
+  function measure() {
+    M.W = stage.clientWidth; M.H = stage.clientHeight; M.portrait = M.W < M.H;
+    let y = 0, n = root; while (n) { y += n.offsetTop; n = n.offsetParent; }
+    M.top = y; M.runway = Math.max(1, root.offsetHeight - M.H);
+    dpr = Math.min(coarse || M.W < 768 ? 1.5 : 2, devicePixelRatio || 1);
+  }
+
+  // ---------- cabin wall with window: one inline SVG mask, scaled with transform ----------
   const rr = (cx, cy, w, h, r) => {
     const x = cx - w / 2, y = cy - h / 2; r = Math.min(r, w / 2, h / 2);
     return `M${x + r},${y}H${x + w - r}A${r},${r} 0 0 1 ${x + w},${y + r}V${y + h - r}A${r},${r} 0 0 1 ${x + w - r},${y + h}H${x + r}A${r},${r} 0 0 1 ${x},${y + h - r}V${y + r}A${r},${r} 0 0 1 ${x + r},${y}Z`;
   };
   function buildCabin() {
-    W = stage.clientWidth; H = stage.clientHeight;
-    const portrait = W < H;
+    const { W, H, portrait } = M;
     let h = Math.min(H * (portrait ? .62 : .74), 780), w = h * (portrait ? .74 : .7);
     if (w > W * (portrait ? .8 : .7)) { w = W * (portrait ? .8 : .7); h = w / (portrait ? .74 : .7); }
     const cx = W / 2, cy = H * .52, r = w * .46, f = w * .16;
-    win = { w, h, cx, cy };
     root.style.setProperty('--win-w', `${Math.round(w)}px`);
     S0 = Math.max(W / (w * .82), H / (h * .82)) * 1.2;
     const wall = `M0,0H${W}V${H}H0Z`;
     el.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    // cool, natural cabin: slate wall, pale frame, no glow and no SVG filters
     el.svg.innerHTML = `
       <defs>
-        <linearGradient id="cw" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2b2545"/><stop offset=".55" stop-color="#43304f"/><stop offset="1" stop-color="#1e1a35"/></linearGradient>
-        <radialGradient id="cg" cx="${cx}" cy="${cy}" r="${Math.max(W, H) * .55}" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f4a76a" stop-opacity=".55"/><stop offset=".35" stop-color="#b8687a" stop-opacity=".25"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
-        <linearGradient id="cf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1d2c2"/><stop offset=".4" stop-color="#b98fa0"/><stop offset="1" stop-color="#4a3553"/></linearGradient>
-        <linearGradient id="ci" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2a44"/><stop offset="1" stop-color="#7a5468"/></linearGradient>
-        <linearGradient id="cs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9ddd6"/><stop offset="1" stop-color="#cbb5b5"/></linearGradient>
+        <linearGradient id="cw" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1c2438"/><stop offset=".55" stop-color="#263149"/><stop offset="1" stop-color="#151b2c"/></linearGradient>
+        <linearGradient id="cf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eef1f6"/><stop offset=".45" stop-color="#b9c2d2"/><stop offset="1" stop-color="#4a5670"/></linearGradient>
+        <linearGradient id="ci" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b4660"/><stop offset="1" stop-color="#6b7892"/></linearGradient>
+        <linearGradient id="cs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f3f7"/><stop offset="1" stop-color="#d3d9e3"/></linearGradient>
         <clipPath id="cwin"><path d="${rr(cx, cy, w, h, r)}"/></clipPath>
-        <filter id="cb" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="${f * .18}"/></filter>
       </defs>
       <path fill="url(#cw)" fill-rule="evenodd" d="${wall}${rr(cx, cy, w + f * 2, h + f * 2, r + f)}"/>
-      <path fill="url(#cg)" fill-rule="evenodd" d="${wall}${rr(cx, cy, w + f * 2, h + f * 2, r + f)}"/>
       <path fill="url(#cf)" fill-rule="evenodd" d="${rr(cx, cy, w + f * 2, h + f * 2, r + f)}${rr(cx, cy, w + f * .9, h + f * .9, r + f * .45)}"/>
       <path fill="url(#ci)" fill-rule="evenodd" d="${rr(cx, cy, w + f * .9, h + f * .9, r + f * .45)}${rr(cx, cy, w, h, r)}"/>
-      <path fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.5" d="${rr(cx, cy, w + f * 2 - 2, h + f * 2 - 2, r + f)}"/>
+      <path fill="none" stroke="#fff" stroke-opacity=".4" stroke-width="1.5" d="${rr(cx, cy, w + f * 2 - 2, h + f * 2 - 2, r + f)}"/>
       <g clip-path="url(#cwin)">
         <rect x="${cx - w / 2}" y="${cy - h / 2}" width="${w}" height="${h * .085}" fill="url(#cs)"/>
-        <rect x="${cx - w / 2}" y="${cy - h / 2 + h * .085}" width="${w}" height="3" fill="#000" opacity=".18"/>
-        <path fill="none" stroke="#000" stroke-opacity=".35" stroke-width="${f * .5}" filter="url(#cb)" d="${rr(cx, cy, w + f * .25, h + f * .25, r)}"/>
+        <rect x="${cx - w / 2}" y="${cy - h / 2 + h * .085}" width="${w}" height="2" fill="#0d1424" opacity=".22"/>
+        <path fill="none" stroke="#0d1424" stroke-opacity=".28" stroke-width="${f * .14}" d="${rr(cx, cy, w - f * .07, h - f * .07, r)}"/>
       </g>`;
     el.cabin.style.transformOrigin = `${cx}px ${cy}px`;
-    measureFlip();
   }
   function measureFlip() {
     if (!slot || !el.introLogo) return;
@@ -76,11 +93,43 @@
     el.introLogo.style.transform = 'none';
     const a = el.introLogo.getBoundingClientRect(), st = stage.getBoundingClientRect();
     const b = slot.getBoundingClientRect(), hr = hdr.getBoundingClientRect();
-    el.introLogo.style.transform = prev;
+    el.introLogo.style.transform = prev; el.introLogo._fs_transform = prev;
     flip = { dx: (b.left - hr.left) - (a.left - st.left), dy: (b.top - hr.top) - (a.top - st.top), s: b.width / a.width };
   }
 
-  // ---------- procedural cloud sprites ----------
+  // ---------- one-time cool grade of the photographs (no per-frame filters) ----------
+  function grade(img, { k, desat, cool }) {
+    const run = () => {
+      try {
+        const w = img.naturalWidth, h = img.naturalHeight; if (!w) return;
+        const c = document.createElement('canvas'); c.width = w; c.height = h;
+        const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(img, 0, 0);
+        const d = g.getImageData(0, 0, w, h), a = d.data;
+        for (let i = 0; i < a.length; i += 4) {
+          let r = a[i], gg = a[i + 1], b = a[i + 2];
+          const Y = (.299 * r + .587 * gg + .114 * b) / 255;
+          r = lerp(r, Y * 255, desat) * (1 - cool * .09); gg = lerp(gg, Y * 255, desat) * (1 - cool * .02); b = Math.min(255, lerp(b, Y * 255, desat) * (1 + cool * .07));
+          const t = clamp((Y - .06) / .86); const tt = t * t * (3 - 2 * t);
+          a[i] = lerp(r, lerp(54, 250, tt), k); a[i + 1] = lerp(gg, lerp(68, 252, tt), k); a[i + 2] = lerp(b, lerp(98, 255, tt), k);
+        }
+        g.putImageData(d, 0, 0);
+        c.toBlob((blob) => {
+          if (!blob) return reveal();
+          const orig = img.currentSrc || img.src;
+          // if the graded copy is ever blocked (e.g. by a CSP), fall back to the original photo
+          img.addEventListener('error', () => { img.src = orig; reveal(); }, { once: true });
+          img.src = URL.createObjectURL(blob);
+          img.decode?.().then(reveal, () => {}) ?? reveal();
+        }, 'image/jpeg', .9);
+      } catch { reveal(); }
+    };
+    const reveal = () => img.classList.add('is-graded');
+    if (img.complete && img.naturalWidth) run(); else img.addEventListener('load', run, { once: true });
+  }
+  grade(el.clouds, { k: .42, desat: .6, cool: 1.2 });
+  grade(el.franceImg, { k: .14, desat: .38, cool: .9 });
+
+  // ---------- procedural cloud sprites (cool white, slate underside) ----------
   const sprites = [];
   function makeSprite(seed) {
     const c = document.createElement('canvas'); const s = 320; c.width = s; c.height = s * .62;
@@ -89,11 +138,11 @@
     for (let i = 0; i < 26; i++) {
       const x = s * (.18 + rnd() * .64), y = c.height * (.38 + rnd() * .32), rad = s * (.08 + rnd() * .16);
       const gr = g.createRadialGradient(x, y - rad * .3, rad * .1, x, y, rad);
-      gr.addColorStop(0, 'rgba(255,255,255,.95)'); gr.addColorStop(.55, 'rgba(255,246,240,.55)'); gr.addColorStop(1, 'rgba(255,236,226,0)');
+      gr.addColorStop(0, 'rgba(255,255,255,.95)'); gr.addColorStop(.55, 'rgba(244,247,251,.55)'); gr.addColorStop(1, 'rgba(236,241,247,0)');
       g.fillStyle = gr; g.beginPath(); g.arc(x, y, rad, 0, Math.PI * 2); g.fill();
     }
     g.globalCompositeOperation = 'source-atop';
-    const sh = g.createLinearGradient(0, 0, 0, c.height); sh.addColorStop(.45, 'rgba(255,255,255,0)'); sh.addColorStop(1, 'rgba(214,170,170,.45)');
+    const sh = g.createLinearGradient(0, 0, 0, c.height); sh.addColorStop(.45, 'rgba(255,255,255,0)'); sh.addColorStop(1, 'rgba(150,164,190,.4)');
     g.fillStyle = sh; g.fillRect(0, 0, s, c.height);
     return c;
   }
@@ -104,19 +153,23 @@
     for (let i = 0; i < 34; i++) puffs.push({ x: (rnd() - .5) * 2.6, y: (rnd() - .5) * 2.2, z: .25 + rnd() * 1.8, sp: sprites[i % 4], d: rnd() });
   }
   const lctx = el.layer.getContext('2d');
-  let dpr = Math.min(1.5, devicePixelRatio || 1);
-  function sizeCanvas(c) { c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); c.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0); }
+  const fctx = el.flock.getContext('2d');
+  // soft clouds render at 1x (no visible loss); birds use the capped DPR for crisp edges
+  function sizeCanvases() {
+    el.layer.width = Math.round(M.W); el.layer.height = Math.round(M.H); lctx.setTransform(1, 0, 0, 1, 0, 0);
+    el.flock.width = Math.round(M.W * dpr); el.flock.height = Math.round(M.H * dpr); fctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  let cloudsDrawn = true;
   function drawClouds(p, t) {
     const vis = fade(p, .44, .5, .66, .76);
-    el.layer.style.opacity = vis.toFixed(3);
-    if (vis <= 0) return;
+    set(el.layer, 'opacity', String(f3(vis)));
+    if (vis < .01) { if (cloudsDrawn) { lctx.clearRect(0, 0, M.W, M.H); cloudsDrawn = false; } return; }
+    cloudsDrawn = true;
+    const { W, H } = M;
     lctx.clearRect(0, 0, W, H);
     const travel = seg(p, .44, .76) * 1.9, part = eio(seg(p, .62, .76));
     const fov = Math.max(W, H) * .42;
-    const list = puffs.map(o => {
-      let z = o.z - travel; z = ((z - .05) % 2 + 2) % 2 + .05;
-      return { o, z };
-    }).sort((a, b) => b.z - a.z);
+    const list = puffs.map(o => { let z = o.z - travel; z = ((z - .05) % 2 + 2) % 2 + .05; return { o, z }; }).sort((a, b) => b.z - a.z);
     for (const { o, z } of list) {
       const spread = 1 + part * 2.4;
       const x = W / 2 + (o.x * spread + Math.sin(t * .00012 + o.d * 6) * .04) * fov / z;
@@ -130,93 +183,101 @@
     lctx.globalAlpha = 1;
   }
 
-  // ---------- birds ----------
-  const fctx = el.flock.getContext('2d');
-  const flockBirds = Array.from({ length: 11 }, (_, i) => ({ ox: (i % 4) * .055 + Math.random() * .03, oy: Math.floor(i / 4) * .05 + (i % 2) * .02, s: .7 + Math.random() * .6, ph: Math.random() * 6.28, sp: 6 + Math.random() * 2 }));
+  // ---------- birds: three parallax depth planes (far, mid, near) ----------
+  const B = window.FSBirds;
+  const PLANES = [
+    { scale: .42, speed: .45, alpha: .55, band: [.1, .28], mode: 'sil', color: '#6d7d9c' },   // far: atmospheric slate
+    { scale: .7, speed: .78, alpha: .85, band: [.18, .42], mode: 'detail' },                   // mid
+    { scale: 1.3, speed: 1.2, alpha: 1, band: [.3, .62], mode: 'detail' },                     // near
+  ];
+  let flock = [];
+  function buildFlock() {
+    const counts = M.portrait && M.W < 700 ? [2, 2, 1] : [3, 3, 2];  // 5 on phones, 8 on desktop
+    const total = counts.reduce((a, b) => a + b, 0);
+    if (flock.length === total || !B) return;
+    flock = [];
+    counts.forEach((n, pi) => { for (let i = 0; i < n; i++) flock.push({ bird: B.create({ seed: 11 + pi * 31 + i * 7 }), plane: PLANES[pi], u: (i + .3 + pi * .37) / n % 1, v: (i * .61 + pi * .23) % 1, seed: pi * 3.1 + i * 1.7 }); });
+  }
+  let lastT = 0, flockDrawn = true;
   function drawFlock(p, t) {
-    const vis = fade(p, .66, .72, .94, 1);
-    el.flock.style.opacity = vis.toFixed(3);
-    if (vis <= 0) return;
+    const vis = fade(p, .66, .72, .96, 1);
+    set(el.flock, 'opacity', String(f3(vis)));
+    const dt = Math.min(.033, Math.max(0, (t - (lastT || t)) / 1000)); lastT = t;
+    if (vis < .01 || !B) { if (flockDrawn) { fctx.clearRect(0, 0, M.W, M.H); flockDrawn = false; } return; }
+    flockDrawn = true;
+    const { W, H, portrait } = M, ts = t / 1000;
     fctx.clearRect(0, 0, W, H);
-    const k = seg(p, .66, 1), base = Math.min(W, H);
-    const fx = lerp(1.05, -.35, k) * W, fy = lerp(.42, .18, k) * H;
-    fctx.strokeStyle = 'rgba(28,34,70,.78)'; fctx.lineCap = 'round';
-    for (const b of flockBirds) {
-      const x = fx + b.ox * W + Math.sin(t * .0007 + b.ph) * 6, y = fy + b.oy * H + Math.cos(t * .0009 + b.ph) * 5;
-      const size = base * .018 * b.s * (1 + k * .9), flap = Math.sin(t * .001 * b.sp + b.ph);
-      fctx.lineWidth = Math.max(1.2, size * .16);
-      window.FSBirds?.draw(fctx, x, y, size, flap);
+    const k = seg(p, .66, 1);
+    const unit = Math.min(W, H) * (portrait ? .085 : .06) * (1 + k * .35);
+    for (const f of flock) {
+      const pl = f.plane;
+      B.step(f.bird, dt, ts + f.seed);
+      // airspeed per plane (parallax): scroll-driven travel + gentle cruising
+      const travel = k * 1.25 * pl.speed + ts * .012 * pl.speed;
+      const x = ((((f.u - travel) % 1.4) + 1.4) % 1.4 - .2) * W;
+      // thermal drift: slow lift and sink, which also drives banking
+      const th = Math.sin(ts * .32 + f.seed), th2 = Math.sin(ts * .11 + f.seed * 2);
+      const y = lerp(pl.band[0], pl.band[1], f.v) * H - k * .08 * H * pl.speed + th * unit * .45 * pl.scale + th2 * unit * .7 * pl.scale;
+      B.draw(fctx, f.bird, {
+        x, y, size: unit * pl.scale, yaw: Math.PI + .7 + Math.sin(ts * .2 + f.seed) * .06,
+        roll: .05 + Math.cos(ts * .32 + f.seed) * .22, pitch: -Math.cos(ts * .32 + f.seed) * .05, cam: .5,
+        mode: pl.mode, color: pl.color, alpha: pl.alpha,
+      });
     }
   }
 
   // ---------- render ----------
-  let target = 0, cur = 0, lastP = -1, raf = 0, visible = true;
-  const progressFromScroll = () => {
-    const r = root.getBoundingClientRect();
-    const total = root.offsetHeight - stage.offsetHeight;
-    return total > 0 ? clamp(-r.top / total) : 0;
-  };
-  const fmt = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  let target = 0, cur = 0, raf = 0, visible = true, lastAlt = '';
+  const fmt = (n) => String(Math.round(n / 10) * 10).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
   function render(p, t) {
     // 1. Intro logo flies to the header
     const lp = eio(seg(p, .035, .16));
-    el.introLogo.style.transform = `translate3d(${flip.dx * lp}px, ${flip.dy * lp}px, 0) scale(${lerp(1, flip.s, lp)})`;
-    el.introLogo.style.opacity = p > .158 ? 0 : 1;
-    el.intro.querySelector('.fl-intro__tag').style.opacity = 1 - seg(p, .015, .07);
+    set(el.introLogo, 'transform', tx(flip.dx * lp, flip.dy * lp, lerp(1, flip.s, lp)));
+    set(el.introLogo, 'opacity', p > .158 ? '0' : '1');
+    set(el.introTag, 'opacity', String(f3(1 - seg(p, .015, .07))));
+    set(el.intro, 'visibility', p > .17 ? 'hidden' : 'visible');
     hdr?.classList.toggle('logo-landed', p > .155);
     hdr?.classList.toggle('nav-in', p > .13);
-    el.intro.style.visibility = p > .17 ? 'hidden' : 'visible';
 
     // 2. Cabin: pull back into the cabin, then push through the window
     const pull = eout(seg(p, .05, .25)), push = ein(seg(p, .4, .53));
     const cs = p < .4 ? lerp(S0, 1, pull) : lerp(1, S0 * 1.6, push);
-    el.cabin.style.transform = `scale(${cs})`;
-    el.cabin.style.opacity = (1 - seg(p, .5, .54)).toFixed(3);
-    el.cabin.style.visibility = p > .545 ? 'hidden' : 'visible';
-    el.glare.style.opacity = (fade(p, .1, .25, .4, .5) * .9).toFixed(3);
+    set(el.cabin, 'transform', `scale3d(${f3(cs)}, ${f3(cs)}, 1)`);
+    set(el.cabin, 'opacity', String(f3(1 - seg(p, .5, .54))));
+    set(el.cabin, 'visibility', p > .545 ? 'hidden' : 'visible');
 
     // 3. Sky through the window: drift, then tilt down and dive
     const dive = eio(seg(p, .4, .6));
-    const drift = Math.sin(t * .00008) * 1.2;
-    el.clouds.style.transform = `translate3d(${drift}%, ${-dive * 14}%, 0) scale(${1.06 + dive * .7})`;
-    el.clouds.style.opacity = (1 - seg(p, .56, .64)).toFixed(3);
-    el.clouds.style.filter = `brightness(${1 + dive * .25}) saturate(${1 - dive * .2})`;
+    set(el.clouds, 'transform', `translate3d(${f3(Math.sin(t * .00008) * 1.2)}%, ${f3(-dive * 14)}%, 0) scale3d(${f3(1.06 + dive * .7)}, ${f3(1.06 + dive * .7)}, 1)`);
+    set(el.clouds, 'opacity', String(f3(1 - seg(p, .56, .64))));
 
     // 4. Copy
     const o1 = fade(p, .2, .26, .35, .41);
-    el.c1.style.opacity = o1.toFixed(3);
-    el.c1.style.transform = `translate3d(0, ${(1 - seg(p, .2, .26)) * 24 - seg(p, .35, .41) * 30}px, 0)`;
-    el.c1.style.pointerEvents = o1 > .5 ? 'auto' : 'none';
-    el.c1.style.visibility = o1 > 0 ? 'visible' : 'hidden';
+    set(el.c1, 'opacity', String(f3(o1)));
+    set(el.c1, 'transform', tx(0, (1 - seg(p, .2, .26)) * 24 - seg(p, .35, .41) * 30));
+    set(el.c1, 'pointerEvents', o1 > .5 ? 'auto' : 'none');
+    set(el.c1, 'visibility', o1 > 0 ? 'visible' : 'hidden');
     const o2 = fade(p, .5, .56, .69, .75);
-    el.c2.style.opacity = o2.toFixed(3);
-    el.c2.style.transform = `translate3d(0, ${(1 - seg(p, .5, .62)) * 60 - seg(p, .69, .75) * 40}px, 0) scale(${lerp(.94, 1.04, seg(p, .5, .75))})`;
-    el.c2.style.visibility = o2 > 0 ? 'visible' : 'hidden';
+    set(el.c2, 'opacity', String(f3(o2)));
+    set(el.c2, 'transform', tx(0, (1 - seg(p, .5, .62)) * 60 - seg(p, .69, .75) * 40, lerp(.94, 1.04, seg(p, .5, .75))));
+    set(el.c2, 'visibility', o2 > 0 ? 'visible' : 'hidden');
     const o3 = seg(p, .82, .9);
-    el.c3.style.opacity = o3.toFixed(3);
-    el.c3.style.transform = `translate3d(0, ${(1 - eout(o3)) * 40}px, 0)`;
-    el.c3.style.visibility = o3 > 0 ? 'visible' : 'hidden';
+    set(el.c3, 'opacity', String(f3(o3)));
+    set(el.c3, 'transform', tx(0, (1 - eout(o3)) * 40));
+    set(el.c3, 'visibility', o3 > 0 ? 'visible' : 'hidden');
 
-    // 5. France below: revealed as clouds part, then we come closer
+    // 5. France below: revealed as clouds part (mist instead of blur), then we come closer
     const fr = seg(p, .58, .7), near = eio(seg(p, .6, 1));
-    el.france.style.opacity = fr.toFixed(3);
-    el.france.style.transform = `scale(${lerp(1.02, 1.5, near)}) translate3d(0, ${near * 3}%, 0)`;
-    el.franceImg.style.filter = `blur(${((1 - seg(p, .6, .78)) * 6).toFixed(2)}px)`;
-    el.haze.style.opacity = (1 - seg(p, .62, .86) * .9).toFixed(3);
+    set(el.france, 'opacity', String(f3(fr)));
+    set(el.france, 'transform', `translate3d(0, ${f3(near * 3)}%, 0) scale3d(${f3(lerp(1.02, 1.5, near))}, ${f3(lerp(1.02, 1.5, near))}, 1)`);
+    set(el.haze, 'opacity', String(f3(1 - seg(p, .6, .86) * .92)));
 
-    // 6. Seagull passes close by
-    const g = seg(p, .7, .97);
-    if (g > 0 && g < 1) {
-      const gx = lerp(W * 1.05, -W * .45, g), gy = lerp(H * .62, H * .1, eout(g)) + Math.sin(t * .002) * 6;
-      el.gull.style.opacity = Math.min(1, g * 6, (1 - g) * 6).toFixed(3);
-      el.gull.style.transform = `translate3d(${gx}px, ${gy}px, 0) scale(${lerp(.55, 1.5, g)}) rotate(${lerp(-8, 6, g)}deg)`;
-    } else el.gull.style.opacity = 0;
-
-    // 7. HUD
-    el.alt.textContent = fmt(10670 * (1 - eio(seg(p, .05, .97))));
-    el.bar.style.transform = `scaleX(${p.toFixed(4)})`;
-    el.cue.style.opacity = (1 - seg(p, .02, .06)).toFixed(3);
+    // 6. HUD (altitude text changes in steps of 10 m inside a size-contained box)
+    const alt = fmt(10670 * (1 - eio(seg(p, .05, .97))));
+    if (alt !== lastAlt) { el.alt.textContent = alt; lastAlt = alt; }
+    set(el.bar, 'transform', `scale3d(${f3(p)}, 1, 1)`);
+    set(el.cue, 'opacity', String(f3(1 - seg(p, .02, .06))));
     const light = p > .5 && p < .7;
     hdr?.classList.toggle('on-light', light);
     root.classList.toggle('on-light', light);
@@ -226,39 +287,50 @@
 
   function frame(t) {
     raf = 0;
-    target = progressFromScroll();
-    cur += (target - cur) * (Math.abs(target - cur) < .0005 ? 1 : .16);
-    if (cur !== lastP || visible) {
-      render(cur, t);
-      drawClouds(cur, t);
-      drawFlock(cur, t);
-      lastP = cur;
-    }
+    target = clamp((scrollY - M.top) / M.runway);
+    const gap = Math.abs(target - cur);
+    cur = gap < .0005 || gap > .12 ? target : cur + (target - cur) * .14;   // snap only after reloads / jumps
+    render(cur, t);
+    drawClouds(cur, t);
+    drawFlock(cur, t);
+    // keep ticking while visible (birds and clouds breathe); idle otherwise
     if (visible) raf = requestAnimationFrame(frame);
   }
   const kick = () => { if (!raf) raf = requestAnimationFrame(frame); };
 
   // ---------- boot ----------
-  function setStatic() {
+  measure();
+  if (reduce) {
     root.classList.add('is-static');
     hdr?.classList.add('logo-landed', 'nav-in');
     ai?.classList.add('is-ready');
     buildCabin();
+    return;
   }
-  if (reduce) { setStatic(); return; }
 
   root.classList.add('is-live');
   initClouds();
-  const resize = () => { buildCabin(); sizeCanvas(el.layer); sizeCanvas(el.flock); lastP = -1; kick(); };
-  let rw = innerWidth;
-  addEventListener('resize', () => { if (Math.abs(innerWidth - rw) > 40 || !matchMedia('(pointer: coarse)').matches) { rw = innerWidth; resize(); } else measureFlip(); });
-  resize();
-  new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) kick(); else { hdr?.classList.add('logo-landed', 'nav-in'); ai?.classList.add('is-ready'); } }).observe(root);
+  const relayout = () => { measure(); buildCabin(); measureFlip(); sizeCanvases(); buildFlock(); kick(); };
+  let rT = 0, rw = innerWidth;
+  addEventListener('resize', () => {
+    clearTimeout(rT);
+    rT = setTimeout(() => {
+      // ignore mobile URL-bar height changes; rebuild on real width changes
+      if (coarse && Math.abs(innerWidth - rw) < 40) { measure(); return; }
+      rw = innerWidth; relayout();
+    }, 150);
+  });
+  relayout();
+  new IntersectionObserver(([e]) => {
+    visible = e.isIntersecting;
+    if (visible) { lastT = 0; kick(); } else { hdr?.classList.add('logo-landed', 'nav-in'); ai?.classList.add('is-ready'); }
+  }).observe(root);
   addEventListener('scroll', kick, { passive: true });
-  document.fonts?.ready.then(() => { measureFlip(); kick(); });
+  document.fonts?.ready.then(() => { measure(); measureFlip(); kick(); });
+  addEventListener('load', () => { measure(); kick(); }, { once: true });
 
   el.skip.addEventListener('click', () => {
-    const y = root.offsetTop + root.offsetHeight - stage.offsetHeight * .02;
+    const y = M.top + M.runway + M.H * .02;
     window.FSScrollTo ? window.FSScrollTo(y) : scrollTo({ top: y, behavior: 'smooth' });
   });
 })();

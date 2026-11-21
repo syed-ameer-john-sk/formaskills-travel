@@ -1,0 +1,7 @@
+# Vercel builds the site from source (vercel.json → node build/build.mjs → site/)
+site
+legacy
+docs
+.claude
+node_modules
+*.log

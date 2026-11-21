@@ -113,10 +113,8 @@ const flightHero = () => `
       <div class="fl-france" data-france><img src="/assets/img/dest_sete.jpg" alt="" data-france-img><div class="fl-haze" data-haze></div></div>
       <canvas class="fl-cloudlayer" data-cloudlayer></canvas>
       <canvas class="fl-birds" data-flock></canvas>
-      <img class="fl-gull" src="/assets/img/realistic_seagull.png" alt="" data-gull>
     </div>
     <div class="fl-cabin" aria-hidden="true" data-cabin><svg data-cabin-svg></svg></div>
-    <div class="fl-glare" aria-hidden="true" data-glare></div>
 
     <div class="fl-intro" data-intro>
       <div class="fl-intro__logo" data-intro-logo>${logo('logo--light')}</div>
@@ -492,7 +490,7 @@ const credits = () => legal('Photography credits and licences', '/legal/photo-cr
 <p>These photographs show real places. Each is used under its original licence.</p>
 <p>Adaptations: resizing, compression and display cropping. Adaptations of CC BY-SA photographs are shared under the same licence.</p>
 <ul class="credits">${C.PHOTO_CREDITS.map(c => `<li><img src="${c.img}" alt="" loading="lazy"><div><b>${c.place}</b><span>Photograph by ${c.by}</span><span><a href="${c.fileHref}" target="_blank" rel="noopener">${c.file}</a> · <a href="${c.licHref}" target="_blank" rel="noopener">${c.lic}</a></span></div></li>`).join('')}</ul>
-<p class="muted">Other images on this website, including the aerial view of Sète, the cloud scenery and the seagull, are supplied by Formaskills Travel.</p>`);
+<p class="muted">Other images on this website, including the aerial view of Sète and the cloud scenery, are supplied by Formaskills Travel.</p>`);
 
 const search = () => `
 ${pageHero({ crumb: [['/search/', 'Search']], title: 'Search', cls: 'phero--compact' })}

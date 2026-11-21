@@ -7,21 +7,9 @@
   const EMAIL = 'contact.skillstravel@gmail.com';
   const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
 
-  // ---------- Bird drawing (shared with the flight) ----------
-  window.FSBirds = {
-    draw(ctx, x, y, s, flap) {
-      const tip = y - s * (.12 + .5 * flap), mid = y - s * (.32 + .22 * flap);
-      ctx.beginPath();
-      ctx.moveTo(x - s, tip);
-      ctx.quadraticCurveTo(x - s * .45, mid, x, y);
-      ctx.quadraticCurveTo(x + s * .45, mid, x + s, tip);
-      ctx.stroke();
-    },
-  };
-
   // ---------- Smooth scroll (desktop pointers only) ----------
   const hdr = $('[data-hdr]');
-  const hdrH = () => (hdr ? hdr.offsetHeight : 0);
+  const hdrH = () => (hdr ? hdr.offsetHeight : 0); // used only on clicks, never in scroll
   let lenis = null;
   if (!reduce && !coarse && window.Lenis) {
     lenis = new window.Lenis({ lerp: .09, wheelMultiplier: .95 });
@@ -45,21 +33,40 @@
   // ---------- Header: progress, hide on scroll, solid after the flight ----------
   const bar = $('.hdr__progress i');
   const flight = $('[data-flight]');
-  let lastY = scrollY, ticking = false;
+  const overlay = hdr?.classList.contains('hdr--overlay');
+  // Layout metrics are cached here and refreshed only on load / debounced resize / content resize —
+  // never read inside the scroll path.
+  const MET = { max: 1, flightEnd: -1, hdrH: 0 };
+  let measureParallax = null, runParallax = null;   // set by the parallax module below
+  const measureSite = () => {
+    MET.max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    MET.flightEnd = flight ? flight.offsetTop + flight.offsetHeight - innerHeight * .9 : -1;
+    MET.hdrH = hdr ? hdr.offsetHeight : 0;
+    measureParallax?.();
+  };
+  window.FSMeasure = measureSite;
+  let lastY = scrollY, ticking = false, lastBar = '';
   const onScroll = () => {
     ticking = false;
-    const y = scrollY, max = document.documentElement.scrollHeight - innerHeight;
-    if (bar) bar.style.transform = `scaleX(${max > 0 ? (y / max).toFixed(4) : 0})`;
+    const y = scrollY;
+    const b = `scale3d(${Math.min(1, y / MET.max).toFixed(4)}, 1, 1)`;
+    if (bar && b !== lastBar) { bar.style.transform = b; lastBar = b; }
+    runParallax?.(y);
     if (!hdr) return;
-    const flightEnd = flight ? flight.offsetTop + flight.offsetHeight - innerHeight * .9 : -1;
-    if (hdr.classList.contains('hdr--overlay')) hdr.classList.toggle('is-solid', y > flightEnd);
-    const inFlight = flight && y < flightEnd;
-    const openPanel = document.querySelector('[data-panel].is-open');
-    if (!inFlight && !openPanel && y > 400 && y > lastY + 6) hdr.classList.add('is-hidden');
+    if (overlay) hdr.classList.toggle('is-solid', y > MET.flightEnd);
+    const inFlight = flight && y < MET.flightEnd;
+    const panelOpen = document.documentElement.style.overflow === 'hidden';
+    if (!inFlight && !panelOpen && y > 400 && y > lastY + 6) hdr.classList.add('is-hidden');
     else if (y < lastY - 6 || y < 400 || inFlight) hdr.classList.remove('is-hidden');
     lastY = y;
   };
   addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  let rsT = 0;
+  const remeasure = () => { clearTimeout(rsT); rsT = setTimeout(() => { measureSite(); onScroll(); }, 150); };
+  addEventListener('resize', remeasure);
+  addEventListener('load', remeasure, { once: true });
+  if ('ResizeObserver' in window) new ResizeObserver(remeasure).observe(document.body);
+  measureSite();
   onScroll();
   if (!flight) hdr?.classList.add('logo-landed', 'nav-in');
 
@@ -232,40 +239,75 @@
   $$('.bubbles').forEach(b => io.observe(b));
 
   // ---------- Parallax (destination photos) ----------
-  const px = $$('[data-parallax], [data-parallax-hero]');
+  // Positions are cached (document offsets) and refreshed with the site metrics; the scroll
+  // tick (shared with the header, one rAF) only computes transforms from scrollY.
+  const px = $$('[data-parallax], [data-parallax-hero]').map(el => ({ el, hero: el.hasAttribute('data-parallax-hero'), top: 0, h: 0, last: '' }));
   if (px.length && !reduce) {
-    const run = () => {
-      for (const el of px) {
-        const r = el.parentElement.getBoundingClientRect();
-        if (r.bottom < 0 || r.top > innerHeight) continue;
-        const k = el.hasAttribute('data-parallax-hero') ? (-r.top) * .25 : ((r.top + r.height / 2) - innerHeight / 2) * -.06;
-        el.style.transform = `translate3d(0, ${k.toFixed(1)}px, 0)`;
+    measureParallax = () => {
+      for (const p of px) {
+        let y = 0, n = p.el.parentElement; while (n) { y += n.offsetTop; n = n.offsetParent; }
+        p.top = y; p.h = p.el.parentElement.offsetHeight;
       }
     };
-    addEventListener('scroll', () => requestAnimationFrame(run), { passive: true }); run();
+    runParallax = (sy) => {
+      const vh = innerHeight;
+      for (const p of px) {
+        const t = p.top - sy;
+        if (t + p.h < 0 || t > vh) continue;
+        const k = p.hero ? -t * .25 : ((t + p.h / 2) - vh / 2) * -.06;
+        const v = `translate3d(0, ${k.toFixed(1)}px, 0)`;
+        if (v !== p.last) { p.el.style.transform = v; p.last = v; }
+      }
+    };
+    measureParallax(); runParallax(scrollY);
   }
 
-  // ---------- CTA band birds ----------
+  // ---------- CTA band: coastal birds in three parallax depth planes (birds.js) ----------
+  // Far: small, slow, faded mist silhouettes. Mid / near: two-tone sculpted birds, faster and larger.
+  const BAND_PLANES = [
+    { scale: .5, speed: .012, alpha: .45, band: [.06, .16], mode: 'sil', color: '#9fb2d4' },
+    { scale: .78, speed: .02, alpha: .75, band: [.08, .22], mode: 'detail' },
+    { scale: 1.15, speed: .03, alpha: .95, band: [.1, .26], mode: 'detail' },
+  ];
   $$('[data-birds]').forEach(c => {
-    if (reduce) return;
-    const n = +c.dataset.birds || 6, ctx = c.getContext('2d');
-    const birds = Array.from({ length: n }, (_, i) => ({ x: Math.random(), y: .15 + Math.random() * .35, s: 6 + Math.random() * 7, sp: .00003 + Math.random() * .00003, ph: Math.random() * 6.28, f: 5 + Math.random() * 2 }));
-    let on = false, W = 0, H = 0, last = 0;
-    const size = () => { const d = Math.min(2, devicePixelRatio || 1); W = c.clientWidth; H = c.clientHeight; c.width = W * d; c.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0); };
+    const B = window.FSBirds;
+    if (reduce || !B) return;
+    const ctx = c.getContext('2d');
+    let on = false, W = 0, H = 0, last = 0, birds = [];
+    const build = () => {
+      const counts = W < 700 ? [2, 2, 1] : [3, 2, 2];
+      birds = [];
+      counts.forEach((n, pi) => { for (let i = 0; i < n; i++) birds.push({ bird: B.create({ seed: 40 + pi * 17 + i * 13 }), pl: BAND_PLANES[pi], x: (i + .4) / n + pi * .21, v: (i * .57 + pi * .31) % 1, wob: pi * 2.3 + i * 1.9 }); });
+    };
+    const size = () => {
+      const d = Math.min(coarse || innerWidth < 768 ? 1.5 : 2, devicePixelRatio || 1);
+      W = c.clientWidth; H = c.clientHeight; c.width = Math.round(W * d); c.height = Math.round(H * d); ctx.setTransform(d, 0, 0, d, 0, 0);
+      if (!birds.length || (W < 700) !== (birds.length === 5)) build();
+    };
     const tick = (t) => {
       if (!on) return;
-      const dt = Math.min(50, t - (last || t)); last = t;
-      ctx.clearRect(0, 0, W, H); ctx.strokeStyle = 'rgba(28,34,70,.55)'; ctx.lineCap = 'round';
+      const dt = Math.min(.033, Math.max(0, (t - (last || t)) / 1000)); last = t; const ts = t / 1000;
+      ctx.clearRect(0, 0, W, H);
+      const unit = Math.max(22, Math.min(W, 1400) * .03);
       for (const b of birds) {
-        b.x -= b.sp * dt * (W > 700 ? 1 : 1.4); if (b.x < -.05) { b.x = 1.05; b.y = .15 + Math.random() * .35; }
-        ctx.lineWidth = Math.max(1.2, b.s * .16);
-        window.FSBirds.draw(ctx, b.x * W, b.y * H + Math.sin(t * .0008 + b.ph) * 4, b.s, Math.sin(t * .001 * b.f + b.ph));
+        const pl = b.pl;
+        B.step(b.bird, dt, ts + b.wob);
+        b.x -= pl.speed * dt * (W > 700 ? 1 : 1.5);
+        if (b.x < -.1) { b.x = 1.1; b.v = Math.random(); }
+        const th = Math.sin(ts * .4 + b.wob);
+        B.draw(ctx, b.bird, {
+          x: b.x * W, y: lerpN(pl.band[0], pl.band[1], b.v) * H + th * unit * .5 * pl.scale, size: unit * pl.scale,
+          yaw: Math.PI + .62, roll: .04 + Math.cos(ts * .4 + b.wob) * .18, pitch: Math.cos(ts * .4 + b.wob) * -.05, cam: -.32,
+          mode: pl.mode, color: pl.color, alpha: pl.alpha,
+        });
       }
       requestAnimationFrame(tick);
     };
     new IntersectionObserver(([e]) => { const was = on; on = e.isIntersecting; if (on && !was) { size(); last = 0; requestAnimationFrame(tick); } }).observe(c);
-    addEventListener('resize', () => on && size());
+    let rT = 0;
+    addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => on && size(), 150); });
   });
+  function lerpN(a, b, t) { return a + (b - a) * t; }
 
   // ---------- Mail forms (contact + partner) ----------
   const TOPICS = { orgfr: 'French language and immersion programmes', orgstay: 'Accommodation and transport', orgcult: 'Cultural and educational experiences, activities and excursions', orgcoord: 'Local coordination and support in France', groups: 'Individual and group programmes', groupmob: 'Plan group mobility', erasmus: 'Erasmus+ reception', jobshadow: 'Job shadowing' };
