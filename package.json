@@ -7,5 +7,11 @@
     "start": "node build/build.mjs && node build/serve.mjs",
     "serve": "node build/serve.mjs"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "lighthouse": "^12.8.2",
+    "playwright": "^1.65.1"
+  }
 }

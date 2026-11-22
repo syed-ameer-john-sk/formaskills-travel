@@ -52,7 +52,7 @@ const hreflang = (path) => LANGS.map(l => `<link rel="alternate" hreflang="${HTM
 const i18nHead = (L) => {
   const T = {};
   if (L !== 'en') for (const k of jsKeys) { const v = dicts[L]?.[plain(k)]; if (v) T[k] = v; }
-  const zh = L === 'zh' ? '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap">\n' : '';
+  const zh = L === 'zh' ? '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" media="print" onload="this.media=\'all\'">\n' : '';
   return `${zh}<script>window.FS_LANG=${JSON.stringify(L)};window.FS_BASE=${JSON.stringify('/' + L)};window.FS_T=${JSON.stringify(T)};try{localStorage.setItem('fs-lang',${JSON.stringify(L)})}catch(e){}</script>`;
 };
 
@@ -101,6 +101,11 @@ for (const p of PAGES) {
     let html = localise(en, L, p.file ? '/en/' : p.path);
     if (L !== 'en') html = translatePage(html, dicts[L], missing[L]);
     html = html.replace('<!--LD-->', `<script type="application/ld+json">${orgLd(L)}</script>`);
+    if (p.path === '/contact/') {                            // FAQPage from the translated questions on the page
+      const qa = [...html.matchAll(/<h3 class="faq__q">[\s\S]*?<span>([\s\S]*?)<\/span>[\s\S]*?<div class="faq__inner">([\s\S]*?)<\/div><\/div><\/div>/g)]
+        .map(m => ({ '@type': 'Question', name: strip(m[1]), acceptedAnswer: { '@type': 'Answer', text: strip(m[2]) } }));
+      if (qa.length) html = html.replace('</head>', `<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', inLanguage: HTML_LANG[L], mainEntity: qa }).replace(/</g, '\\u003c')}</script>\n</head>`);
+    }
     html = p.file ? html.replaceAll('__V__', V) : finalise(html, L, p.path);
     const file = p.file ? join(OUT, p.file) : join(OUT, L, p.path, 'index.html');
     await mkdir(dirname(file), { recursive: true });

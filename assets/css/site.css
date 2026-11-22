@@ -950,3 +950,135 @@ main > .sec, .after-flight > .sec, main > .cta-band, .after-flight > .cta-band, 
 h1, h2, h3, h4, .btn, .hdr__nav a, .tabs__list button, .badge, .path__h, .dest__name, .lead { overflow-wrap: anywhere; }
 :lang(de) h1, :lang(de) h2, :lang(de) h3, :lang(pl) h1, :lang(pl) h2, :lang(pl) h3, :lang(fr) h1, :lang(fr) h2 { hyphens: auto; -webkit-hyphens: auto; }
 :lang(de) .btn, :lang(pl) .btn { white-space: normal; }
+
+/* =====================================================================
+   Motion layer (PRD §4–§7): reveals, home sections, video stories, map
+   effect, sticky Enquire, cursor glow. Transforms and opacity only.
+   ===================================================================== */
+/* reveal on scroll (motion.js tags content below the fold) */
+.rv { opacity: 0; transform: translate3d(0, 28px, 0); transition: opacity .9s var(--ease), transform 1s var(--ease); transition-delay: calc(var(--rd, 0) * 90ms); }
+.rv.is-in { opacity: 1; transform: none; }
+
+/* audience cards */
+.paths { grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2vw, 1.6rem); border-top: 0; }
+.path, .path + .path, .path:first-child { position: relative; display: flex; flex-direction: column; padding: 0; border: 0; gap: 0; background: #fff; border-radius: var(--r-l); overflow: hidden;
+  box-shadow: 0 1px 0 var(--line), 0 18px 40px -30px rgba(28,34,70,.45); transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--ly, 0px));
+  transition: transform .5s var(--ease), box-shadow .5s var(--ease), opacity .9s var(--ease); }
+.path.rv:not(.is-in) { transform: translate3d(0, 28px, 0); }
+.path:hover, .path:focus-within { --ly: -6px; box-shadow: 0 1px 0 var(--line), 0 30px 60px -30px rgba(28,34,70,.55); }
+.path__img { position: relative; aspect-ratio: 16/9; overflow: hidden; }
+.path__img img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.02); transition: transform 1.2s var(--ease); }
+.path:hover .path__img img { transform: scale(1.08); }
+.path__img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(28,34,70,0) 40%, rgba(28,34,70,.5)); }
+.path__badge { position: absolute; left: 1.2rem; bottom: 1rem; z-index: 1; display: grid; place-items: center; width: 3.2rem; height: 3.2rem; border-radius: 50%; background: #fff; color: var(--nuit); box-shadow: 0 10px 24px -10px rgba(28,34,70,.6); transition: transform .5s var(--ease); }
+.path:hover .path__badge { transform: rotate(-8deg) scale(1.06); }
+.path__body { display: flex; flex-direction: column; gap: .8rem; padding: 1.6rem clamp(1.2rem, 2.2vw, 1.8rem) 1.6rem; flex: 1; }
+.path__a::after { content: ""; position: absolute; inset: 0; z-index: 2; }   /* whole card is the link */
+.path__a:focus-visible { outline: none; }
+.path:has(.path__a:focus-visible) { outline: 3px solid var(--peri); outline-offset: 3px; }
+@media (max-width: 860px) {
+  .paths { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 1rem; margin: 0 calc(var(--gut) * -1); padding: .5rem var(--gut) 1.5rem; scrollbar-width: none; }
+  .paths::-webkit-scrollbar { display: none; }
+  .path, .path + .path, .path:first-child { flex: 0 0 min(82%, 340px); scroll-snap-align: start; }
+}
+
+/* why: icon badges and parallax photo */
+.why__fig > div { height: 118%; margin-top: -9%; }
+.why__fig img { width: 100%; height: 100%; object-fit: cover; }
+.why__ico { display: inline-grid; place-items: center; width: 3rem; height: 3rem; border-radius: 50%; background: var(--sky); color: var(--peri-d); margin-bottom: 1rem; transition: transform .6s var(--ease), background .4s, color .4s; }
+.why__i .why__ico .ico { width: 1.5rem; height: 1.5rem; margin: 0; color: inherit; }
+.why__i:hover .why__ico { transform: translateY(-3px) rotate(-6deg); background: var(--nuit); color: #fff; }
+.why__i.rv .why__ico { transform: scale(.5); transition: transform .8s cubic-bezier(.3,1.6,.5,1) calc(var(--rd, 0) * 90ms + .25s), background .4s, color .4s; }
+.why__i.rv.is-in .why__ico { transform: none; }
+
+/* video story cards */
+.sec--stories { background: linear-gradient(180deg, var(--paper), var(--sky)); }
+.stories { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(.8rem, 1.6vw, 1.4rem); }
+.story { position: relative; display: block; aspect-ratio: 9/16; border-radius: var(--r-l); overflow: hidden; background: var(--nuit); color: #fff; text-decoration: none; isolation: isolate;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--ly, 0px)); transition: transform .5s var(--ease), box-shadow .5s, opacity .9s var(--ease); box-shadow: 0 24px 50px -34px rgba(28,34,70,.7); }
+.story.rv:not(.is-in) { transform: translate3d(0, 28px, 0); }
+.story:hover, .story:focus-visible { --ly: -8px; box-shadow: 0 36px 70px -34px rgba(28,34,70,.8); }
+.stories .story:nth-child(even) { margin-top: clamp(1.5rem, 4vw, 3.5rem); }
+.story__v { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.04); transition: transform 1.4s var(--ease); }
+.story:hover .story__v { transform: scale(1.1); }
+.story::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(16,20,46,0) 45%, rgba(16,20,46,.85)); z-index: 1; }
+.story__t { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 1.2rem 1.1rem 1.3rem; display: grid; gap: .35rem; }
+.story__name { margin: 0; font: 600 clamp(1.3rem, 2vw, 1.7rem)/1.1 var(--f-ui); letter-spacing: -.01em; }
+.story__d { margin: 0; font-size: .95rem; line-height: 1.4; color: rgba(255,255,255,.9); }
+.story.is-playing::before { content: ""; position: absolute; top: 1rem; right: 1rem; z-index: 2; width: .55rem; height: .55rem; border-radius: 50%; background: #fff; box-shadow: 0 0 0 4px rgba(255,255,255,.22); animation: livePulse 2s ease-in-out infinite; }
+@keyframes livePulse { 50% { opacity: .35; } }
+.story:focus-visible { outline: 3px solid var(--peri); outline-offset: 3px; }
+@media (max-width: 860px) {
+  .stories { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 calc(var(--gut) * -1); padding: .5rem var(--gut) 1.5rem; scrollbar-width: none; }
+  .stories::-webkit-scrollbar { display: none; }
+  .stories .story { flex: 0 0 min(62%, 260px); scroll-snap-align: center; }
+  .stories .story:nth-child(even) { margin-top: 0; }
+}
+.famous-wrap { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+.story--page { max-width: 380px; width: 100%; }
+.famous--stack { grid-template-columns: 1fr; gap: 1.6rem; }
+@media (max-width: 760px) { .famous-wrap { grid-template-columns: 1fr; } .story--page { max-width: 300px; margin: 0 auto; } }
+
+/* wave dividers (crest drifts slowly) */
+.wave { position: relative; height: clamp(36px, 5vw, 72px); background: var(--wt); overflow: hidden; margin: -1px 0; }
+.wave svg { position: absolute; top: 0; left: 0; width: 200%; height: 100%; fill: var(--wf); animation: waveDrift 26s linear infinite; }
+@keyframes waveDrift { to { transform: translate3d(-50%, 0, 0); } }
+
+/* timeline that draws itself */
+.steps--flight::before { opacity: .5; }
+.steps--flight::after { content: ""; position: absolute; left: 1.5rem; right: 1.5rem; top: 1.5rem; height: 2px; margin-top: -.5px; background: linear-gradient(90deg, var(--peri), var(--nuit)); transform: scaleX(var(--tp, 0)); transform-origin: left; border-radius: 2px; }
+.steps--flight .steps__n { transition: background .5s var(--ease), color .5s var(--ease), transform .6s cubic-bezier(.3,1.6,.5,1), border-color .5s; }
+.steps--flight .steps__i.is-lit .steps__n { background: var(--nuit); color: #fff; border-color: var(--nuit); transform: scale(1.08); }
+@media (max-width: 860px) {
+  .steps--flight::after { left: 1.5rem; right: auto; top: 1.5rem; bottom: 1.5rem; width: 2px; height: auto; margin: 0 0 0 -.5px; transform: scaleY(var(--tp, 0)); transform-origin: top; background: linear-gradient(180deg, var(--peri), var(--nuit)); }
+}
+
+/* closing call to action: destination photo behind a navy overlay */
+.cta-band { background: var(--nuit); }
+.cta-band__img { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.cta-band__img > div { height: 124%; margin-top: -12%; }
+.cta-band__img img { width: 100%; height: 100%; object-fit: cover; }
+.cta-band__sky { background: linear-gradient(180deg, rgba(18,28,56,.94) 0%, rgba(29,45,90,.86) 50%, rgba(42,76,158,.8) 100%); }
+
+/* map effect: outline draws in, hatched area follows the selected city, markers pop in */
+.map__draw { fill: none; stroke: #fff; stroke-width: 1.6; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: .9; }
+.mapx__map.is-in .map__draw { stroke-dashoffset: 0; transition: stroke-dashoffset 2.2s cubic-bezier(.6,.1,.2,1); }
+.map__hatch-bg { fill: rgba(240,163,94,.24); }
+.map__hatch-ln { stroke: rgba(240,163,94,.75); stroke-width: 1.6; }
+.map__area { pointer-events: none; transition: transform .8s cubic-bezier(.2,.7,.1,1); }
+.map__hit { fill: transparent; }
+.map__pin { transition: opacity .5s var(--ease); }
+.js .mapx__map:not(.is-in) .map__pin { opacity: 0; }
+.mapx__map.is-in .map__pin { transition-delay: calc(.9s + var(--i) * .15s); }
+.map__pin:hover .map__dot { r: 8.5; }
+
+/* sticky Enquire (after the hero; hidden over the closing CTA and footer) */
+.stick-enq { position: fixed; z-index: 79; left: max(1rem, env(safe-area-inset-left)); bottom: max(1rem, env(safe-area-inset-bottom)); height: 52px; min-height: 52px; box-shadow: 0 16px 30px -12px rgba(28,34,70,.55);
+  opacity: 0; transform: translate3d(0, 120%, 0); pointer-events: none; transition: opacity .4s var(--ease), transform .5s var(--ease), background .25s; }
+.stick-enq.is-on { opacity: 1; transform: none; pointer-events: auto; }
+.stick-enq .ico { color: var(--amber); }
+
+/* cursor glow (desktop pointer only, added by motion.js) */
+.cursor-glow { display: none; }
+.has-pointer .cursor-glow { display: block; position: fixed; left: 0; top: 0; z-index: 70; width: 420px; height: 420px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(150,170,240,.32), rgba(150,170,240,.12) 55%, rgba(150,170,240,0)); mix-blend-mode: multiply; opacity: 0; transition: opacity .6s; will-change: transform; }
+.has-pointer .cursor-glow.is-on { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rv { opacity: 1; transform: none; transition: none; }
+  .wave svg, .story.is-playing::before { animation: none; }
+  .map__draw { stroke-dashoffset: 0; }
+  .js .mapx__map:not(.is-in) .map__pin { opacity: 1; }
+  .path, .story, .path__img img, .story__v { transition: none; }
+}
+
+/* enquiry form (contact page + Enquire modal) */
+.form--enq { display: grid; gap: 1.1rem; }
+.form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+@media (max-width: 560px) { .form__row { grid-template-columns: 1fr; } }
+.field label small { font-weight: 400; color: var(--ink-2); font-size: .9em; }
+.field [aria-invalid="true"] { border-color: #b3261e; box-shadow: 0 0 0 3px rgba(179,38,30,.12); }
+.hp { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.modal .form--enq { margin-top: .6rem; }
+.modal .form--enq .fine { margin: 0; }
+.story--page .story__d { display: none; }

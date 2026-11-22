@@ -1,5 +1,6 @@
+import { readFileSync } from 'node:fs';
 import * as C from './content.mjs';
-import { esc, icon, btn, notice, faqList, picture, franceMap, pageHero, ctaBand, logo, crumbs } from './layout.mjs';
+import { esc, icon, btn, notice, faqList, picture, franceMap, pageHero, ctaBand, logo, crumbs, enquiryForm } from './layout.mjs';
 
 const { SITE, NOTICE, DESTINATIONS, DEST_SHARED } = C;
 const sec = (inner, cls = '', attrs = '') => `<section class="sec ${cls}" ${attrs}><div class="wrap">${inner}</div></section>`;
@@ -8,6 +9,23 @@ const steps = (arr, cls = '') => `<ol class="steps ${cls}">${arr.map((s, i) => `
 const ticks = (arr, cls = '') => `<ul class="ticks ${cls}">${arr.map(t => `<li>${icon('check')}<span>${t}</span></li>`).join('')}</ul>`;
 const linkList = (arr) => `<ul class="linklist">${arr.map(([h, l]) => `<li><a href="${h}"><span>${l}</span>${icon('arrow')}</a></li>`).join('')}</ul>`;
 const destUrl = (d) => `/destinations/${d.slug}/`;
+
+// Vertical video story card. Sources are attached by motion.js only when the card nears the
+// viewport (and never with reduced motion or data saver), so the poster is the fallback.
+const storyCard = (d, i, cls = '') => { const tag = cls ? 'div' : 'a'; return `<${tag} class="story ${cls}" ${cls ? '' : `href="${destUrl(d)}"`} data-story style="--i:${i}">
+  <video class="story__v" muted loop playsinline preload="none" data-poster="/assets/video/${d.slug}-poster.jpg" aria-hidden="true" tabindex="-1" width="720" height="1280">
+    <source data-src="/assets/video/${d.slug}.webm" type="video/webm"><source data-src="/assets/video/${d.slug}.mp4" type="video/mp4">
+  </video>
+  <div class="story__t"><p class="story__name">${d.name}</p><p class="story__d">${d.famous[0].d}</p></div>
+  <p class="sr-only">Silent video clip of ${d.name}.</p>
+</${tag}>`; };
+
+// Curved divider between two section colours. The crest drifts slowly.
+const wave = (from, to) => `<div class="wave" style="--wf:${from};--wt:${to}" aria-hidden="true"><svg viewBox="0 0 2880 80" preserveAspectRatio="none"><path d="M0 0H2880V34C2640 74 2400 74 2160 40S1680 4 1440 34 960 74 720 40 240 4 0 34Z"/></svg></div>`;
+
+// Testimonials: rendered only when build/testimonials.json has entries (none are published yet).
+const TESTIMONIALS = JSON.parse(readFileSync(new URL('./testimonials.json', import.meta.url), 'utf8'));
+const testimonials = () => TESTIMONIALS.length ? sec(`${head2('What participants say')}<div class="quotes">${TESTIMONIALS.map(q => `<figure class="quote"><blockquote><p>${esc(q.quote)}</p></blockquote><figcaption><b>${esc(q.name)}</b>${q.role ? `<span>${esc(q.role)}</span>` : ''}</figcaption></figure>`).join('')}</div>`, 'sec--tint') : '';
 
 // =============== Shared blocks ===============
 const destPanel = (d, i, { full = true } = {}) => `
@@ -33,7 +51,7 @@ const mapSection = ({ full = true, title = 'Explore our destinations on the map'
       </div>
       <div class="mapx__map">${franceMap()}</div>
     </div>
-    <div class="mapx__panels">${DESTINATIONS.map((d, i) => destPanel(d, i, { full })).join('')}</div>
+    <div class="mapx__panels" aria-live="polite">${DESTINATIONS.map((d, i) => destPanel(d, i, { full })).join('')}</div>
   </div>
   ${after}`, 'sec--map', `id="${id}"`);
 
@@ -160,21 +178,28 @@ ${sec(`
       ['For me', 'Learn French, explore France and plan a stay around your interests.', '/what-we-offer/#me', 'Explore for me', 'users'],
       ['For my organisation', 'Plan a group programme or mobility project for your learners or staff.', '/what-we-offer/#org', 'Explore for organisations', 'building'],
       ['Become a partner', 'Offer your classes, accommodation or activities to learners and visitors.', '/partners/', 'Explore for partners', 'handshake'],
-    ].map(([k, h, href, l, ic]) => `<article class="path"><p class="path__k">${icon(ic)}<span>${k}</span></p><h2 class="path__h">${h}</h2><a class="path__a" href="${href}"><span>${l}</span>${icon('arrow')}</a></article>`).join('')}
+    ].map(([k, h, href, l, ic], i) => `<article class="path"><div class="path__img" aria-hidden="true">${picture(['/assets/img/photos/montpellier', '/assets/img/photos/sete', '/assets/img/photos/nice'][i], '', '(min-width: 860px) 30vw, 80vw')}<span class="path__badge">${icon(ic)}</span></div><div class="path__body"><p class="path__k"><span>${k}</span></p><h2 class="path__h">${h}</h2><a class="path__a" href="${href}" data-magnetic><span>${l}</span>${icon('arrow')}</a></div></article>`).join('')}
   </div>
   ${notice()}`, 'sec--paths')}
 
 ${sec(`<div class="why">
-  <div class="why__head">${head2('Why Formaskills Travel?')}<figure class="why__fig">${'<img src="/assets/img/experience_sete.jpg" alt="Four young travellers walking along a harbour wall in Sète" loading="lazy" decoding="async">'}</figure></div>
-  <div class="why__grid">${C.WHY.map(w => `<div class="why__i">${icon(w.icon)}<h3>${w.t}</h3><p>${w.d}</p></div>`).join('')}</div>
+  <div class="why__head">${head2('Why Formaskills Travel?')}<figure class="why__fig"><div data-parallax><img src="/assets/img/experience_sete.jpg" width="1376" height="768" alt="Four young travellers walking along a harbour wall in Sète" loading="lazy" decoding="async"></div></figure></div>
+  <div class="why__grid">${C.WHY.map(w => `<div class="why__i"><span class="why__ico">${icon(w.icon)}</span><h3>${w.t}</h3><p>${w.d}</p></div>`).join('')}</div>
 </div>`)}
 
+${sec(`${head2('Our destinations in motion', 'Short silent clips of Sète, Montpellier, Paris and Nice. Select a city to explore it.')}
+  <div class="stories" data-stories>${DESTINATIONS.map(storyCard).join('')}</div>`, 'sec--stories')}
+
+${wave('var(--paper)', 'var(--nuit)')}
 ${mapSection({ after: `<div class="actions actions--map">${btn('/destinations/', 'Explore All Destinations')}${btn('/contact/#write', 'Make a personalised request', 'ghost')}</div>` })}
+${wave('var(--nuit)', 'var(--paper)')}
 
 ${sec(`<div class="how">
   <div><p class="kicker">How it works</p><h2 class="sec__title">Three simple steps</h2></div>
-  ${steps(C.STEPS3, 'steps--flight')}
+  ${steps(C.STEPS3, 'steps--flight" data-timeline="')}
 </div>`)}
+
+${testimonials()}
 
 ${ctaBand()}
 </div>`;
@@ -287,7 +312,7 @@ ${sec(`<div class="split">
   <div><p class="lead">${d.summary}</p><div class="actions">${btn(`/plan-your-stay/?for=me&city=${d.slug}`, d.meCta)}${btn('/contact/', 'Enquire', 'ghost')}</div></div>
   <aside class="factcard"><p class="period">${icon('clock')}<span>Recommended period <b>${d.period}</b></span></p>${ticks(d.highlights, 'ticks--compact')}</aside>
 </div>`)}
-${sec(`${head2('Famous for')}<div class="famous">${d.famous.map(f => `<div class="famous__i"><h3>${f.t}</h3><p>${f.d}</p></div>`).join('')}</div>`, 'sec--tint')}
+${sec(`<div class="famous-wrap">${storyCard(d, 0, 'story--page')}<div>${head2('Famous for')}<div class="famous famous--stack">${d.famous.map(f => `<div class="famous__i"><h3>${f.t}</h3><p>${f.d}</p></div>`).join('')}</div></div></div>`, 'sec--tint')}
 ${sec(`${head2(`Build your project in ${d.name}`, `Beyond the visit, here is how a group project can take shape in ${d.name}.`)}
   <div class="quad">${[['Who it suits', DEST_SHARED.suits, 'users'], ['Best period', d.best, 'clock'], ['French course options', DEST_SHARED.french, 'chat'], ['Possible activities', d.activities, 'compass']].map(([t, p, ic]) => `<div class="quad__i">${icon(ic)}<h3>${t}</h3><p>${p}</p></div>`).join('')}</div>`)}
 ${sec(`<div class="split">
@@ -426,16 +451,7 @@ ${ctaBand({ title: 'Have a project in mind?', text: `Tell us about your group, y
 const contact = () => `
 ${pageHero({ crumb: [['/contact/', 'Contact & FAQ']], title: 'Contact', lead: ['Write to us, call us, or start an enquiry. Our team replies personally.'] })}
 ${sec(`<div class="split split--form">
-  <form class="form" id="write" data-mailform="contact" novalidate>
-    <h2 class="sec__title">Write to us</h2>
-    <div class="field"><label for="cf-email">Email</label><input id="cf-email" name="Email" type="email" required autocomplete="email"></div>
-    <div class="field"><label for="cf-subject">Subject</label><input id="cf-subject" name="Subject" data-subject required></div>
-    <div class="field"><label for="cf-msg">Your message</label><textarea id="cf-msg" name="Message" rows="7" required></textarea></div>
-    <label class="check check--consent"><input type="checkbox" required data-consent><span>I agree that Formaskills Travel may contact me about this enquiry. <a href="/legal/privacy/">Privacy notice</a></span></label>
-    <p class="form__err" data-form-err role="alert"></p>
-    <div class="actions"><button class="btn btn--primary" type="submit"><span>Open in my email app</span>${icon('arrow')}</button><button class="btn btn--ghost" type="button" data-copy-form>${icon('copy')}<span>Copy message</span></button></div>
-    <p class="fine">This opens your email app with your enquiry ready to send. Nothing is sent until you send the email.</p>
-  </form>
+  ${enquiryForm('cf', { title: 'Write to us' })}
   <aside class="reach">
     <h2 class="sec__title">Other ways to reach us</h2>
     <dl class="reach__dl"><div><dt>${icon('mail')}Email</dt><dd><a href="mailto:${SITE.email}">${SITE.email}</a></dd></div><div><dt>${icon('phone')}Phone</dt><dd><a href="tel:${SITE.tel}">${SITE.phone}</a></dd></div></dl>

@@ -5,3 +5,5 @@ docs
 .claude
 node_modules
 *.log
+qa
+tools

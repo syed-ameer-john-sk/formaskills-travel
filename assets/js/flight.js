@@ -178,7 +178,13 @@
       } catch { reveal(); }
     };
     const reveal = () => img.classList.add('is-graded');
-    if (img.complete && img.naturalWidth) run(); else img.addEventListener('load', run, { once: true });
+    // heavy pixel work: never on phones (the source already covers their screens), and on
+    // desktop only once the page has loaded and the browser is idle — it is needed later in the flight
+    reveal();                                   // show the original now; the graded copy swaps in later
+    if (coarse) return;
+    const idle = window.requestIdleCallback || ((f) => setTimeout(f, 1500));
+    const later = () => idle(() => (img.complete && img.naturalWidth ? run() : img.addEventListener('load', run, { once: true })), { timeout: 4000 });
+    if (document.readyState === 'complete') later(); else addEventListener('load', later, { once: true });
   }
   const FRANCE_MAX_ZOOM = 1.12;
   function gradePhotos() {

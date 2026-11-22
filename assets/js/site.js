@@ -116,6 +116,7 @@
   const who = $$('[data-who]');
   const setWho = (w) => {
     who.forEach(b => b.setAttribute('aria-checked', String(b.dataset.who === w)));
+    const sel = $('#mf-who'); if (sel) sel.value = w;
     const plan = $('[data-enq-link="plan"]'), write = $('[data-enq-link="write"]');
     if (plan) plan.href = `${BASE}/plan-your-stay/?for=${w}`;
     if (write) write.href = w === 'partner' ? `${BASE}/partners/#enquiry` : `${BASE}/contact/#write`;
@@ -238,8 +239,10 @@
     const svg = $('.map__svg', map), route = $('.map__route', map);
     const pins = $$('.map__pin', map);
     const pos = (slug) => { const g = $(`.map__pin[data-dest="${slug}"]`, map); const m = /translate\(([\d.]+) ([\d.]+)\)/.exec(g.getAttribute('transform')); return [+m[1], +m[2]]; };
+    const area = $('.map__area', map);
     const show = (slug) => {
       pins.forEach(p => p.classList.toggle('is-on', p.dataset.dest === slug));
+      if (area) { const [ax, ay] = pos(slug); area.style.transform = `translate(${ax}px, ${ay}px)`; }
       $$('[data-dest-panel]', map).forEach(p => { const on = p.dataset.destPanel === slug; if (on && p.hidden) { p.hidden = false; p.classList.remove('is-entering'); void p.offsetWidth; p.classList.add('is-entering'); } else if (!on) p.hidden = true; });
       if (route) {
         if (slug === 'sete') { route.setAttribute('d', ''); return; }
@@ -340,12 +343,35 @@
   const TOPICS = { orgfr: 'French language and immersion programmes', orgstay: 'Accommodation and transport', orgcult: 'Cultural and educational experiences, activities and excursions', orgcoord: 'Local coordination and support in France', groups: 'Individual and group programmes', groupmob: 'Plan group mobility', erasmus: 'Erasmus+ reception', jobshadow: 'Job shadowing' };
   const topic = new URLSearchParams(location.search).get('topic');
   const subj = $('[data-subject]');
-  if (subj && topic && TOPICS[topic]) subj.value = T('Enquiry: {topic}', { topic: T(TOPICS[topic]) });
+  const topicSubject = topic && TOPICS[topic] ? T('Enquiry: {topic}', { topic: T(TOPICS[topic]) }) : '';
+  if (subj && topicSubject) subj.value = topicSubject;
+  if (topicSubject) $$('#write [data-enq-who]').forEach(s => { s.value = 'org'; });   // offer pages are for organisations
+
+  // ---------- Enquiry submission ----------
+  // The ONE place enquiries leave the site. Today there is no backend, so it opens a prefilled
+  // email (mailto:). To connect an API later (Formspree, Resend, a Vercel function…):
+  //   1. set ENQUIRY_ENDPOINT below, e.g. '/api/enquiry' or 'https://formspree.io/f/xxxx';
+  //   2. allow that origin in the CSP `connect-src` (vercel.json and _headers);
+  //   3. the endpoint receives JSON { kind, lang, subject, body, fields, website } — `website` is the
+  //      honeypot value and must be empty; reject the request otherwise.
+  // On any network error the visitor still gets the email fallback, so no enquiry is lost.
+  const ENQUIRY_ENDPOINT = '';
+  async function submitEnquiry(data) {
+    if (ENQUIRY_ENDPOINT) {
+      try {
+        const r = await fetch(ENQUIRY_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, lang: LANG }) });
+        if (r.ok) return { sent: true };
+      } catch { /* fall through to email */ }
+    }
+    location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(data.body)}`;
+    return { sent: false, mailto: true };
+  }
+  window.FSSubmitEnquiry = submitEnquiry;
   const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
   // Label shown on the page for a field (already in the page's language)
   const fieldLabel = (form, el) => {
     if (el.type === 'checkbox' || el.type === 'radio') return (el.closest('fieldset')?.querySelector('legend')?.textContent || '').trim();
-    return (form.querySelector(`label[for="${el.id}"]`)?.textContent || el.name || '').trim();
+    return (form.querySelector(`label[for="${el.id}"]`)?.firstChild?.textContent || el.name || '').trim();   // first text node: skips "(optional)"
   };
   const fieldValue = (el) => {
     if (el.tagName === 'SELECT') return el.value ? el.selectedOptions[0].textContent.trim() : '';
@@ -364,7 +390,7 @@
         if (!groups.has(k)) groups.set(k, []);
         groups.get(k).push(v);
       }
-      let subject = kind === 'partner' ? T('Partnership enquiry') : T('Enquiry');
+      let subject = kind === 'partner' ? T('Partnership enquiry') : (topicSubject || T('Enquiry'));
       const lines = [];
       for (const [k, vs] of groups) {
         const el = form.querySelector('[data-subject]');
@@ -373,7 +399,8 @@
       }
       const org = form.querySelector('#pf-org')?.value.trim();
       if (kind === 'partner' && org) subject = `${T('Partnership enquiry')}: ${org}`;
-      return { subject, body: `${lines.join('\n\n')}\n\n—\n${T('Sent from the Formaskills Travel website.')} ${T('Sending an enquiry is not a booking. Nothing is reserved or charged.')}` };
+      const fields = Object.fromEntries([...groups].map(([k, vs]) => [k, vs.join(', ')]));
+      return { kind, subject, fields, body: `${lines.join('\n\n')}\n\n—\n${T('Sent from the Formaskills Travel website.')} ${T('Sending an enquiry is not a booking. Nothing is reserved or charged.')}` };
     };
     const validate = () => {
       const bad = [];
@@ -388,11 +415,14 @@
       }
       err.textContent = ''; return true;
     };
-    form.addEventListener('submit', (e) => {
-      e.preventDefault(); if (!validate()) return;
-      const { subject, body } = compose();
-      location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      toast(T('Your email app should open with the message ready'));
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const hp = form.querySelector('[name="company_website"]');
+      if (hp && hp.value) return;                          // honeypot filled: a bot, drop silently
+      if (!validate()) return;
+      const res = await submitEnquiry({ ...compose(), website: '' });
+      toast(res.sent ? T('Thank you. Your enquiry has been sent.') : T('Your email app should open with the message ready'));
+      if (res.sent) form.reset();
     });
     $('[data-copy-form]', form)?.addEventListener('click', () => { const { subject, body } = compose(); copy(`${T('To')}: ${EMAIL}\n${T('Subject')}: ${subject}\n\n${body}`, T('Message copied')); });
     form.addEventListener('input', (e) => { if (e.target.getAttribute('aria-invalid') === 'true') e.target.setAttribute('aria-invalid', 'false'); });

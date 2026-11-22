@@ -70,13 +70,17 @@ export const franceMap = (interactive = true) => {
     const [x, y] = proj([d.map.lon, d.map.lat]);
     const labelLeft = d.slug === 'sete';
     const lx = labelLeft ? x - 14 : x + 14, ly = d.slug === 'montpellier' ? y - 10 : y + 5;
-    return `<g class="map__pin" data-dest="${d.slug}" transform="translate(${x} ${y})">
-      <circle class="map__pulse" r="14"/><circle class="map__dot" r="6.5"/>
+    return `<g class="map__pin" data-dest="${d.slug}" transform="translate(${x} ${y})" style="--i:${i}">
+      <circle class="map__hit" r="26"/><circle class="map__pulse" r="14"/><circle class="map__dot" r="6.5"/>
       <text x="${lx - x}" y="${ly - y}" text-anchor="${labelLeft ? 'end' : 'start'}">${d.name}</text></g>`;
   }).join('');
   return `<svg class="map__svg" viewBox="-20 -10 700 640" role="img" aria-label="Map of France showing Sète, Montpellier, Paris and Nice">
-    <defs><pattern id="mapdots" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1.1"/></pattern></defs>
+    <defs><pattern id="mapdots" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1.1"/></pattern>
+      <pattern id="maphatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" class="map__hatch-bg"/><line x1="0" y1="0" x2="0" y2="8" class="map__hatch-ln"/></pattern>
+      <clipPath id="mapclip"><path d="${FRANCE_PATH}"/></clipPath></defs>
     <path class="map__land" d="${FRANCE_PATH}"/><path class="map__land map__land--dots" d="${FRANCE_PATH}"/>
+    <g clip-path="url(#mapclip)"><circle class="map__area" r="70" cx="0" cy="0" fill="url(#maphatch)"/></g>
+    <path class="map__draw" d="${FRANCE_PATH}" pathLength="1"/><path class="map__draw" d="${CORSICA_PATH}" pathLength="1"/>
     <path class="map__land" d="${CORSICA_PATH}"/><path class="map__land map__land--dots" d="${CORSICA_PATH}"/>
     <path class="map__route" d="" />
     ${pins}</svg>`;
@@ -104,7 +108,7 @@ export const head = ({ title, desc, path, bodyClass = '', ld = '' }) => {
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap"></noscript>
 <link rel="stylesheet" href="/assets/css/site.css?v=__V__">
 <script>document.documentElement.classList.add('js');</script>
 <!--I18N-HEAD-->
@@ -186,8 +190,9 @@ export const footer = (scripts = []) => `
     </div>
     <div class="enq__ways">
       <a class="enq__way" data-enq-link="plan" href="/plan-your-stay/?for=me">${icon('compass')}<span><b>Plan my project and prepare my enquiry</b><small>A few optional questions, then we prepare your email.</small></span></a>
-      <a class="enq__way" data-enq-link="write" href="/contact/#write">${icon('mail')}<span><b>Write an email</b><small>Describe your project in your own words.</small></span></a>
     </div>
+    <p class="enq__h">Or send a quick enquiry</p>
+    ${enquiryForm('mf')}
     <div class="enq__other">
       <p class="enq__h">Other ways to reach us</p>
       <p><span class="sr-only">Email: </span><a href="mailto:${SITE.email}">${SITE.email}</a> · <span class="sr-only">Phone: </span><a href="tel:${SITE.tel}">${SITE.phone}</a></p>
@@ -221,10 +226,13 @@ export const footer = (scripts = []) => `
   </section>
 </div>
 <div class="toast" role="status" aria-live="polite" data-toast></div>
+<button class="stick-enq btn btn--primary" type="button" data-open="enquire" data-stick-enq data-magnetic>${icon('mail')}<span>Enquire</span></button>
+<div class="cursor-glow" aria-hidden="true" data-cursor-glow></div>
 
 <script src="/assets/vendor/lenis.min.js" defer></script>
 <script src="/assets/js/birds.js?v=__V__" defer></script>
 <script src="/assets/js/site.js?v=__V__" defer></script>
+<script src="/assets/js/motion.js?v=__V__" defer></script>
 ${scripts.map(s => `<script src="${s}?v=__V__" defer></script>`).join('\n')}
 </body>
 </html>`;
@@ -243,8 +251,32 @@ export const pageHero = ({ crumb, title, lead = [], actions = '', media = '', cl
   </div>
 </section>`;
 
+// ---------- Enquiry form (contact page and Enquire modal) ----------
+// Submitted by submitEnquiry() in site.js. `company_website` is a honeypot: hidden from people,
+// filled only by bots; such submissions are silently dropped.
+export const enquiryForm = (p, { title = '' } = {}) => `
+  <form class="form form--enq" id="${p === 'cf' ? 'write' : `${p}-form`}" data-mailform="contact" novalidate>
+    ${title ? `<h2 class="sec__title">${title}</h2>` : ''}
+    <div class="form__row">
+      <div class="field"><label for="${p}-name">Name</label><input id="${p}-name" name="Name" required autocomplete="name"></div>
+      <div class="field"><label for="${p}-email">Email</label><input id="${p}-email" name="Email" type="email" required autocomplete="email" inputmode="email"></div>
+    </div>
+    <div class="form__row">
+      <div class="field"><label for="${p}-phone">Phone <small>(optional)</small></label><input id="${p}-phone" name="Phone" type="tel" autocomplete="tel" inputmode="tel"></div>
+      <div class="field"><label for="${p}-who">Who is this enquiry for?</label><select id="${p}-who" name="Who" required data-enq-who><option value="me">For me</option><option value="org">For my organisation</option><option value="partner">Become a partner</option></select></div>
+    </div>
+    <div class="field"><label for="${p}-dest">Destination <small>(optional)</small></label><select id="${p}-dest" name="Destination"><option value=""></option>${DESTINATIONS.map(d => `<option value="${d.slug}">${d.name}</option>`).join('')}<option value="other">Another destination or not sure yet</option></select></div>
+    <div class="field"><label for="${p}-msg">Your message</label><textarea id="${p}-msg" name="Message" rows="${p === 'cf' ? 7 : 4}" required></textarea></div>
+    <div class="hp" aria-hidden="true"><label for="${p}-hp">Leave this field empty</label><input id="${p}-hp" name="company_website" tabindex="-1" autocomplete="off"></div>
+    <label class="check check--consent"><input type="checkbox" required data-consent><span>I agree that Formaskills Travel may contact me about this enquiry. <a href="/legal/privacy/">Privacy notice</a></span></label>
+    <p class="form__err" data-form-err role="alert"></p>
+    <div class="actions"><button class="btn btn--primary" type="submit"><span>Send enquiry</span>${icon('arrow')}</button>${p === 'cf' ? `<button class="btn btn--ghost" type="button" data-copy-form>${icon('copy')}<span>Copy message</span></button>` : ''}</div>
+    <p class="fine">This opens your email app with your enquiry ready to send. Nothing is sent until you send the email.</p>
+  </form>`;
+
 export const ctaBand = ({ title = 'What if your next chapter started here?', text = 'A goal, a wish or just an idea: let us shape a programme around you.', actions } = {}) => `
 <section class="cta-band" data-cta-band>
+  <div class="cta-band__img" aria-hidden="true"><div data-parallax>${picture('/assets/img/photos/hero', '', '100vw')}</div></div>
   <div class="cta-band__sky" aria-hidden="true"><div class="cta-band__sun"></div><canvas class="cta-band__birds" data-birds="6"></canvas></div>
   <div class="wrap cta-band__in">
     <h2 class="cta-band__title">${title}</h2>
