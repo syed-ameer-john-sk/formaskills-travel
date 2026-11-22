@@ -1082,3 +1082,8 @@ h1, h2, h3, h4, .btn, .hdr__nav a, .tabs__list button, .badge, .path__h, .dest__
 .modal .form--enq { margin-top: .6rem; }
 .modal .form--enq .fine { margin: 0; }
 .story--page .story__d { display: none; }
+
+/* tab bar: the "Others" link sits beside the tab list, not inside it (ARIA) */
+.tabs__bar { display: flex; flex-wrap: wrap; gap: .45rem; align-items: center; margin-bottom: 2rem; }
+.tabs__bar > .tabs__list { margin-bottom: 0; }
+@media (max-width: 700px) { .tabs__bar { display: block; } .tabs__bar > .tabs__list { margin-bottom: .8rem; } }

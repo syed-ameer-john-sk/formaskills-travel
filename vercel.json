@@ -6,7 +6,9 @@
   "cleanUrls": true,
   "trailingSlash": true,
   "redirects": [
-    { "source": "/:seg(about|arriving-in-sete|au-pair-and-host-families|contact|destinations|for-me|for-organisations|guides-and-resources|learn-french|legal|partners|plan-your-stay|practical-information|search|tourism|what-we-offer)/:rest*", "destination": "/en/:seg/:rest*", "permanent": true }
+    { "source": "/:seg(about|arriving-in-sete|au-pair-and-host-families|contact|destinations|for-me|for-organisations|guides-and-resources|learn-french|legal|partners|plan-your-stay|practical-information|search|tourism|what-we-offer)", "destination": "/en/:seg/", "permanent": true },
+    { "source": "/:seg(about|arriving-in-sete|au-pair-and-host-families|contact|destinations|for-me|for-organisations|guides-and-resources|learn-french|legal|partners|plan-your-stay|practical-information|search|tourism|what-we-offer)/", "destination": "/en/:seg/", "permanent": true },
+    { "source": "/:seg(about|arriving-in-sete|au-pair-and-host-families|contact|destinations|for-me|for-organisations|guides-and-resources|learn-french|legal|partners|plan-your-stay|practical-information|search|tourism|what-we-offer)/:rest+", "destination": "/en/:seg/:rest+", "permanent": true }
   ],
   "headers": [
     {

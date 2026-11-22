@@ -41,7 +41,7 @@ for (const f of await readdir(join(ROOT, 'assets/js'))) {
 const pageUrl = (L, path) => `/${L}${path}`;
 const langSwitch = (L, path) => `
       <div class="lang" data-lang>
-        <button class="lang__btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="lang-menu" aria-label="Change language"><span class="lang__code" translate="no" aria-hidden="true">${L.toUpperCase()}</span>${icon('chevron')}</button>
+        <button class="lang__btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="lang-menu" aria-labelledby="lang-code lang-lbl"><span class="lang__code" id="lang-code" translate="no">${L.toUpperCase()}</span>${icon('chevron')}</button><p class="sr-only" id="lang-lbl" hidden>Change language</p>
         <ul class="lang__menu" id="lang-menu" role="list" hidden>
           ${LANGS.map(l => `<li><a href="${pageUrl(l, path)}" hreflang="${l}" lang="${HTML_LANG[l]}" translate="no" data-lang-code="${l}" ${l === L ? 'aria-current="true"' : ''}><b>${l.toUpperCase()}</b><span>${LANG_NAMES[l]}</span></a></li>`).join('')}
         </ul>

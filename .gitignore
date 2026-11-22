@@ -6,3 +6,5 @@ Thumbs.db
 .vercel
 *.backup.html
 site/
+qa/lighthouse/*.json
+qa/*.log

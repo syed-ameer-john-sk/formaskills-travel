@@ -216,7 +216,7 @@ export const footer = (scripts = []) => `
 </div>
 
 <div class="ai" data-ai>
-  <button class="ai__launch" type="button" data-ai-toggle aria-expanded="false" aria-controls="ai-panel" aria-label="Open Formaskills AI, the assistant">${icon('spark')}<span>Ask</span></button>
+  <button class="ai__launch" type="button" data-ai-toggle aria-expanded="false" aria-controls="ai-panel">${icon('spark')}<span>Ask</span><span class="sr-only"> Formaskills AI</span></button>
   <section class="ai__panel" id="ai-panel" aria-labelledby="ai-title" hidden>
     <header class="ai__head"><h2 id="ai-title">Formaskills AI</h2><button class="iconbtn" type="button" data-ai-toggle aria-label="Close assistant">${icon('close')}</button></header>
     <p class="ai__note">Answers come from the information on this website. For anything specific to your project, our team replies personally.</p>

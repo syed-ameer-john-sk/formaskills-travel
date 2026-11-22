@@ -82,8 +82,10 @@ const orgService = (s, { cta = 'Submit tailored request', orgOnly = true } = {})
 const orgTabs = (order, opts) => {
   const list = order.map(id => C.ORG_SERVICES.find(s => s.id === id));
   return `<div class="tabs" data-tabs>
-    <div class="tabs__list" role="tablist" aria-label="What your organisation can do with us">
-      ${list.map((s, i) => `<button type="button" role="tab" id="t-${s.id}" aria-controls="${s.id}" aria-selected="${i === 0}" data-tab="${s.id}">${s.tab}</button>`).join('')}
+    <div class="tabs__bar">
+      <div class="tabs__list" role="tablist" aria-label="What your organisation can do with us">
+        ${list.map((s, i) => `<button type="button" role="tab" id="t-${s.id}" aria-controls="${s.id}" aria-selected="${i === 0}" data-tab="${s.id}">${s.tab}</button>`).join('')}
+      </div>
       <a class="tabs__link" href="/contact/#write">Others</a>
     </div>
     ${list.map((s, i) => `<div class="tabs__panel" role="tabpanel" id="${s.id}" aria-labelledby="t-${s.id}" tabindex="0" ${i ? 'hidden' : ''}>${orgService(s, opts)}</div>`).join('')}
