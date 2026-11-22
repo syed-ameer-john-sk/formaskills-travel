@@ -109,16 +109,16 @@ const flightHero = () => `
   <div class="flight__stage" data-stage>
     <div class="fl-sky" aria-hidden="true"><div class="fl-stars"></div></div>
     <div class="fl-view" aria-hidden="true" data-view>
-      <img class="fl-clouds" src="/assets/img/hero_clouds.jpg" alt="" fetchpriority="high" data-clouds>
-      <div class="fl-france" data-france><img src="/assets/img/dest_sete.jpg" alt="" data-france-img><div class="fl-haze" data-haze></div></div>
+      <img class="fl-clouds" src="/assets/img/hero-clouds-hq.webp" width="2000" height="1116" alt="" fetchpriority="high" decoding="async" data-clouds>
+      <div class="fl-france" data-france><img src="/assets/img/sete-aerial-hq.webp" width="2000" height="1116" alt="" decoding="async" data-france-img><div class="fl-haze" data-haze></div></div>
       <canvas class="fl-cloudlayer" data-cloudlayer></canvas>
       <canvas class="fl-birds" data-flock></canvas>
     </div>
-    <div class="fl-cabin" aria-hidden="true" data-cabin><svg data-cabin-svg></svg></div>
+    <div class="fl-cabin" aria-hidden="true" data-cabin><canvas data-cabin-canvas></canvas></div>
 
     <div class="fl-intro" data-intro>
-      <div class="fl-intro__logo" data-intro-logo>${logo('logo--light')}</div>
-      <p class="fl-intro__tag">${SITE.tagline}</p>
+      <div class="fl-intro__logo" data-intro-logo>${logo('logo--intro')}<img class="logo fl-intro__white" src="/assets/img/logo.png" width="2000" height="467" alt="" aria-hidden="true" data-intro-white></div>
+      <p class="fl-intro__tag"><span>${SITE.tagline}</span></p>
     </div>
 
     <div class="fl-copy fl-copy--window" data-copy1>
@@ -141,14 +141,35 @@ const flightHero = () => `
     <div class="fl-hud" aria-hidden="true">
       <div class="fl-alt"><span>Altitude</span><b data-alt>10 670</b><span>m</span></div>
       <div class="fl-bar"><i data-bar></i></div>
-      <div class="fl-cue" data-cue><span>Scroll to descend</span><i></i></div>
+    </div>
+    <div class="fl-scrollhint" data-cue aria-hidden="true">
+      <span class="fl-scrollhint__mouse"><i></i></span>
+      <span class="fl-scrollhint__label" data-cue-label>Scroll to begin your journey</span>
+      <span class="fl-scrollhint__chev"><i></i><i></i><i></i></span>
     </div>
     <button class="fl-skip" type="button" data-skip>Skip intro</button>
   </div>
 </section>`;
 
+const glideScene = () => `
+<section class="glide" data-glide aria-labelledby="glide-h">
+  <div class="glide__stage">
+    <div class="glide__sky" aria-hidden="true"></div>
+    <div class="glide__sun" aria-hidden="true" data-glide-sun></div>
+    <img class="glide__clouds" src="/assets/img/hero-clouds-hq.webp" width="2000" height="1116" alt="" loading="lazy" decoding="async" data-glide-clouds>
+    <div class="glide__warm" aria-hidden="true"></div>
+    <img class="glide__bird" src="/assets/img/tropicbird.webp" srcset="/assets/img/tropicbird-800.webp 800w, /assets/img/tropicbird.webp 1341w" sizes="(max-width: 700px) 92vw, 62vw" width="1341" height="840" alt="" aria-hidden="true" decoding="async" data-glide-bird>
+    <div class="glide__copy" data-glide-copy>
+      <p class="fl-eyebrow">Golden hour over the Mediterranean</p>
+      <h2 id="glide-h" class="glide__h">Rise above the ordinary.</h2>
+      <p class="glide__lead">Every programme starts with a view like this: wide skies, warm light and a coast that feels like home.</p>
+    </div>
+  </div>
+</section>`;
+
 const home = () => `
 ${flightHero()}
+${glideScene()}
 <div class="after-flight" id="explore">
 ${sec(`
   <div class="paths">
@@ -507,7 +528,7 @@ const notFound = () => `
 
 // =============== REGISTRY ===============
 export const PAGES = [
-  { path: '/', title: 'Your journey begins before you land. | Formaskills Travel', desc: 'Group programmes, mobility projects, cultural experiences and French learning in France, coordinated from Sète. Enquire online.', body: home, home: true, scripts: ['/assets/js/flight.js'] },
+  { path: '/', title: 'Your journey begins before you land. | Formaskills Travel', desc: 'Group programmes, mobility projects, cultural experiences and French learning in France, coordinated from Sète. Enquire online.', body: home, home: true, scripts: ['/assets/js/skygen.js', '/assets/js/flight.js', '/assets/js/glide.js'] },
   { path: '/what-we-offer/', title: 'What we offer', desc: 'Language, educational, professional and cultural programmes in France, for individuals, groups, schools, universities, training organisations and companies.', body: whatWeOffer },
   { path: '/for-me/', title: 'For me', desc: 'Learn French online, discover France and plan a stay around your interests.', body: forMe },
   { path: '/learn-french/', title: 'Learn French online', desc: 'French courses for individuals online and FLE programmes in France for groups.', body: learnFrench },

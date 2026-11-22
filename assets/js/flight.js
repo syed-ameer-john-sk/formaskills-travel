@@ -18,9 +18,9 @@
   const slot = hdr && hdr.querySelector('[data-logo-slot]');
   const stage = $('[data-stage]');
   const el = {
-    cabin: $('[data-cabin]'), svg: $('[data-cabin-svg]'), clouds: $('[data-clouds]'), france: $('[data-france]'),
+    cabin: $('[data-cabin]'), cabinCanvas: $('[data-cabin-canvas]'), clouds: $('[data-clouds]'), france: $('[data-france]'),
     franceImg: $('[data-france-img]'), haze: $('[data-haze]'), layer: $('[data-cloudlayer]'), flock: $('[data-flock]'),
-    intro: $('[data-intro]'), introLogo: $('[data-intro-logo]'), introTag: $('.fl-intro__tag'), c1: $('[data-copy1]'),
+    intro: $('[data-intro]'), introLogo: $('[data-intro-logo]'), introTag: $('.fl-intro__tag'), introWhite: $('[data-intro-white]'), c1: $('[data-copy1]'),
     c2: $('[data-copy2]'), c3: $('[data-copy3]'), alt: $('[data-alt]'), bar: $('[data-bar]'), cue: $('[data-cue]'),
     skip: $('[data-skip]'),
   };
@@ -53,39 +53,70 @@
     dpr = Math.min(coarse || M.W < 768 ? 1.5 : 2, devicePixelRatio || 1);
   }
 
-  // ---------- cabin wall with window: one inline SVG mask, scaled with transform ----------
-  const rr = (cx, cy, w, h, r) => {
+  // ---------- cabin wall with window ----------
+  // Drawn on a screen-sized canvas at the current zoom (only when the zoom changes). Scaling a
+  // full-screen vector layer up to ~5x made the browser show it in half-rasterised tiles while
+  // scrolling; a viewport-sized canvas never has more pixels than the screen.
+  const cctx = el.cabinCanvas.getContext('2d');
+  let win = { cx: 0, cy: 0, w: 0, h: 0, r: 0, f: 0 }, cdpr = 1, lastCs = -1, grads = null;
+  const rrPath = (g, cx, cy, w, h, r) => {
     const x = cx - w / 2, y = cy - h / 2; r = Math.min(r, w / 2, h / 2);
-    return `M${x + r},${y}H${x + w - r}A${r},${r} 0 0 1 ${x + w},${y + r}V${y + h - r}A${r},${r} 0 0 1 ${x + w - r},${y + h}H${x + r}A${r},${r} 0 0 1 ${x},${y + h - r}V${y + r}A${r},${r} 0 0 1 ${x + r},${y}Z`;
+    g.moveTo(x + r, y); g.lineTo(x + w - r, y); g.arcTo(x + w, y, x + w, y + r, r);
+    g.lineTo(x + w, y + h - r); g.arcTo(x + w, y + h, x + w - r, y + h, r);
+    g.lineTo(x + r, y + h); g.arcTo(x, y + h, x, y + h - r, r);
+    g.lineTo(x, y + r); g.arcTo(x, y, x + r, y, r); g.closePath();
   };
+  const lin = (g, x0, y0, x1, y1, stops) => { const gr = g.createLinearGradient(x0, y0, x1, y1); stops.forEach(([o, c]) => gr.addColorStop(o, c)); return gr; };
   function buildCabin() {
     const { W, H, portrait } = M;
-    let h = Math.min(H * (portrait ? .62 : .74), 780), w = h * (portrait ? .74 : .7);
-    if (w > W * (portrait ? .8 : .7)) { w = W * (portrait ? .8 : .7); h = w / (portrait ? .74 : .7); }
+    // portrait screens get a taller, narrower window (closer to a real cabin window and roomier for text)
+    const ratio = portrait ? .62 : .7;
+    let h = Math.min(H * (portrait ? .66 : .74), 780), w = h * ratio;
+    if (w > W * (portrait ? .84 : .7)) { w = W * (portrait ? .84 : .7); h = w / ratio; }
     const cx = W / 2, cy = H * .52, r = w * .46, f = w * .16;
+    win = { cx, cy, w, h, r, f };
+    // the window copy is positioned on exactly this glass area and sized from it (container units)
     root.style.setProperty('--win-w', `${Math.round(w)}px`);
+    root.style.setProperty('--win-h', `${Math.round(h)}px`);
+    root.style.setProperty('--win-x', `${Math.round(cx - w / 2)}px`);
+    root.style.setProperty('--win-y', `${Math.round(cy - h / 2)}px`);
     S0 = Math.max(W / (w * .82), H / (h * .82)) * 1.2;
-    const wall = `M0,0H${W}V${H}H0Z`;
-    el.svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    // cool, natural cabin: slate wall, pale frame, no glow and no SVG filters
-    el.svg.innerHTML = `
-      <defs>
-        <linearGradient id="cw" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1c2438"/><stop offset=".55" stop-color="#263149"/><stop offset="1" stop-color="#151b2c"/></linearGradient>
-        <linearGradient id="cf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eef1f6"/><stop offset=".45" stop-color="#b9c2d2"/><stop offset="1" stop-color="#4a5670"/></linearGradient>
-        <linearGradient id="ci" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b4660"/><stop offset="1" stop-color="#6b7892"/></linearGradient>
-        <linearGradient id="cs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f3f7"/><stop offset="1" stop-color="#d3d9e3"/></linearGradient>
-        <clipPath id="cwin"><path d="${rr(cx, cy, w, h, r)}"/></clipPath>
-      </defs>
-      <path fill="url(#cw)" fill-rule="evenodd" d="${wall}${rr(cx, cy, w + f * 2, h + f * 2, r + f)}"/>
-      <path fill="url(#cf)" fill-rule="evenodd" d="${rr(cx, cy, w + f * 2, h + f * 2, r + f)}${rr(cx, cy, w + f * .9, h + f * .9, r + f * .45)}"/>
-      <path fill="url(#ci)" fill-rule="evenodd" d="${rr(cx, cy, w + f * .9, h + f * .9, r + f * .45)}${rr(cx, cy, w, h, r)}"/>
-      <path fill="none" stroke="#fff" stroke-opacity=".4" stroke-width="1.5" d="${rr(cx, cy, w + f * 2 - 2, h + f * 2 - 2, r + f)}"/>
-      <g clip-path="url(#cwin)">
-        <rect x="${cx - w / 2}" y="${cy - h / 2}" width="${w}" height="${h * .085}" fill="url(#cs)"/>
-        <rect x="${cx - w / 2}" y="${cy - h / 2 + h * .085}" width="${w}" height="2" fill="#0d1424" opacity=".22"/>
-        <path fill="none" stroke="#0d1424" stroke-opacity=".28" stroke-width="${f * .14}" d="${rr(cx, cy, w - f * .07, h - f * .07, r)}"/>
-      </g>`;
-    el.cabin.style.transformOrigin = `${cx}px ${cy}px`;
+    cdpr = dpr;
+    el.cabinCanvas.width = Math.round(W * cdpr); el.cabinCanvas.height = Math.round(H * cdpr);
+    // cool, natural cabin: slate wall, pale frame, no glow
+    const g = cctx, X = cx - w / 2 - f, Y = cy - h / 2 - f;
+    grads = {
+      wall: lin(g, 0, 0, W, H, [[0, '#1c2438'], [.55, '#263149'], [1, '#151b2c']]),
+      frame: lin(g, X, Y, X + w + f * 2, Y + h + f * 2, [[0, '#eef1f6'], [.45, '#b9c2d2'], [1, '#4a5670']]),
+      inner: lin(g, 0, Y, 0, Y + h + f * 2, [[0, '#3b4660'], [1, '#6b7892']]),
+      shade: lin(g, 0, cy - h / 2, 0, cy - h / 2 + h * .085, [[0, '#f1f3f7'], [1, '#d3d9e3']]),
+    };
+    lastCs = -1;
+  }
+  function drawCabin(cs) {
+    if (Math.abs(cs - lastCs) < .0005) return;
+    lastCs = cs;
+    const g = cctx, { W, H } = M, { cx, cy, w, h, r, f } = win;
+    g.setTransform(cdpr, 0, 0, cdpr, 0, 0);
+    g.clearRect(0, 0, W, H);
+    g.translate(cx, cy); g.scale(cs, cs); g.translate(-cx, -cy);
+    // wall: everything outside the outer frame (the rectangle always covers the screen)
+    const B = Math.max(W, H) / Math.min(cs, 1) + Math.max(W, H);
+    g.beginPath(); g.rect(cx - B, cy - B, B * 2, B * 2); rrPath(g, cx, cy, w + f * 2, h + f * 2, r + f);
+    g.fillStyle = grads.wall; g.fill('evenodd');
+    g.beginPath(); rrPath(g, cx, cy, w + f * 2, h + f * 2, r + f); rrPath(g, cx, cy, w + f * .9, h + f * .9, r + f * .45);
+    g.fillStyle = grads.frame; g.fill('evenodd');
+    g.beginPath(); rrPath(g, cx, cy, w + f * .9, h + f * .9, r + f * .45); rrPath(g, cx, cy, w, h, r);
+    g.fillStyle = grads.inner; g.fill('evenodd');
+    g.beginPath(); rrPath(g, cx, cy, w + f * 2 - 2, h + f * 2 - 2, r + f);
+    g.strokeStyle = 'rgba(255,255,255,.4)'; g.lineWidth = 1.5; g.stroke();
+    // window shade and inner edge, clipped to the glass
+    g.save(); g.beginPath(); rrPath(g, cx, cy, w, h, r); g.clip();
+    g.fillStyle = grads.shade; g.fillRect(cx - w / 2, cy - h / 2, w, h * .085);
+    g.fillStyle = 'rgba(13,20,36,.22)'; g.fillRect(cx - w / 2, cy - h / 2 + h * .085, w, 2);
+    g.beginPath(); rrPath(g, cx, cy, w - f * .07, h - f * .07, r);
+    g.strokeStyle = 'rgba(13,20,36,.28)'; g.lineWidth = f * .14; g.stroke();
+    g.restore();
   }
   function measureFlip() {
     if (!slot || !el.introLogo) return;
@@ -98,14 +129,36 @@
   }
 
   // ---------- one-time cool grade of the photographs (no per-frame filters) ----------
-  function grade(img, { k, desat, cool }) {
+  // Optionally upscales once to the screen's real pixel size (high-quality smoothing + light
+  // unsharp mask) so the browser never has to stretch a small photo during the zoom.
+  function grade(img, { k = 0, desat = 0, cool = 0, targetW = 0, sharpen = 0, quality = .9, onlyIfUpscale = false }) {
     const run = () => {
       try {
-        const w = img.naturalWidth, h = img.naturalHeight; if (!w) return;
+        const nw = img.naturalWidth, nh = img.naturalHeight; if (!nw) return reveal();
+        const want = typeof targetW === 'function' ? targetW(nw, nh) : targetW;
+        // high-resolution sources need no processing on most screens
+        if (onlyIfUpscale && want <= nw * 1.05) return reveal();
+        const w = Math.max(nw, Math.min(2880, Math.round(want))), h = Math.round(nh * w / nw);
         const c = document.createElement('canvas'); c.width = w; c.height = h;
-        const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(img, 0, 0);
+        const g = c.getContext('2d', { willReadFrequently: true });
+        g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
+        g.drawImage(img, 0, 0, w, h);
         const d = g.getImageData(0, 0, w, h), a = d.data;
-        for (let i = 0; i < a.length; i += 4) {
+        if (sharpen > 0) {
+          // unsharp mask with a 3x3 Gaussian: out = px + amount * (px - blur)
+          const s = new Uint8ClampedArray(a), row = w * 4;
+          for (let y = 1; y < h - 1; y++) {
+            for (let x = 1; x < w - 1; x++) {
+              const i = y * row + x * 4;
+              for (let ch = 0; ch < 3; ch++) {
+                const j = i + ch;
+                const blur = (s[j - row - 4] + 2 * s[j - row] + s[j - row + 4] + 2 * s[j - 4] + 4 * s[j] + 2 * s[j + 4] + s[j + row - 4] + 2 * s[j + row] + s[j + row + 4]) / 16;
+                a[j] = s[j] + sharpen * (s[j] - blur);
+              }
+            }
+          }
+        }
+        if (k || desat || cool) for (let i = 0; i < a.length; i += 4) {
           let r = a[i], gg = a[i + 1], b = a[i + 2];
           const Y = (.299 * r + .587 * gg + .114 * b) / 255;
           r = lerp(r, Y * 255, desat) * (1 - cool * .09); gg = lerp(gg, Y * 255, desat) * (1 - cool * .02); b = Math.min(255, lerp(b, Y * 255, desat) * (1 + cool * .07));
@@ -120,14 +173,24 @@
           img.addEventListener('error', () => { img.src = orig; reveal(); }, { once: true });
           img.src = URL.createObjectURL(blob);
           img.decode?.().then(reveal, () => {}) ?? reveal();
-        }, 'image/jpeg', .9);
+        }, 'image/jpeg', quality);
       } catch { reveal(); }
     };
     const reveal = () => img.classList.add('is-graded');
     if (img.complete && img.naturalWidth) run(); else img.addEventListener('load', run, { once: true });
   }
-  grade(el.clouds, { k: .42, desat: .6, cool: 1.2 });
-  grade(el.franceImg, { k: .14, desat: .38, cool: .9 });
+  const FRANCE_MAX_ZOOM = 1.12;
+  function gradePhotos() {
+    // high-resolution, naturally lit sources: the clouds are shown as they are
+    el.clouds.classList.add('is-graded');
+    // the landing photo is full-bleed and zoomed: upscale + lightly sharpen only on screens
+    // that need more pixels than the source has (e.g. high-DPI displays)
+    const realDpr = Math.min(2, devicePixelRatio || 1);
+    grade(el.franceImg, {
+      targetW: (nw, nh) => Math.max(M.W, M.H * nw / nh) * FRANCE_MAX_ZOOM * realDpr,
+      sharpen: .35, quality: .95, onlyIfUpscale: true,
+    });
+  }
 
   // ---------- procedural cloud sprites (cool white, slate underside) ----------
   const sprites = [];
@@ -148,7 +211,11 @@
   }
   const puffs = [];
   function initClouds() {
-    for (let i = 0; i < 4; i++) sprites.push(makeSprite(17 + i * 101));
+    // detailed GPU-generated puffs (sharp at any size); fall back to the 2D sprites without WebGL
+    const gen = window.FSSky?.puffs(4, 640, 400);
+    window.FSSky?.release();
+    if (gen && gen.length === 4) sprites.push(...gen);
+    else for (let i = 0; i < 4; i++) sprites.push(makeSprite(17 + i * 101));
     let r = 7; const rnd = () => (r = (r * 9301 + 49297) % 233280) / 233280;
     for (let i = 0; i < 34; i++) puffs.push({ x: (rnd() - .5) * 2.6, y: (rnd() - .5) * 2.2, z: .25 + rnd() * 1.8, sp: sprites[i % 4], d: rnd() });
   }
@@ -227,7 +294,7 @@
   }
 
   // ---------- render ----------
-  let target = 0, cur = 0, raf = 0, visible = true, lastAlt = '';
+  let target = 0, cur = 0, raf = 0, visible = true, lastAlt = '', scrolled = false;
   const fmt = (n) => String(Math.round(n / 10) * 10).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
   function render(p, t) {
@@ -236,6 +303,8 @@
     set(el.introLogo, 'transform', tx(flip.dx * lp, flip.dy * lp, lerp(1, flip.s, lp)));
     set(el.introLogo, 'opacity', p > .158 ? '0' : '1');
     set(el.introTag, 'opacity', String(f3(1 - seg(p, .015, .07))));
+    // dark logo over bright clouds → white logo once the dark cabin wall surrounds it
+    if (el.introWhite) set(el.introWhite, 'opacity', String(f3(seg(p, .065, .11))));
     set(el.intro, 'visibility', p > .17 ? 'hidden' : 'visible');
     hdr?.classList.toggle('logo-landed', p > .155);
     hdr?.classList.toggle('nav-in', p > .13);
@@ -243,13 +312,13 @@
     // 2. Cabin: pull back into the cabin, then push through the window
     const pull = eout(seg(p, .05, .25)), push = ein(seg(p, .4, .53));
     const cs = p < .4 ? lerp(S0, 1, pull) : lerp(1, S0 * 1.6, push);
-    set(el.cabin, 'transform', `scale3d(${f3(cs)}, ${f3(cs)}, 1)`);
+    if (p < .545) drawCabin(cs);
     set(el.cabin, 'opacity', String(f3(1 - seg(p, .5, .54))));
     set(el.cabin, 'visibility', p > .545 ? 'hidden' : 'visible');
 
     // 3. Sky through the window: drift, then tilt down and dive
     const dive = eio(seg(p, .4, .6));
-    set(el.clouds, 'transform', `translate3d(${f3(Math.sin(t * .00008) * 1.2)}%, ${f3(-dive * 14)}%, 0) scale3d(${f3(1.06 + dive * .7)}, ${f3(1.06 + dive * .7)}, 1)`);
+    set(el.clouds, 'transform', `translate3d(${f3(Math.sin(t * .00008) * 1.2)}%, ${f3(-dive * 12)}%, 0) scale3d(${f3(1.06 + dive * .42)}, ${f3(1.06 + dive * .42)}, 1)`);
     set(el.clouds, 'opacity', String(f3(1 - seg(p, .56, .64))));
 
     // 4. Copy
@@ -270,15 +339,21 @@
     // 5. France below: revealed as clouds part (mist instead of blur), then we come closer
     const fr = seg(p, .58, .7), near = eio(seg(p, .6, 1));
     set(el.france, 'opacity', String(f3(fr)));
-    set(el.france, 'transform', `translate3d(0, ${f3(near * 3)}%, 0) scale3d(${f3(lerp(1.02, 1.5, near))}, ${f3(lerp(1.02, 1.5, near))}, 1)`);
+    const fz = lerp(1, FRANCE_MAX_ZOOM, near);
+    set(el.france, 'transform', `translate3d(0, ${f3(near * 1.5)}%, 0) scale3d(${f3(fz)}, ${f3(fz)}, 1)`);
     set(el.haze, 'opacity', String(f3(1 - seg(p, .6, .86) * .92)));
 
     // 6. HUD (altitude text changes in steps of 10 m inside a size-contained box)
     const alt = fmt(10670 * (1 - eio(seg(p, .05, .97))));
     if (alt !== lastAlt) { el.alt.textContent = alt; lastAlt = alt; }
     set(el.bar, 'transform', `scale3d(${f3(p)}, 1, 1)`);
-    set(el.cue, 'opacity', String(f3(1 - seg(p, .02, .06))));
-    const light = p > .5 && p < .7;
+    // scroll prompt: leaves as soon as the visitor starts the descent
+    const hint = 1 - seg(p, .004, .035);
+    set(el.cue, 'opacity', String(f3(hint)));
+    set(el.cue, 'visibility', hint > 0 ? 'visible' : 'hidden');
+    if (p > .004 && !scrolled) { scrolled = true; root.classList.remove('hint-nudge'); }
+    // dark header, HUD and prompt while the background is bright: the opening clouds and the fog
+    const light = p < .075 || (p > .5 && p < .7);
     hdr?.classList.toggle('on-light', light);
     root.classList.toggle('on-light', light);
     root.classList.toggle('is-done', p > .97);
@@ -300,11 +375,12 @@
 
   // ---------- boot ----------
   measure();
+  gradePhotos();
   if (reduce) {
     root.classList.add('is-static');
     hdr?.classList.add('logo-landed', 'nav-in');
     ai?.classList.add('is-ready');
-    buildCabin();
+    buildCabin(); drawCabin(1);
     return;
   }
 
@@ -328,6 +404,11 @@
   addEventListener('scroll', kick, { passive: true });
   document.fonts?.ready.then(() => { measure(); measureFlip(); kick(); });
   addEventListener('load', () => { measure(); kick(); }, { once: true });
+
+  // scroll prompt: touch wording on phones; a stronger nudge if nobody has scrolled after a few seconds
+  const cueLabel = $('[data-cue-label]');
+  if (cueLabel && coarse) cueLabel.textContent = 'Swipe up to begin your journey';
+  setTimeout(() => { if (!scrolled && cur < .004) root.classList.add('hint-nudge'); }, 4000);
 
   el.skip.addEventListener('click', () => {
     const y = M.top + M.runway + M.H * .02;

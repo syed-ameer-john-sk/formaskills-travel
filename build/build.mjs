@@ -54,7 +54,7 @@ add('Au pair and host families', 'Our au pair and host-family network is in deve
 add('Do you offer internships or work placements?', 'Formaskills Travel organises job shadowing and professional observation for staff. Partner companies can express interest in hosting trainees; every project is discussed individually.', '/partners/#host');
 
 // Assets & root files
-await cp(join(ROOT, 'assets'), join(OUT, 'assets'), { recursive: true, filter: (s) => !/\.(webp)$/.test(s) || /hero_clouds|dest_/.test(s) });
+await cp(join(ROOT, 'assets'), join(OUT, 'assets'), { recursive: true, filter: (s) => !/\.(webp)$/.test(s) || /hero_clouds|dest_|tropicbird|-hq.webp$/.test(s) });
 await mkdir(join(OUT, 'assets/data'), { recursive: true });
 await writeFile(join(OUT, 'assets/data/search.json'), JSON.stringify(index));
 await writeFile(join(OUT, 'assets/data/kb.json'), JSON.stringify(kb));

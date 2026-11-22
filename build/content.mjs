@@ -67,7 +67,7 @@ export const DESTINATIONS = [
   {
     slug: 'sete', name: 'Sète', tag: 'Mediterranean coast',
     img: '/assets/img/photos/hero', alt: 'The Canal Royal in Sète, with boats along the quays',
-    aerial: '/assets/img/dest_sete.jpg',
+    aerial: '/assets/img/sete-aerial-hq.webp',
     summary: 'A lively port city between the Mediterranean Sea and the Thau Lagoon, Sète offers a relaxed coastal setting, local traditions and easy access to cultural and outdoor activities. It is particularly well suited to groups looking for a Mediterranean experience on a human scale.',
     highlights: ['Canals and harbour atmosphere', 'Beaches and coastal activities', 'Local traditions and gastronomy', 'Compact and easy to explore'],
     period: 'July - August',
