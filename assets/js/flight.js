@@ -328,6 +328,7 @@
     set(el.c1, 'transform', tx(0, (1 - seg(p, .2, .26)) * 24 - seg(p, .35, .41) * 30));
     set(el.c1, 'pointerEvents', o1 > .5 ? 'auto' : 'none');
     set(el.c1, 'visibility', o1 > 0 ? 'visible' : 'hidden');
+    if (o1 > .35 && h1 && !h1.classList.contains('is-in')) h1.classList.add('is-in');
     const o2 = fade(p, .5, .56, .69, .75);
     set(el.c2, 'opacity', String(f3(o2)));
     set(el.c2, 'transform', tx(0, (1 - seg(p, .5, .62)) * 60 - seg(p, .69, .75) * 40, lerp(.94, 1.04, seg(p, .5, .75))));
@@ -386,6 +387,26 @@
   }
 
   root.classList.add('is-live');
+  // hero title: wrap each word in a span for a staggered reveal (screen readers keep the whole sentence)
+  const h1 = $('[data-reveal-words]');
+  if (h1) {
+    h1.setAttribute('aria-label', h1.textContent.replace(/\s+/g, ' ').trim());
+    let i = 0;
+    const wrap = (node) => [...node.childNodes].forEach(n => {
+      if (n.nodeType === 1) return wrap(n);
+      if (n.nodeType !== 3 || !n.textContent.trim()) return;
+      const frag = document.createDocumentFragment();
+      // CJK has no spaces: reveal (and allow line breaks) per character
+      n.textContent.split(/(\s+)/).flatMap(t => /[　-鿿＀-￯]/.test(t) ? Array.from(t) : [t]).forEach(t => {
+        if (!t) return;
+        if (/^\s+$/.test(t)) { frag.append(t); return; }
+        const s = document.createElement('span'); s.className = 'w'; s.style.setProperty('--i', i++); s.setAttribute('aria-hidden', 'true'); s.textContent = t; frag.append(s);
+      });
+      n.replaceWith(frag);
+    });
+    wrap(h1);
+    h1.classList.add('rw');
+  }
   initClouds();
   const relayout = () => { measure(); buildCabin(); measureFlip(); sizeCanvases(); buildFlock(); kick(); };
   let rT = 0, rw = innerWidth;

@@ -123,7 +123,7 @@ const flightHero = () => `
 
     <div class="fl-copy fl-copy--window" data-copy1>
       <p class="fl-eyebrow">${SITE.tagline}</p>
-      <h1 id="flight-h1" class="fl-h1">Your journey begins before you land.</h1>
+      <h1 id="flight-h1" class="fl-h1" data-reveal-words>Your journey begins <em>before you land.</em></h1>
       <p class="fl-lead">Start a conversation. Discover a place. Come back with a new outlook. Group programmes, mobility projects, cultural stays and French learning, built around your goals.</p>
       <div class="actions actions--center">${btn('/plan-your-stay/', 'Find my project', 'light')}</div>
       <p class="fl-small">In person, online or through a stay.</p>

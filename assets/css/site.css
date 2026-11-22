@@ -802,7 +802,19 @@ main > .sec, .after-flight > .sec, main > .cta-band, .after-flight > .cta-band, 
 .flight.on-light .fl-skip { color: var(--nuit); border-color: rgba(28,34,70,.3); background: rgba(255,255,255,.5); }
 .fl-hud, .fl-alt b, .fl-skip { transition: color .5s, background .5s, border-color .5s; }
 .fl-eyebrow { font: 400 1rem var(--f-ui); color: rgba(255,255,255,.85); margin-bottom: 1rem; }
-.fl-h1 { color: #fff; font-size: clamp(2.1rem, 4.6vw, 4.1rem); font-weight: 400; letter-spacing: -.02em; line-height: 1.04; max-width: 13ch; margin: 0 0 1.1rem; text-shadow: 0 2px 30px rgba(28,34,70,.35); }
+.fl-h1 { color: #fff; font-size: clamp(2.1rem, 4.6vw, 4.1rem); font-weight: 600; letter-spacing: -.025em; line-height: 1.04; max-width: 13ch; margin: 0 0 1.1rem; text-shadow: 0 2px 24px rgba(16,20,46,.45), 0 1px 3px rgba(16,20,46,.35); }
+/* "before you land": display serif italic, underline in brand periwinkle drawn after the words land */
+.fl-h1 em { position: relative; display: inline-block; font: italic 500 1.08em/1 var(--f-read); letter-spacing: -.01em; padding: 0 .04em .06em; }
+.fl-h1 em { color: #eef2ff; text-shadow: 0 2px 18px rgba(16,20,46,.6), 0 1px 2px rgba(16,20,46,.55); }
+.fl-h1 em::after { content: ""; position: absolute; left: .04em; right: .04em; bottom: -.02em; height: max(2px, .06em); border-radius: 2px;
+  background: linear-gradient(90deg, rgba(122,150,230,0), #7a96e6 15%, #c9d6ff 65%, rgba(201,214,255,0)); box-shadow: 0 1px 6px rgba(16,20,46,.35); transform: scaleX(var(--ul, 1)); transform-origin: left; transition: transform .9s cubic-bezier(.2,.7,.2,1) .75s; }
+/* staggered word reveal (words wrapped by flight.js; static/reduced-motion pages never get .rw) */
+.fl-h1 .w { display: inline-block; white-space: pre; }
+.fl-h1.rw .w { opacity: 0; transform: translateY(.45em); filter: blur(4px); transition: opacity .7s ease, transform .8s cubic-bezier(.2,.7,.2,1), filter .7s ease; transition-delay: calc(var(--i) * 70ms); }
+.fl-h1.rw em { --ul: 0; }
+.fl-h1.rw.is-in .w { opacity: 1; transform: none; filter: none; }
+.fl-h1.rw.is-in em { --ul: 1; }
+:lang(zh-Hans) .fl-h1 em { font-family: inherit; font-style: normal; }
 .fl-lead { font: 400 clamp(1rem, 1.35vw, 1.12rem)/1.55 var(--f-ui); color: rgba(255,255,255,.92); max-width: 40ch; margin: 0; text-shadow: 0 1px 14px rgba(28,34,70,.5); }
 .fl-small { font: 400 .92rem var(--f-ui); color: rgba(255,255,255,.8); margin: 1rem 0 0; }
 
@@ -816,7 +828,7 @@ main > .sec, .after-flight > .sec, main > .cta-band, .after-flight > .cta-band, 
   display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
 }
 .fl-copy--window .fl-eyebrow { font-size: max(14px, min(4cqw, 2.8cqh)); margin: 0 0 .9em; }
-.fl-copy--window .fl-h1 { font-size: max(22px, min(13.5cqw, 9.4cqh)); line-height: 1.04; max-width: none; margin: 0 0 .38em; }
+.fl-copy--window .fl-h1 { font-size: max(22px, min(14cqw, 9.6cqh)); line-height: 1.02; max-width: none; margin: 0 0 .38em; }
 .fl-copy--window .fl-lead { font-size: max(14px, min(4.6cqw, 3cqh)); line-height: 1.5; max-width: 100%; }
 .fl-copy--window .actions { margin-top: max(10px, 3.6cqh); }
 .fl-copy--window .btn { font-size: max(14px, min(4.4cqw, 3cqh)); min-height: 0; padding: .78em 1.4em; }

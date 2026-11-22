@@ -651,7 +651,7 @@
  "Vocational education (opens in a new tab)": "<a href=\"https://erasmus-plus.ec.europa.eu/programme-guide/part-b/key-action-1/vet-learners-and-staff\" target=\"_blank\" rel=\"noopener\"><span>Formación profesional<span class=\"sr-only\">(se abre en una pestaña nueva)</span></span></a>",
  "Higher education (opens in a new tab)": "<a href=\"https://erasmus-plus.ec.europa.eu/programme-guide/part-b/key-action-1/higher-education-mobility-projects\" target=\"_blank\" rel=\"noopener\"><span>Educación superior<span class=\"sr-only\">(se abre en una pestaña nueva)</span></span></a>",
  "Your journey begins before you land. | Formaskills Travel": "Tu viaje comienza antes de aterrizar. | Formaskills Travel",
- "Your journey begins before you land.": "Tu viaje comienza antes de aterrizar.",
+ "Your journey begins before you land.": "Tu viaje comienza <em>antes de aterrizar.</em>",
  "Start a conversation. Discover a place. Come back with a new outlook. Group programmes, mobility projects, cultural stays and French learning, built around your goals.": "Empieza una conversación. Descubre un lugar. Vuelve con una nueva mirada. Programas para grupos, proyectos de movilidad, estancias culturales y aprendizaje de francés, diseñados en torno a tus objetivos.",
  "Find my project": "<a class=\"btn btn--light\" href=\"/plan-your-stay/\" ><span>Encontrar mi proyecto</span></a>",
  "In person, online or through a stay.": "En persona, en línea o durante una estancia.",
