@@ -60,7 +60,8 @@
   const cctx = el.cabinCanvas.getContext('2d');
   let win = { cx: 0, cy: 0, w: 0, h: 0, r: 0, f: 0 }, cdpr = 1, lastCs = -1, grads = null;
   const rrPath = (g, cx, cy, w, h, r) => {
-    const x = cx - w / 2, y = cy - h / 2; r = Math.min(r, w / 2, h / 2);
+    w = Math.max(0, w); h = Math.max(0, h);
+    const x = cx - w / 2, y = cy - h / 2; r = Math.max(0, Math.min(r, w / 2, h / 2));
     g.moveTo(x + r, y); g.lineTo(x + w - r, y); g.arcTo(x + w, y, x + w, y + r, r);
     g.lineTo(x + w, y + h - r); g.arcTo(x + w, y + h, x + w - r, y + h, r);
     g.lineTo(x + r, y + h); g.arcTo(x, y + h, x, y + h - r, r);
@@ -94,7 +95,7 @@
     lastCs = -1;
   }
   function drawCabin(cs) {
-    if (Math.abs(cs - lastCs) < .0005) return;
+    if (Math.abs(cs - lastCs) < .0005 || M.W < 10 || M.H < 10) return;   // nothing to draw before layout
     lastCs = cs;
     const g = cctx, { W, H } = M, { cx, cy, w, h, r, f } = win;
     g.setTransform(cdpr, 0, 0, cdpr, 0, 0);
@@ -407,7 +408,8 @@
 
   // scroll prompt: touch wording on phones; a stronger nudge if nobody has scrolled after a few seconds
   const cueLabel = $('[data-cue-label]');
-  if (cueLabel && coarse) cueLabel.textContent = 'Swipe up to begin your journey';
+  const T = window.FST || ((x) => x);
+  if (cueLabel && coarse) cueLabel.textContent = T('Swipe up to begin your journey');
   setTimeout(() => { if (!scrolled && cur < .004) root.classList.add('hint-nudge'); }, 4000);
 
   el.skip.addEventListener('click', () => {

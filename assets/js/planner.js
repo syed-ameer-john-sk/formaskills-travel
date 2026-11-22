@@ -3,6 +3,7 @@
   const host = document.querySelector('[data-planner]');
   if (!host) return;
   const EMAIL = 'contact.skillstravel@gmail.com';
+  const T = window.FST || ((x) => x), LANG = window.FS_LANG || 'en', BASE = window.FS_BASE || '';
   const esc = (s) => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const ic = { arrow: '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
     users: '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0M15.5 6.3a3 3 0 0 1 0 5.6M17.5 14.3A5.5 5.5 0 0 1 20.5 19"/></svg>',
@@ -158,7 +159,7 @@
       <div class="pl-bar"><i style="width:${(steps.length + 1) / (steps.length + 2) * 100}%"></i></div>
       <h2 tabindex="-1" data-focus>${esc(D.ui.reviewH)}</h2><p>${esc(D.ui.reviewP)}</p>
       <dl class="pl-review">${rows}</dl>
-      ${m.length ? `<div class="pl-means"><h3>${esc(D.ui.meansH)}</h3><ul>${m.map(k => `<li><b>${esc(D.svc[k])}</b>: ${esc(D.statusLabel[D.status[k]])}</li>`).join('')}</ul><p class="fine">Services marked “In development” are not yet available to book. You can register your interest.</p></div>` : ''}
+      ${m.length ? `<div class="pl-means"><h3>${esc(D.ui.meansH)}</h3><ul>${m.map(k => `<li><b>${esc(D.svc[k])}</b>: ${esc(D.statusLabel[D.status[k]])}</li>`).join('')}</ul><p class="fine">${esc(T('Services marked “In development” are not yet available to book. You can register your interest.'))}</p></div>` : ''}
       <div class="pl-nav"><button type="button" class="btn btn--ghost" data-back>${esc(D.ui.back)}</button><button type="button" class="btn btn--primary" data-next><span>${esc(D.ui.cont)}</span>${ic.arrow}</button></div></div>`;
     host.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => { idx = +b.dataset.edit; editing = true; mode = 'step'; render(); focusH(); }));
     host.querySelector('[data-back]').addEventListener('click', () => { idx = Math.max(0, steps.length - 1); mode = 'step'; render(); focusH(); });
@@ -177,7 +178,7 @@
     host.innerHTML = `<div class="pl-step"><h2 tabindex="-1" data-focus>${esc(D.ui.contactH)}</h2>
       <form class="form" data-cform novalidate>
         ${f.map(([k, lk, type, req, ac]) => `<div class="field"><label for="pc-${k}">${esc(D.ui[lk])}</label><input id="pc-${k}" name="${k}" type="${type}" ${req ? 'required' : ''} ${ac ? `autocomplete="${ac}"` : ''} value="${esc(contact[k] || '')}"><p class="pl-err" data-err="${k}" hidden></p></div>`).join('')}
-        <label class="check check--consent"><input type="checkbox" name="consent" ${contact.consent ? 'checked' : ''}><span>${esc(D.ui.consent)} <a href="/legal/privacy/">${esc(D.ui.privacyLink)}</a></span></label><p class="pl-err" data-err="consent" hidden></p>
+        <label class="check check--consent"><input type="checkbox" name="consent" ${contact.consent ? 'checked' : ''}><span>${esc(D.ui.consent)} <a href="${BASE}/legal/privacy/">${esc(D.ui.privacyLink)}</a></span></label><p class="pl-err" data-err="consent" hidden></p>
         <label class="check check--consent"><input type="checkbox" name="accurate" ${contact.accurate ? 'checked' : ''}><span>${esc(aud === 'partner' ? D.ui.accuratePartner : D.ui.accurate)}</span></label><p class="pl-err" data-err="accurate" hidden></p>
         <label class="check check--consent"><input type="checkbox" name="news" ${contact.news ? 'checked' : ''}><span>${esc(D.ui.news)}</span></label>
         <p class="fine">${esc(D.ui.useNote)}</p>
@@ -213,13 +214,13 @@
     CONTACT[aud].forEach(([k, lk]) => { if (contact[k]) L.push(`  ${D.ui[lk]}: ${contact[k]}`); });
     L.push(`  ${D.ui.consent} ${contact.consent ? '✓' : '—'}`);
     L.push(`  ${D.ui.news} ${contact.news ? '✓' : '—'}`);
-    L.push('', 'Sending an enquiry is not a booking. Nothing is reserved or charged.');
+    L.push('', T('Sending an enquiry is not a booking. Nothing is reserved or charged.'));
     return L.join('\n');
   }
   const subject = () => {
     const who = aud === 'me' ? contact.name : contact.orgName;
     const t = A.topic && D.topics[A.topic] ? ` – ${D.topics[A.topic].l}` : '';
-    return `Enquiry (${{ me: D.ui.me, org: D.ui.org, partner: D.ui.partner }[aud]})${t}${who ? ` – ${who}` : ''}`;
+    return `${T('Enquiry')} (${{ me: D.ui.me, org: D.ui.org, partner: D.ui.partner }[aud]})${t}${who ? ` – ${who}` : ''}`;
   };
   function openMail() { location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject())}&body=${encodeURIComponent(summary())}`; }
 
@@ -235,16 +236,16 @@
       </div>
       <p class="fine">${esc(D.ui.emailNote)} <a href="mailto:${EMAIL}">${EMAIL}</a></p></div>`;
     host.querySelector('[data-mail]').addEventListener('click', openMail);
-    host.querySelector('[data-copy]').addEventListener('click', () => window.FSCopy?.(`To: ${EMAIL}\nSubject: ${subject()}\n\n${text}`, D.ui.copied));
+    host.querySelector('[data-copy]').addEventListener('click', () => window.FSCopy?.(`${T('To')}: ${EMAIL}\n${T('Subject')}: ${subject()}\n\n${text}`, D.ui.copied));
     host.querySelector('[data-dl]').addEventListener('click', () => {
-      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([`To: ${EMAIL}\nSubject: ${subject()}\n\n${text}`], { type: 'text/plain' }));
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([`${T('To')}: ${EMAIL}\n${T('Subject')}: ${subject()}\n\n${text}`], { type: 'text/plain' }));
       a.download = 'formaskills-enquiry.txt'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     });
     host.querySelector('[data-restart]').addEventListener('click', () => { A = topic ? { topic } : {}; contact = {}; idx = 0; mode = 'who'; try { sessionStorage.removeItem(SKEY); } catch {} render(); focusH(); });
   }
 
   // ---------- boot ----------
-  fetch('/assets/data/planner.json').then(r => r.json()).then(d => {
+  fetch(`/assets/data/planner-${LANG}.json`).then(r => r.json()).then(d => {
     D = d;
     let restored = null; try { restored = JSON.parse(sessionStorage.getItem(SKEY) || 'null'); } catch {}
     const f = params.get('for');
@@ -261,5 +262,5 @@
       while (idx < steps.length - 1 && steps[idx].groups && steps[idx].groups.length === 1 && A[steps[idx].groups[0].id]) idx++;
     }
     render();
-  }).catch(() => { host.innerHTML = `<p>The project planner could not load. You can email us instead: <a href="mailto:${EMAIL}">${EMAIL}</a></p>`; });
+  }).catch(() => { host.innerHTML = `<p>${esc(T('The project planner could not load. You can email us instead:'))} <a href="mailto:${EMAIL}">${EMAIL}</a></p>`; });
 })();

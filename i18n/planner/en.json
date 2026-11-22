@@ -1,0 +1,1071 @@
+{
+ "steps": {
+  "me": [
+   {
+    "id": "purpose",
+    "review": "Purpose",
+    "groups": [
+     {
+      "id": "purpose",
+      "type": "multi",
+      "q": "What brings you to France?",
+      "options": [
+       "learn",
+       "culture",
+       "discover",
+       "aupair",
+       "hostfamily",
+       "notsure"
+      ]
+     }
+    ],
+    "title": "What brings you to France?"
+   },
+   {
+    "id": "places",
+    "review": "Places",
+    "groups": [
+     {
+      "id": "places",
+      "type": "multi",
+      "q": "Where are you drawn to?",
+      "options": [
+       "sete",
+       "montpellier",
+       "nice",
+       "paris",
+       "notsure"
+      ]
+     }
+    ],
+    "title": "Where are you drawn to?"
+   },
+   {
+    "id": "apcand",
+    "review": "Au pair profile",
+    "groups": [
+     {
+      "id": "apdur",
+      "type": "single",
+      "q": "Preferred duration",
+      "options": [
+       "m3",
+       "m6",
+       "m12",
+       "longer",
+       "flex"
+      ]
+     },
+     {
+      "id": "apage",
+      "type": "line",
+      "q": "Age"
+     },
+     {
+      "id": "aplang",
+      "type": "line",
+      "q": "Spoken languages"
+     },
+     {
+      "id": "apcountry",
+      "type": "line",
+      "q": "Preferred country"
+     },
+     {
+      "id": "apcity",
+      "type": "line",
+      "q": "Preferred city, if you have one"
+     },
+     {
+      "id": "apnote",
+      "type": "text",
+      "q": "Languages, childcare experience and family preferences"
+     }
+    ],
+    "title": "About you as an au pair",
+    "if": [
+     [
+      "purpose",
+      "aupair"
+     ]
+    ]
+   },
+   {
+    "id": "fam1",
+    "review": "Host family",
+    "groups": [
+     {
+      "id": "kids",
+      "type": "line",
+      "q": "Number of children the au pair will take care of"
+     },
+     {
+      "id": "kidages",
+      "type": "line",
+      "q": "Ages of the children"
+     },
+     {
+      "id": "fstart",
+      "type": "line",
+      "q": "Preferred start date and duration"
+     },
+     {
+      "id": "fhours",
+      "type": "line",
+      "q": "Expected weekly working hours"
+     }
+    ],
+    "title": "Your family",
+    "if": [
+     [
+      "purpose",
+      "hostfamily"
+     ]
+    ]
+   },
+   {
+    "id": "fam2",
+    "review": "Duties and pocket money",
+    "groups": [
+     {
+      "id": "duties",
+      "type": "multi",
+      "q": "Expected duties",
+      "options": [
+       "d1",
+       "d2",
+       "d3",
+       "d4",
+       "d5",
+       "other"
+      ]
+     },
+     {
+      "id": "dutiesx",
+      "type": "text",
+      "q": "Additional duties you would like",
+      "show_if": [
+       "duties",
+       "other"
+      ]
+     },
+     {
+      "id": "pocket",
+      "type": "line",
+      "q": "Pocket money offered (amount per week or month, and currency)"
+     }
+    ],
+    "title": "Duties and pocket money",
+    "if": [
+     [
+      "purpose",
+      "hostfamily"
+     ]
+    ]
+   },
+   {
+    "id": "fam3",
+    "review": "Home and languages",
+    "groups": [
+     {
+      "id": "amen",
+      "type": "multi",
+      "q": "Accommodation and amenities provided",
+      "options": [
+       "a1",
+       "a2",
+       "a3",
+       "a4",
+       "a5",
+       "a6",
+       "other"
+      ]
+     },
+     {
+      "id": "amenx",
+      "type": "text",
+      "q": "Other accommodation or amenities you offer",
+      "show_if": [
+       "amen",
+       "other"
+      ]
+     },
+     {
+      "id": "homelang",
+      "type": "line",
+      "q": "Language(s) spoken at home"
+     },
+     {
+      "id": "needlang",
+      "type": "line",
+      "q": "Language(s) the au pair must speak"
+     }
+    ],
+    "title": "Home and languages",
+    "if": [
+     [
+      "purpose",
+      "hostfamily"
+     ]
+    ]
+   },
+   {
+    "id": "when",
+    "review": "Timing",
+    "groups": [
+     {
+      "id": "start",
+      "type": "single",
+      "q": "When would you like to come?",
+      "options": [
+       "m3",
+       "m6",
+       "m12",
+       "flex"
+      ]
+     },
+     {
+      "id": "length",
+      "type": "single",
+      "q": "For how long?",
+      "options": [
+       "lt1w",
+       "w1",
+       "w2",
+       "w34",
+       "m13",
+       "longer",
+       "notsure"
+      ]
+     }
+    ],
+    "title": "When, and for how long?"
+   },
+   {
+    "id": "who",
+    "review": "Travellers",
+    "groups": [
+     {
+      "id": "party",
+      "type": "single",
+      "q": "Who is coming?",
+      "options": [
+       "solo",
+       "couple",
+       "family",
+       "friends"
+      ]
+     },
+     {
+      "id": "count",
+      "type": "number",
+      "q": "How many people? (optional)"
+     },
+     {
+      "id": "minors",
+      "type": "single",
+      "q": "Is anyone under 18 coming?",
+      "options": [
+       "yes",
+       "no"
+      ]
+     }
+    ],
+    "title": "Who is coming?",
+    "hide_if_only": [
+     "purpose",
+     "hostfamily"
+    ]
+   },
+   {
+    "id": "extras",
+    "review": "Extras",
+    "groups": [
+     {
+      "id": "level",
+      "type": "single",
+      "q": "Your French level",
+      "options": [
+       "none",
+       "beginner",
+       "intermediate",
+       "advanced",
+       "notsure"
+      ]
+     },
+     {
+      "id": "format",
+      "type": "single",
+      "q": "How would you like to learn?",
+      "options": [
+       "inperson",
+       "online",
+       "either"
+      ]
+     },
+     {
+      "id": "help",
+      "type": "multi",
+      "q": "Would you like help with…",
+      "options": [
+       "accommodation",
+       "transport",
+       "activities",
+       "meals"
+      ]
+     },
+     {
+      "id": "note",
+      "type": "text",
+      "q": "Anything else you would like us to know?",
+      "hint": "Please do not include health, passport or payment details."
+     }
+    ],
+    "title": "A few extras (all optional)",
+    "hide_if_only": [
+     "purpose",
+     "hostfamily"
+    ]
+   }
+  ],
+  "org": [
+   {
+    "id": "orgtype",
+    "review": "Organisation",
+    "groups": [
+     {
+      "id": "orgtype",
+      "type": "single",
+      "q": "What kind of organisation are you?",
+      "options": [
+       "erasmus",
+       "group",
+       "training",
+       "other"
+      ]
+     }
+    ],
+    "title": "What kind of organisation are you?"
+   },
+   {
+    "id": "detail",
+    "review": "Details",
+    "branch": "orgtype",
+    "branches": {
+     "erasmus": [
+      {
+       "id": "accredited",
+       "type": "single",
+       "q": "Does your institution hold Erasmus+ accreditation?",
+       "options": [
+        "yes",
+        "no",
+        "notsure"
+       ]
+      },
+      {
+       "id": "who_part",
+       "type": "single",
+       "q": "Who is it for?",
+       "options": [
+        "learners",
+        "staff",
+        "both"
+       ]
+      },
+      {
+       "id": "size",
+       "type": "number",
+       "q": "Approximately how many participants?"
+      },
+      {
+       "id": "sector",
+       "type": "single",
+       "q": "Education sector",
+       "options": [
+        "school",
+        "vet",
+        "he",
+        "other"
+       ]
+      },
+      {
+       "id": "activity",
+       "type": "multi",
+       "q": "Planned activities",
+       "options": [
+        "pg",
+        "pi",
+        "vg",
+        "js",
+        "other"
+       ]
+      },
+      {
+       "id": "funding",
+       "type": "single",
+       "q": "What is the current Erasmus+ funding situation for this project?",
+       "options": [
+        "grant",
+        "submitted",
+        "preparing",
+        "outside",
+        "notsure"
+       ]
+      },
+      {
+       "id": "elearn",
+       "type": "text",
+       "q": "Participants and learning objectives",
+       "hint": "Type of learners or staff, studies or professional field, experience and target skills."
+      }
+     ],
+     "group": [
+      {
+       "id": "age",
+       "type": "single",
+       "q": "Age range of participants",
+       "options": [
+        "u12",
+        "a1215",
+        "a1617",
+        "a18",
+        "mixed"
+       ]
+      },
+      {
+       "id": "size",
+       "type": "number",
+       "q": "Approximately how many participants?"
+      },
+      {
+       "id": "goal",
+       "type": "single",
+       "q": "Main purpose",
+       "options": [
+        "language",
+        "culture",
+        "both",
+        "other"
+       ]
+      }
+     ],
+     "training": [
+      {
+       "id": "need",
+       "type": "multi",
+       "q": "What do you need?",
+       "options": [
+        "shadowing",
+        "language",
+        "culture",
+        "other"
+       ]
+      },
+      {
+       "id": "size",
+       "type": "number",
+       "q": "Approximately how many participants?"
+      }
+     ],
+     "other": [
+      {
+       "id": "describe",
+       "type": "text",
+       "q": "Tell us about your organisation and what you have in mind."
+      }
+     ]
+    },
+    "title": "About your project"
+   },
+   {
+    "id": "shadow",
+    "review": "Job shadowing",
+    "groups": [
+     {
+      "id": "shact",
+      "type": "single",
+      "q": "Requested activity",
+      "options": [
+       "js",
+       "sv",
+       "mix"
+      ]
+     },
+     {
+      "id": "fields",
+      "type": "fieldlist",
+      "q": "Professional or study field",
+      "hint": "Choose a field and say how many participants. Add more fields if you need to.",
+      "options": [
+       "edu",
+       "child",
+       "tour",
+       "cult",
+       "biz",
+       "health",
+       "digital",
+       "agri",
+       "tech",
+       "lang",
+       "sport",
+       "other",
+       "notsure"
+      ]
+     }
+    ],
+    "title": "Job shadowing details",
+    "if": [
+     [
+      "activity",
+      "js"
+     ],
+     [
+      "need",
+      "shadowing"
+     ],
+     [
+      "topic",
+      "jobshadow"
+     ]
+    ]
+   },
+   {
+    "id": "places",
+    "review": "Places",
+    "groups": [
+     {
+      "id": "places",
+      "type": "multi",
+      "q": "Where are you drawn to?",
+      "options": [
+       "sete",
+       "montpellier",
+       "nice",
+       "paris",
+       "notsure"
+      ]
+     }
+    ],
+    "title": "Where are you drawn to?"
+   },
+   {
+    "id": "when",
+    "review": "Timing",
+    "groups": [
+     {
+      "id": "start",
+      "type": "single",
+      "q": "When would you like to come?",
+      "options": [
+       "m3",
+       "m6",
+       "m12",
+       "flex"
+      ]
+     },
+     {
+      "id": "length",
+      "type": "single",
+      "q": "For how long?",
+      "options": [
+       "lt1w",
+       "w1",
+       "w2",
+       "w34",
+       "m13",
+       "longer",
+       "notsure"
+      ]
+     }
+    ],
+    "title": "When, and for how long?"
+   },
+   {
+    "id": "note",
+    "review": "Note",
+    "groups": [
+     {
+      "id": "note",
+      "type": "text",
+      "q": "Anything else you would like us to know?",
+      "hint": "Please do not include health, passport or payment details."
+     }
+    ],
+    "title": "Anything else you would like us to know?"
+   }
+  ],
+  "partner": [
+   {
+    "id": "ptype",
+    "review": "What you offer",
+    "groups": [
+     {
+      "id": "offer",
+      "type": "multi",
+      "q": "Which services can you offer?",
+      "options": [
+       "accommodation",
+       "meals",
+       "transport",
+       "activities",
+       "french",
+       "jobshadow",
+       "agency",
+       "other"
+      ]
+     }
+    ],
+    "title": "Which services can you offer?"
+   },
+   {
+    "id": "plangs",
+    "review": "Languages and capacity",
+    "groups": [
+     {
+      "id": "planglang",
+      "type": "multi",
+      "q": "Languages available for services and support",
+      "options": [
+       "fr",
+       "en",
+       "es",
+       "de",
+       "it",
+       "pt",
+       "zh",
+       "pl",
+       "ar",
+       "other"
+      ]
+     },
+     {
+      "id": "planglangx",
+      "type": "line",
+      "q": "Other languages",
+      "show_if": [
+       "planglang",
+       "other"
+      ]
+     },
+     {
+      "id": "capacity",
+      "type": "text",
+      "q": "Capacity, availability and booking lead time",
+      "hint": "Minimum and maximum numbers, available periods, minimum duration and any constraints."
+     }
+    ],
+    "title": "Languages and capacity"
+   },
+   {
+    "id": "pplace",
+    "review": "Place",
+    "groups": [
+     {
+      "id": "pplace",
+      "type": "multi",
+      "q": "Where do you work?",
+      "options": [
+       "sete",
+       "montpellier",
+       "other"
+      ]
+     },
+     {
+      "id": "pplacex",
+      "type": "line",
+      "q": "Which city or region?",
+      "show_if": [
+       "pplace",
+       "other"
+      ]
+     }
+    ],
+    "title": "Where do you work?"
+   },
+   {
+    "id": "phost",
+    "review": "Hosting and partnership",
+    "groups": [
+     {
+      "id": "hostjs",
+      "type": "single",
+      "q": "Would you be able to host staff on job shadowing, for example for a few weeks, if participants wish to do so with your organisation?",
+      "options": [
+       "yes",
+       "no",
+       "depends"
+      ]
+     },
+     {
+      "id": "become",
+      "type": "single",
+      "q": "Would you like to become a Formaskills Travel partner?",
+      "options": [
+       "yes",
+       "info"
+      ]
+     }
+    ],
+    "title": "Hosting and becoming a partner"
+   },
+   {
+    "id": "pcollab",
+    "review": "Working together",
+    "groups": [
+     {
+      "id": "collab",
+      "type": "text",
+      "q": "Where are you, and how would you like to work together?"
+     }
+    ],
+    "title": "Where are you, and how would you like to work together?"
+   },
+   {
+    "id": "pnote",
+    "review": "Note",
+    "groups": [
+     {
+      "id": "note",
+      "type": "text",
+      "q": "Anything else you would like us to know?",
+      "hint": "Please do not include health, passport or payment details."
+     }
+    ],
+    "title": "Anything else you would like us to know?"
+   }
+  ]
+ },
+ "opt": {
+  "purpose": {
+   "learn": "Learn French",
+   "culture": "Cultural immersion",
+   "discover": "Discover places in France",
+   "aupair": "Au pair stay (I would be the au pair)",
+   "hostfamily": "Host family looking for an au pair",
+   "notsure": "Not sure"
+  },
+  "places": {
+   "sete": "Sète",
+   "montpellier": "Montpellier",
+   "nice": "Nice",
+   "paris": "Paris",
+   "notsure": "Not sure"
+  },
+  "apdur": {
+   "m3": "Up to 3 months",
+   "m6": "3 to 6 months",
+   "m12": "6 to 12 months",
+   "longer": "More than 12 months",
+   "flex": "Flexible"
+  },
+  "duties": {
+   "d1": "School and activity drop-offs and pick-ups",
+   "d2": "Meal preparation for the children",
+   "d3": "Homework help",
+   "d4": "Bath and bedtime routine",
+   "d5": "Light housekeeping related to children (bedroom, laundry)",
+   "other": "Other duties (describe below)"
+  },
+  "amen": {
+   "a1": "Private room",
+   "a2": "Private bathroom",
+   "a3": "Wi-Fi connection",
+   "a4": "Access to a car (for child transport or personal use)",
+   "a5": "Public transport pass or allowance",
+   "a6": "Contribution to language course fees",
+   "other": "Other accommodation or amenities (describe below)"
+  },
+  "start": {
+   "m3": "Within 3 months",
+   "m6": "In 3 to 6 months",
+   "m12": "In 6 to 12 months",
+   "flex": "Flexible"
+  },
+  "length": {
+   "lt1w": "Under a week",
+   "w1": "About 1 week",
+   "w2": "About 2 weeks",
+   "w34": "3 to 4 weeks",
+   "m13": "1 to 3 months",
+   "longer": "Longer",
+   "notsure": "Not sure"
+  },
+  "party": {
+   "solo": "Just me",
+   "couple": "Couple",
+   "family": "Family",
+   "friends": "Friends or group"
+  },
+  "minors": {
+   "yes": "Yes",
+   "no": "No"
+  },
+  "level": {
+   "none": "No French yet",
+   "beginner": "Beginner",
+   "intermediate": "Intermediate",
+   "advanced": "Advanced",
+   "notsure": "Not sure"
+  },
+  "format": {
+   "inperson": "In person in Sète",
+   "online": "Online",
+   "either": "Either"
+  },
+  "help": {
+   "accommodation": "Accommodation",
+   "transport": "Transfers and local transport",
+   "activities": "Planning activities",
+   "meals": "Meals"
+  },
+  "orgtype": {
+   "erasmus": "Erasmus+ institution",
+   "group": "Group or school",
+   "training": "Training or professional body",
+   "other": "Other"
+  },
+  "accredited": {
+   "yes": "Yes",
+   "no": "No",
+   "notsure": "Not sure"
+  },
+  "who_part": {
+   "learners": "Learners",
+   "staff": "Staff",
+   "both": "Both"
+  },
+  "sector": {
+   "school": "School education",
+   "vet": "Vocational education",
+   "he": "Higher education",
+   "other": "Other"
+  },
+  "activity": {
+   "pg": "Group pupil mobility",
+   "pi": "Individual pupil mobility",
+   "vg": "Vocational group mobility",
+   "js": "Job shadowing for staff",
+   "other": "Other"
+  },
+  "funding": {
+   "grant": "Grant awarded for this project",
+   "submitted": "Application submitted, awaiting decision",
+   "preparing": "Preparing an application",
+   "outside": "Other funding, or a project outside Erasmus+",
+   "notsure": "Not sure, I would like guidance"
+  },
+  "age": {
+   "u12": "Under 12",
+   "a1215": "12 to 15",
+   "a1617": "16 to 17",
+   "a18": "18 and over",
+   "mixed": "Mixed ages"
+  },
+  "goal": {
+   "language": "Language",
+   "culture": "Culture",
+   "both": "Language and culture",
+   "other": "Other"
+  },
+  "need": {
+   "shadowing": "Job shadowing",
+   "language": "French language course",
+   "culture": "Cultural activities",
+   "other": "Other"
+  },
+  "shact": {
+   "js": "Job shadowing",
+   "sv": "Study visit",
+   "mix": "A combination, or not sure"
+  },
+  "fields": {
+   "edu": "Education and teaching",
+   "child": "Early childhood and youth work",
+   "tour": "Tourism and hospitality",
+   "cult": "Culture, arts and heritage",
+   "biz": "Business and administration",
+   "health": "Health and social care",
+   "digital": "IT and digital",
+   "agri": "Agriculture and environment",
+   "tech": "Engineering and technical trades",
+   "lang": "Languages and communication",
+   "sport": "Sport and leisure",
+   "other": "Other",
+   "notsure": "Not sure yet"
+  },
+  "offer": {
+   "accommodation": "Accommodation",
+   "meals": "Meals and catering",
+   "transport": "Transport",
+   "activities": "Activities, visits and leisure",
+   "french": "French courses and training",
+   "jobshadow": "Staff job shadowing and professional observation",
+   "agency": "Agency, referrals or resale",
+   "other": "Other service (describe below)"
+  },
+  "planglang": {
+   "fr": "French",
+   "en": "English",
+   "es": "Spanish",
+   "de": "German",
+   "it": "Italian",
+   "pt": "Portuguese",
+   "zh": "Chinese",
+   "pl": "Polish",
+   "ar": "Arabic",
+   "other": "Other (describe below)"
+  },
+  "pplace": {
+   "sete": "Sète",
+   "montpellier": "Montpellier",
+   "other": "Other"
+  },
+  "hostjs": {
+   "yes": "Yes",
+   "no": "No",
+   "depends": "It depends"
+  },
+  "become": {
+   "yes": "Yes, please consider my organisation as a partner",
+   "info": "I would like more information before deciding"
+  }
+ },
+ "gen": {
+  "notsure": "Not sure",
+  "yes": "Yes",
+  "no": "No",
+  "other": "Other",
+  "both": "Both"
+ },
+ "ui": {
+  "whoH": "Who is this for?",
+  "me": "For me",
+  "org": "For my organisation",
+  "partner": "Become a partner",
+  "send": "Submit my enquiry",
+  "progress": "Question {n} of {total}",
+  "optional": "optional",
+  "editing": "You are editing. You will return to your review.",
+  "back": "Back",
+  "skip": "Skip",
+  "cont": "Continue",
+  "reviewH": "Review your enquiry",
+  "reviewP": "Change anything, or send it as it is.",
+  "skipped": "Skipped",
+  "meansH": "What this means",
+  "edit": "Edit",
+  "contactH": "Where should we reply?",
+  "orgName": "Organisation or school name",
+  "name": "Full name of the main contact",
+  "person": "Full name of the main contact",
+  "email": "Email",
+  "replyLang": "Language for our reply (optional)",
+  "consent": "I agree that Formaskills Travel may contact me about this enquiry.",
+  "privacyLink": "Privacy notice",
+  "finalNote": "This opens your email app with your enquiry ready to send. It is not a booking. Nothing is reserved or charged.",
+  "emailNote": "This opens your email app with your enquiry ready to send. Nothing is sent until you send the email.",
+  "errName": "Enter your name.",
+  "errOrg": "Enter your organisation's name.",
+  "errEmail": "Enter a valid email address.",
+  "errConsent": "Tick the box to continue.",
+  "afterH": "Your enquiry is ready",
+  "afterP": "If your email app did not open, copy your summary and email it to us at the address below.",
+  "copy": "Copy my summary",
+  "download": "Download the enquiry (.txt)",
+  "emailUs": "Email us",
+  "enquire": "Enquire",
+  "copied": "Summary copied",
+  "startOver": "Start over",
+  "topic": "You are asking about",
+  "progressLabel": "Progress",
+  "goTo": "Go to question {n}",
+  "countUnit": "people",
+  "country": "Country of residence",
+  "city": "City",
+  "phone": "Telephone or WhatsApp number (optional)",
+  "orgCountry": "Country of the organisation or school",
+  "accurate": "I confirm that the information provided is accurate to the best of my knowledge.",
+  "accuratePartner": "I confirm that this information is accurate and would like to be contacted about this collaboration.",
+  "news": "I would like to receive occasional news and offers from Formaskills Travel by email. I can unsubscribe at any time.",
+  "useNote": "We use this information to assess and respond to your request. Thank you: our team will reply to discuss the next steps.",
+  "errCountry": "Enter your country of residence.",
+  "errCity": "Enter your city.",
+  "errAccurate": "Please confirm that the information is accurate.",
+  "addField": "Add another field",
+  "remove": "Remove",
+  "pick": "Choose a field",
+  "fnum": "Participants",
+  "yes": "Yes",
+  "no": "No",
+  "errRequired": "Please choose Yes to continue.",
+  "orgNameP": "Organisation name",
+  "orgCountryP": "Country of the organisation",
+  "confirm": "I confirm",
+  "errConsent2": "Tick the box to continue."
+ },
+ "topics": {
+  "orgfr": {
+   "l": "French language and immersion programmes",
+   "en": "French language and immersion programmes"
+  },
+  "orgstay": {
+   "l": "Accommodation and transport",
+   "en": "Accommodation and transport"
+  },
+  "orgcult": {
+   "l": "Cultural and educational experiences, activities and excursions",
+   "en": "Cultural and educational experiences, activities and excursions"
+  },
+  "orgcoord": {
+   "l": "Local coordination and support in France",
+   "en": "Local coordination and support in France"
+  },
+  "groups": {
+   "l": "Individual and group programmes",
+   "en": "Individual and group programmes"
+  },
+  "groupmob": {
+   "l": "Plan group mobility",
+   "en": "Plan group mobility"
+  },
+  "erasmus": {
+   "l": "Erasmus+ reception",
+   "en": "Erasmus+ reception"
+  },
+  "jobshadow": {
+   "l": "Job shadowing",
+   "en": "Job shadowing"
+  }
+ },
+ "svc": {
+  "courses": "French learning online, and FLE programmes in France for groups",
+  "logistics": "Accommodation, transfers and local transport help",
+  "erasmus": "Erasmus+ reception",
+  "cities": "Sète, Montpellier, Paris and Nice. Other destinations through a personalised request",
+  "professional": "Job shadowing",
+  "aupair": "Au pair and host-family stays",
+  "immersions": "Sète immersions and excursions",
+  "groups": "Group programmes",
+  "partners": "Service partners",
+  "tourism": "Cultural activities and local experiences"
+ },
+ "status": {
+  "courses": "request",
+  "logistics": "request",
+  "erasmus": "request",
+  "cities": "request",
+  "professional": "request",
+  "aupair": "request",
+  "immersions": "dev",
+  "groups": "request",
+  "partners": "request",
+  "tourism": "dev"
+ },
+ "statusLabel": {
+  "confirmed": "Confirmed",
+  "partner": "Partner-based",
+  "request": "On request",
+  "dev": "In development"
+ }
+}

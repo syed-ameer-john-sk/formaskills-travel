@@ -5,6 +5,7 @@ export const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
 // ---------- Icons (1.6px line set) ----------
 const P = {
   arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  chevron: '<path d="m6 9 6 6 6-6"/>',
   search: '<circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/>',
   menu: '<path d="M4 7h16M4 12h16M4 17h10"/>',
   close: '<path d="M6 6l12 12M18 6 6 18"/>',
@@ -95,6 +96,7 @@ export const head = ({ title, desc, path, bodyClass = '', ld = '' }) => {
 <title>${esc(full)}</title>
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${SITE.url}${path}">
+<!--HREFLANG-->
 <meta name="theme-color" content="#1c2246">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Formaskills Travel">
 <meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}">
@@ -105,6 +107,7 @@ export const head = ({ title, desc, path, bodyClass = '', ld = '' }) => {
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
 <link rel="stylesheet" href="/assets/css/site.css?v=__V__">
 <script>document.documentElement.classList.add('js');</script>
+<!--I18N-HEAD-->
 ${ld}
 </head>
 <body class="${bodyClass}">
@@ -120,6 +123,7 @@ export const header = (path, { overlay = false } = {}) => `
       <ul>${NAV.map(n => `<li><a href="${n.href}" ${isActive(path, n.href) ? 'aria-current="page"' : ''}>${n.label}</a></li>`).join('')}</ul>
     </nav>
     <div class="hdr__tools">
+      <!--LANG-SWITCH-->
       <button class="iconbtn" type="button" data-open="search" aria-label="Search">${icon('search')}</button>
       <button class="btn btn--primary btn--sm hdr__cta" type="button" data-open="enquire"><span>Enquire</span></button>
       <button class="iconbtn hdr__menu" type="button" data-open="menu" aria-label="Menu" aria-expanded="false" aria-controls="menu">${icon('menu')}</button>
@@ -135,6 +139,7 @@ export const header = (path, { overlay = false } = {}) => `
     <div class="drawer__more">
       ${FOOTER_COLS.slice(0, 2).map(c => `<div><p class="drawer__h">${c.title}</p><ul>${c.links.map(([h, l]) => `<li><a href="${h}">${l}</a></li>`).join('')}</ul></div>`).join('')}
     </div>
+    <!--LANG-LIST-->
     <div class="drawer__foot">
       <button class="btn btn--primary" type="button" data-open="enquire"><span>Enquire</span>${icon('arrow')}</button>
       <a class="drawer__contact" href="mailto:${SITE.email}">${icon('mail')}${SITE.email}</a>
@@ -158,7 +163,7 @@ export const footer = (scripts = []) => `
         <li>${icon('phone')}<span><span class="sr-only">Phone: </span><a href="tel:${SITE.tel}">${SITE.phone}</a></span></li>
         <li>${icon('clock')}<span>${SITE.hours}</span></li>
       </ul>
-      <p class="ftr__lang">Write to us in your language.</p>
+      <!--LANG-FOOTER-->
       <ul class="ftr__social">${SITE.socials.map(s => `<li><a href="${s.href}" target="_blank" rel="noopener" aria-label="${s.name} (opens in a new tab)">${icon(s.name.toLowerCase())}</a></li>`).join('')}</ul>
     </div>
     <nav class="ftr__cols" aria-label="Pages">

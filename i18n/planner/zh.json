@@ -1,0 +1,1071 @@
+{
+ "steps": {
+  "me": [
+   {
+    "id": "purpose",
+    "review": "目的",
+    "groups": [
+     {
+      "id": "purpose",
+      "type": "multi",
+      "q": "是什么让您想来法国？",
+      "options": [
+       "learn",
+       "culture",
+       "discover",
+       "aupair",
+       "hostfamily",
+       "notsure"
+      ]
+     }
+    ],
+    "title": "是什么让您想来法国？"
+   },
+   {
+    "id": "places",
+    "review": "地点",
+    "groups": [
+     {
+      "id": "places",
+      "type": "multi",
+      "q": "哪些地方吸引您？",
+      "options": [
+       "sete",
+       "montpellier",
+       "nice",
+       "paris",
+       "notsure"
+      ]
+     }
+    ],
+    "title": "哪些地方吸引您？"
+   },
+   {
+    "id": "apcand",
+    "review": "互惠生资料",
+    "groups": [
+     {
+      "id": "apdur",
+      "type": "single",
+      "q": "期望时长",
+      "options": [
+       "m3",
+       "m6",
+       "m12",
+       "longer",
+       "flex"
+      ]
+     },
+     {
+      "id": "apage",
+      "type": "line",
+      "q": "年龄"
+     },
+     {
+      "id": "aplang",
+      "type": "line",
+      "q": "会说的语言"
+     },
+     {
+      "id": "apcountry",
+      "type": "line",
+      "q": "期望国家"
+     },
+     {
+      "id": "apcity",
+      "type": "line",
+      "q": "期望城市（如有）"
+     },
+     {
+      "id": "apnote",
+      "type": "text",
+      "q": "语言、育儿经验和对家庭的偏好"
+     }
+    ],
+    "title": "关于您作为互惠生",
+    "if": [
+     [
+      "purpose",
+      "aupair"
+     ]
+    ]
+   },
+   {
+    "id": "fam1",
+    "review": "寄宿家庭",
+    "groups": [
+     {
+      "id": "kids",
+      "type": "line",
+      "q": "互惠生将照看的孩子人数"
+     },
+     {
+      "id": "kidages",
+      "type": "line",
+      "q": "孩子的年龄"
+     },
+     {
+      "id": "fstart",
+      "type": "line",
+      "q": "期望开始日期和时长"
+     },
+     {
+      "id": "fhours",
+      "type": "line",
+      "q": "预计每周工作时数"
+     }
+    ],
+    "title": "您的家庭",
+    "if": [
+     [
+      "purpose",
+      "hostfamily"
+     ]
+    ]
+   },
+   {
+    "id": "fam2",
+    "review": "职责与零花钱",
+    "groups": [
+     {
+      "id": "duties",
+      "type": "multi",
+      "q": "预计职责",
+      "options": [
+       "d1",
+       "d2",
+       "d3",
+       "d4",
+       "d5",
+       "other"
+      ]
+     },
+     {
+      "id": "dutiesx",
+      "type": "text",
+      "q": "您希望增加的职责",
+      "show_if": [
+       "duties",
+       "other"
+      ]
+     },
+     {
+      "id": "pocket",
+      "type": "line",
+      "q": "提供的零花钱（每周或每月金额及币种）"
+     }
+    ],
+    "title": "职责与零花钱",
+    "if": [
+     [
+      "purpose",
+      "hostfamily"
+     ]
+    ]
+   },
+   {
+    "id": "fam3",
+    "review": "住宿与语言",
+    "groups": [
+     {
+      "id": "amen",
+      "type": "multi",
+      "q": "提供的住宿和设施",
+      "options": [
+       "a1",
+       "a2",
+       "a3",
+       "a4",
+       "a5",
+       "a6",
+       "other"
+      ]
+     },
+     {
+      "id": "amenx",
+      "type": "text",
+      "q": "您提供的其他住宿或设施",
+      "show_if": [
+       "amen",
+       "other"
+      ]
+     },
+     {
+      "id": "homelang",
+      "type": "line",
+      "q": "家中使用的语言"
+     },
+     {
+      "id": "needlang",
+      "type": "line",
+      "q": "互惠生必须会说的语言"
+     }
+    ],
+    "title": "住宿与语言",
+    "if": [
+     [
+      "purpose",
+      "hostfamily"
+     ]
+    ]
+   },
+   {
+    "id": "when",
+    "review": "时间",
+    "groups": [
+     {
+      "id": "start",
+      "type": "single",
+      "q": "您希望什么时候来？",
+      "options": [
+       "m3",
+       "m6",
+       "m12",
+       "flex"
+      ]
+     },
+     {
+      "id": "length",
+      "type": "single",
+      "q": "停留多长时间？",
+      "options": [
+       "lt1w",
+       "w1",
+       "w2",
+       "w34",
+       "m13",
+       "longer",
+       "notsure"
+      ]
+     }
+    ],
+    "title": "什么时候，多长时间？"
+   },
+   {
+    "id": "who",
+    "review": "同行人员",
+    "groups": [
+     {
+      "id": "party",
+      "type": "single",
+      "q": "谁会来？",
+      "options": [
+       "solo",
+       "couple",
+       "family",
+       "friends"
+      ]
+     },
+     {
+      "id": "count",
+      "type": "number",
+      "q": "一共多少人？（可选）"
+     },
+     {
+      "id": "minors",
+      "type": "single",
+      "q": "是否有 18 岁以下的人同行？",
+      "options": [
+       "yes",
+       "no"
+      ]
+     }
+    ],
+    "title": "谁会来？",
+    "hide_if_only": [
+     "purpose",
+     "hostfamily"
+    ]
+   },
+   {
+    "id": "extras",
+    "review": "补充信息",
+    "groups": [
+     {
+      "id": "level",
+      "type": "single",
+      "q": "您的法语水平",
+      "options": [
+       "none",
+       "beginner",
+       "intermediate",
+       "advanced",
+       "notsure"
+      ]
+     },
+     {
+      "id": "format",
+      "type": "single",
+      "q": "您希望怎样学习？",
+      "options": [
+       "inperson",
+       "online",
+       "either"
+      ]
+     },
+     {
+      "id": "help",
+      "type": "multi",
+      "q": "您是否需要以下方面的协助……",
+      "options": [
+       "accommodation",
+       "transport",
+       "activities",
+       "meals"
+      ]
+     },
+     {
+      "id": "note",
+      "type": "text",
+      "q": "还有其他想告诉我们的吗？",
+      "hint": "请勿填写健康、护照或付款信息。"
+     }
+    ],
+    "title": "更多信息（均为可选）",
+    "hide_if_only": [
+     "purpose",
+     "hostfamily"
+    ]
+   }
+  ],
+  "org": [
+   {
+    "id": "orgtype",
+    "review": "机构",
+    "groups": [
+     {
+      "id": "orgtype",
+      "type": "single",
+      "q": "您是哪类机构？",
+      "options": [
+       "erasmus",
+       "group",
+       "training",
+       "other"
+      ]
+     }
+    ],
+    "title": "您是哪类机构？"
+   },
+   {
+    "id": "detail",
+    "review": "详情",
+    "branch": "orgtype",
+    "branches": {
+     "erasmus": [
+      {
+       "id": "accredited",
+       "type": "single",
+       "q": "您的机构是否持有 Erasmus+ 认证？",
+       "options": [
+        "yes",
+        "no",
+        "notsure"
+       ]
+      },
+      {
+       "id": "who_part",
+       "type": "single",
+       "q": "是为谁安排？",
+       "options": [
+        "learners",
+        "staff",
+        "both"
+       ]
+      },
+      {
+       "id": "size",
+       "type": "number",
+       "q": "大约有多少参与者？"
+      },
+      {
+       "id": "sector",
+       "type": "single",
+       "q": "教育领域",
+       "options": [
+        "school",
+        "vet",
+        "he",
+        "other"
+       ]
+      },
+      {
+       "id": "activity",
+       "type": "multi",
+       "q": "计划的活动",
+       "options": [
+        "pg",
+        "pi",
+        "vg",
+        "js",
+        "other"
+       ]
+      },
+      {
+       "id": "funding",
+       "type": "single",
+       "q": "该项目目前的 Erasmus+ 资助情况如何？",
+       "options": [
+        "grant",
+        "submitted",
+        "preparing",
+        "outside",
+        "notsure"
+       ]
+      },
+      {
+       "id": "elearn",
+       "type": "text",
+       "q": "参与者与学习目标",
+       "hint": "学习者或员工类型、学习或职业领域、经验和目标技能。"
+      }
+     ],
+     "group": [
+      {
+       "id": "age",
+       "type": "single",
+       "q": "参与者的年龄范围",
+       "options": [
+        "u12",
+        "a1215",
+        "a1617",
+        "a18",
+        "mixed"
+       ]
+      },
+      {
+       "id": "size",
+       "type": "number",
+       "q": "大约有多少参与者？"
+      },
+      {
+       "id": "goal",
+       "type": "single",
+       "q": "主要目的",
+       "options": [
+        "language",
+        "culture",
+        "both",
+        "other"
+       ]
+      }
+     ],
+     "training": [
+      {
+       "id": "need",
+       "type": "multi",
+       "q": "您需要什么？",
+       "options": [
+        "shadowing",
+        "language",
+        "culture",
+        "other"
+       ]
+      },
+      {
+       "id": "size",
+       "type": "number",
+       "q": "大约有多少参与者？"
+      }
+     ],
+     "other": [
+      {
+       "id": "describe",
+       "type": "text",
+       "q": "请介绍您的机构以及您的想法。"
+      }
+     ]
+    },
+    "title": "关于您的项目"
+   },
+   {
+    "id": "shadow",
+    "review": "工作跟岗",
+    "groups": [
+     {
+      "id": "shact",
+      "type": "single",
+      "q": "所需活动",
+      "options": [
+       "js",
+       "sv",
+       "mix"
+      ]
+     },
+     {
+      "id": "fields",
+      "type": "fieldlist",
+      "q": "职业或学习领域",
+      "hint": "选择一个领域并填写参与人数。如有需要可添加更多领域。",
+      "options": [
+       "edu",
+       "child",
+       "tour",
+       "cult",
+       "biz",
+       "health",
+       "digital",
+       "agri",
+       "tech",
+       "lang",
+       "sport",
+       "other",
+       "notsure"
+      ]
+     }
+    ],
+    "title": "工作跟岗详情",
+    "if": [
+     [
+      "activity",
+      "js"
+     ],
+     [
+      "need",
+      "shadowing"
+     ],
+     [
+      "topic",
+      "jobshadow"
+     ]
+    ]
+   },
+   {
+    "id": "places",
+    "review": "地点",
+    "groups": [
+     {
+      "id": "places",
+      "type": "multi",
+      "q": "哪些地方吸引您？",
+      "options": [
+       "sete",
+       "montpellier",
+       "nice",
+       "paris",
+       "notsure"
+      ]
+     }
+    ],
+    "title": "哪些地方吸引您？"
+   },
+   {
+    "id": "when",
+    "review": "时间",
+    "groups": [
+     {
+      "id": "start",
+      "type": "single",
+      "q": "您希望什么时候来？",
+      "options": [
+       "m3",
+       "m6",
+       "m12",
+       "flex"
+      ]
+     },
+     {
+      "id": "length",
+      "type": "single",
+      "q": "停留多长时间？",
+      "options": [
+       "lt1w",
+       "w1",
+       "w2",
+       "w34",
+       "m13",
+       "longer",
+       "notsure"
+      ]
+     }
+    ],
+    "title": "什么时候，多长时间？"
+   },
+   {
+    "id": "note",
+    "review": "备注",
+    "groups": [
+     {
+      "id": "note",
+      "type": "text",
+      "q": "还有其他想告诉我们的吗？",
+      "hint": "请勿填写健康、护照或付款信息。"
+     }
+    ],
+    "title": "还有其他想告诉我们的吗？"
+   }
+  ],
+  "partner": [
+   {
+    "id": "ptype",
+    "review": "你提供的内容",
+    "groups": [
+     {
+      "id": "offer",
+      "type": "multi",
+      "q": "您可以提供哪些服务？",
+      "options": [
+       "accommodation",
+       "meals",
+       "transport",
+       "activities",
+       "french",
+       "jobshadow",
+       "agency",
+       "other"
+      ]
+     }
+    ],
+    "title": "您可以提供哪些服务？"
+   },
+   {
+    "id": "plangs",
+    "review": "语言与接待能力",
+    "groups": [
+     {
+      "id": "planglang",
+      "type": "multi",
+      "q": "服务与支持可用的语言",
+      "options": [
+       "fr",
+       "en",
+       "es",
+       "de",
+       "it",
+       "pt",
+       "zh",
+       "pl",
+       "ar",
+       "other"
+      ]
+     },
+     {
+      "id": "planglangx",
+      "type": "line",
+      "q": "其他语言",
+      "show_if": [
+       "planglang",
+       "other"
+      ]
+     },
+     {
+      "id": "capacity",
+      "type": "text",
+      "q": "接待能力、可用时间和预订提前期",
+      "hint": "最少和最多人数、可用时段、最短时长及任何限制。"
+     }
+    ],
+    "title": "语言与接待能力"
+   },
+   {
+    "id": "pplace",
+    "review": "地点",
+    "groups": [
+     {
+      "id": "pplace",
+      "type": "multi",
+      "q": "你在哪里开展业务？",
+      "options": [
+       "sete",
+       "montpellier",
+       "other"
+      ]
+     },
+     {
+      "id": "pplacex",
+      "type": "line",
+      "q": "哪个城市或地区？",
+      "show_if": [
+       "pplace",
+       "other"
+      ]
+     }
+    ],
+    "title": "你在哪里开展业务？"
+   },
+   {
+    "id": "phost",
+    "review": "接待与合作",
+    "groups": [
+     {
+      "id": "hostjs",
+      "type": "single",
+      "q": "如果有参与者希望在贵机构进行工作跟岗（例如几周），贵方是否可以接待员工？",
+      "options": [
+       "yes",
+       "no",
+       "depends"
+      ]
+     },
+     {
+      "id": "become",
+      "type": "single",
+      "q": "您是否希望成为 Formaskills Travel 的合作伙伴？",
+      "options": [
+       "yes",
+       "info"
+      ]
+     }
+    ],
+    "title": "接待与成为合作伙伴"
+   },
+   {
+    "id": "pcollab",
+    "review": "合作方式",
+    "groups": [
+     {
+      "id": "collab",
+      "type": "text",
+      "q": "您在哪里，希望如何合作？"
+     }
+    ],
+    "title": "您在哪里，希望如何合作？"
+   },
+   {
+    "id": "pnote",
+    "review": "备注",
+    "groups": [
+     {
+      "id": "note",
+      "type": "text",
+      "q": "还有其他想告诉我们的吗？",
+      "hint": "请勿填写健康、护照或付款信息。"
+     }
+    ],
+    "title": "还有其他想告诉我们的吗？"
+   }
+  ]
+ },
+ "opt": {
+  "purpose": {
+   "learn": "学习法语",
+   "culture": "文化沉浸",
+   "discover": "探索法国各地",
+   "aupair": "互惠生寄宿（我将作为互惠生）",
+   "hostfamily": "寻找互惠生的寄宿家庭",
+   "notsure": "不确定"
+  },
+  "places": {
+   "sete": "塞特",
+   "montpellier": "蒙彼利埃",
+   "nice": "尼斯",
+   "paris": "巴黎",
+   "notsure": "不确定"
+  },
+  "apdur": {
+   "m3": "最多 3 个月",
+   "m6": "3 至 6 个月",
+   "m12": "6 至 12 个月",
+   "longer": "超过 12 个月",
+   "flex": "灵活"
+  },
+  "duties": {
+   "d1": "接送孩子上学和参加活动",
+   "d2": "为孩子准备饭菜",
+   "d3": "辅导作业",
+   "d4": "洗澡和睡前安排",
+   "d5": "与孩子相关的轻度家务（卧室、洗衣）",
+   "other": "其他职责（请在下方说明）"
+  },
+  "amen": {
+   "a1": "独立房间",
+   "a2": "独立卫生间",
+   "a3": "Wi-Fi 网络",
+   "a4": "可使用汽车（接送孩子或个人使用）",
+   "a5": "公共交通卡或补贴",
+   "a6": "承担部分语言课程费用",
+   "other": "其他住宿或设施（请在下方说明）"
+  },
+  "start": {
+   "m3": "3 个月内",
+   "m6": "3 到 6 个月后",
+   "m12": "6 到 12 个月后",
+   "flex": "时间灵活"
+  },
+  "length": {
+   "lt1w": "不到一周",
+   "w1": "大约 1 周",
+   "w2": "大约 2 周",
+   "w34": "3 到 4 周",
+   "m13": "1 到 3 个月",
+   "longer": "更长",
+   "notsure": "不确定"
+  },
+  "party": {
+   "solo": "我一个人",
+   "couple": "情侣或夫妻",
+   "family": "家庭",
+   "friends": "朋友或团体"
+  },
+  "minors": {
+   "yes": "是",
+   "no": "否"
+  },
+  "level": {
+   "none": "还没学过法语",
+   "beginner": "初级",
+   "intermediate": "中级",
+   "advanced": "高级",
+   "notsure": "不确定"
+  },
+  "format": {
+   "inperson": "在塞特线下上课",
+   "online": "线上",
+   "either": "都可以"
+  },
+  "help": {
+   "accommodation": "住宿",
+   "transport": "接送与当地交通",
+   "activities": "活动安排",
+   "meals": "餐食"
+  },
+  "orgtype": {
+   "erasmus": "Erasmus+ 机构",
+   "group": "团体或学校",
+   "training": "培训或专业机构",
+   "other": "其他"
+  },
+  "accredited": {
+   "yes": "是",
+   "no": "否",
+   "notsure": "不确定"
+  },
+  "who_part": {
+   "learners": "学员",
+   "staff": "员工",
+   "both": "两者都有"
+  },
+  "sector": {
+   "school": "学校教育",
+   "vet": "职业教育",
+   "he": "高等教育",
+   "other": "其他"
+  },
+  "activity": {
+   "pg": "学生团体交流",
+   "pi": "学生个人交流",
+   "vg": "职业教育团体交流",
+   "js": "教职工工作跟岗",
+   "other": "其他"
+  },
+  "funding": {
+   "grant": "该项目已获资助",
+   "submitted": "已提交申请，等待结果",
+   "preparing": "正在准备申请",
+   "outside": "其他资金，或 Erasmus+ 之外的项目",
+   "notsure": "不确定，希望获得指导"
+  },
+  "age": {
+   "u12": "12 岁以下",
+   "a1215": "12 到 15 岁",
+   "a1617": "16 到 17 岁",
+   "a18": "18 岁及以上",
+   "mixed": "年龄混合"
+  },
+  "goal": {
+   "language": "语言",
+   "culture": "文化",
+   "both": "语言与文化",
+   "other": "其他"
+  },
+  "need": {
+   "shadowing": "岗位跟岗",
+   "language": "法语课程",
+   "culture": "文化活动",
+   "other": "其他"
+  },
+  "shact": {
+   "js": "工作跟岗",
+   "sv": "学习访问",
+   "mix": "组合形式，或不确定"
+  },
+  "fields": {
+   "edu": "教育与教学",
+   "child": "幼儿与青少年工作",
+   "tour": "旅游与酒店服务",
+   "cult": "文化、艺术与遗产",
+   "biz": "商务与行政",
+   "health": "健康与社会关怀",
+   "digital": "信息技术与数字化",
+   "agri": "农业与环境",
+   "tech": "工程与技术行业",
+   "lang": "语言与传播",
+   "sport": "体育与休闲",
+   "other": "其他",
+   "notsure": "尚不确定"
+  },
+  "offer": {
+   "accommodation": "住宿",
+   "meals": "餐饮",
+   "transport": "交通",
+   "activities": "活动、参观与休闲",
+   "french": "法语课程与培训",
+   "jobshadow": "员工工作跟岗与职业观摩",
+   "agency": "代理、转介或转售",
+   "other": "其他服务（请在下方说明）"
+  },
+  "planglang": {
+   "fr": "法语",
+   "en": "英语",
+   "es": "西班牙语",
+   "de": "德语",
+   "it": "意大利语",
+   "pt": "葡萄牙语",
+   "zh": "中文",
+   "pl": "波兰语",
+   "ar": "阿拉伯语",
+   "other": "其他（请在下方说明）"
+  },
+  "pplace": {
+   "sete": "塞特",
+   "montpellier": "蒙彼利埃",
+   "other": "其他"
+  },
+  "hostjs": {
+   "yes": "是",
+   "no": "否",
+   "depends": "视情况而定"
+  },
+  "become": {
+   "yes": "是，请将我的机构视为合作伙伴",
+   "info": "我想在决定前获取更多信息"
+  }
+ },
+ "gen": {
+  "notsure": "不确定",
+  "yes": "是",
+  "no": "否",
+  "other": "其他",
+  "both": "两者都有"
+ },
+ "ui": {
+  "whoH": "这是为谁准备的？",
+  "me": "个人",
+  "org": "机构",
+  "partner": "成为合作伙伴",
+  "send": "提交我的咨询",
+  "progress": "第 {n} 题，共 {total} 题",
+  "optional": "可选",
+  "editing": "您正在修改。完成后将返回检查页面。",
+  "back": "返回",
+  "skip": "跳过",
+  "cont": "继续",
+  "reviewH": "检查您的咨询",
+  "reviewP": "可以修改任何内容，也可以直接发送。",
+  "skipped": "已跳过",
+  "meansH": "这意味着什么",
+  "edit": "修改",
+  "contactH": "我们应该回复到哪里？",
+  "orgName": "机构或学校名称",
+  "name": "主要联系人的全名",
+  "person": "主要联系人的全名",
+  "email": "电子邮件",
+  "replyLang": "希望我们使用的回复语言（可选）",
+  "consent": "我同意 Formaskills Travel 就此咨询与我联系。",
+  "privacyLink": "隐私声明",
+  "finalNote": "这会向我们的团队发送一条咨询。这不是预订。不会预留或收取任何费用。",
+  "emailNote": "这会打开您的邮件应用，并附上准备好的咨询内容。在您发送邮件之前，不会发送任何内容。",
+  "errName": "请输入您的姓名。",
+  "errOrg": "请输入您的机构名称。",
+  "errEmail": "请输入有效的电子邮件地址。",
+  "errConsent": "请勾选此项以继续。",
+  "afterH": "您的咨询已准备好",
+  "afterP": "如果您的邮件应用没有打开，请复制摘要并发送到下方的地址。",
+  "copy": "复制我的摘要",
+  "download": "下载咨询内容（.txt）",
+  "emailUs": "给我们发邮件",
+  "enquire": "咨询",
+  "copied": "摘要已复制",
+  "startOver": "重新开始",
+  "topic": "你咨询的主题",
+  "progressLabel": "进度",
+  "goTo": "转到第 {n} 题",
+  "countUnit": "人",
+  "country": "居住国家",
+  "city": "城市",
+  "phone": "电话或 WhatsApp 号码（选填）",
+  "orgCountry": "机构或学校所在国家",
+  "accurate": "我确认所提供的信息据我所知准确无误。",
+  "accuratePartner": "我确认这些信息准确无误，并希望就此次合作与我联系。",
+  "news": "我还希望偶尔收到与我相关的 Formaskills Travel 机会信息。（选填）",
+  "useNote": "我们使用这些信息来评估并回复您的请求。谢谢：我们的团队会回复您，商讨后续步骤。",
+  "errCountry": "请填写居住国家。",
+  "errCity": "请填写城市。",
+  "errAccurate": "请确认信息准确无误。",
+  "addField": "添加其他领域",
+  "remove": "移除",
+  "pick": "选择领域",
+  "fnum": "参与人数",
+  "yes": "是",
+  "no": "否",
+  "errRequired": "请选择“是”以继续。",
+  "orgNameP": "机构名称",
+  "orgCountryP": "机构所在国家",
+  "confirm": "我确认",
+  "errConsent2": "请勾选此项以继续。"
+ },
+ "topics": {
+  "orgfr": {
+   "l": "法语与沉浸式项目",
+   "en": "French language and immersion programmes"
+  },
+  "orgstay": {
+   "l": "住宿与交通",
+   "en": "Accommodation and transport"
+  },
+  "orgcult": {
+   "l": "文化与教育体验、活动与游览",
+   "en": "Cultural and educational experiences, activities and excursions"
+  },
+  "orgcoord": {
+   "l": "法国本地协调与支持",
+   "en": "Local coordination and support in France"
+  },
+  "groups": {
+   "l": "个人与团体项目",
+   "en": "Individual and group programmes"
+  },
+  "groupmob": {
+   "l": "规划团体交流",
+   "en": "Plan group mobility"
+  },
+  "erasmus": {
+   "l": "Erasmus+ 接待",
+   "en": "Erasmus+ reception"
+  },
+  "jobshadow": {
+   "l": "岗位跟岗",
+   "en": "Job shadowing"
+  }
+ },
+ "svc": {
+  "courses": "在线学习法语，以及面向团体的法国法语（FLE）课程",
+  "logistics": "住宿、接送与当地交通协助",
+  "erasmus": "Erasmus+ 接待",
+  "cities": "赛特、蒙彼利埃、巴黎和尼斯。其他目的地可通过个性化需求",
+  "professional": "工作跟岗",
+  "aupair": "互惠生与接待家庭",
+  "immersions": "塞特沉浸式项目与短途游览",
+  "groups": "团体项目",
+  "partners": "服务合作伙伴",
+  "tourism": "文化活动与本地体验"
+ },
+ "status": {
+  "courses": "request",
+  "logistics": "request",
+  "erasmus": "request",
+  "cities": "request",
+  "professional": "request",
+  "aupair": "request",
+  "immersions": "dev",
+  "groups": "request",
+  "partners": "request",
+  "tourism": "dev"
+ },
+ "statusLabel": {
+  "confirmed": "已确认",
+  "partner": "合作伙伴提供",
+  "request": "可应请求提供",
+  "dev": "开发中"
+ }
+}

@@ -353,7 +353,7 @@ ${sec(`<div class="split split--form">
     <div class="field"><label for="pf-org">Organisation name</label><input id="pf-org" name="Organisation" required autocomplete="organization"></div>
     <div class="field"><label for="pf-name">Contact person</label><input id="pf-name" name="Contact person" required autocomplete="name"></div>
     <div class="field"><label for="pf-email">Email</label><input id="pf-email" name="Email" type="email" required autocomplete="email"></div>
-    <div class="field"><label for="pf-cat">Partner category</label><select id="pf-cat" name="Partner category" data-pf-cat><option value="">Choose…</option>${C.PARTNER_CATEGORIES.map(c => `<option>${c}</option>`).join('')}</select>
+    <div class="field"><label for="pf-cat">Partner category</label><select id="pf-cat" name="Partner category" data-pf-cat><option value="">Choose…</option>${C.PARTNER_CATEGORIES.map(c => `<option value="${esc(c)}">${c}</option>`).join('')}</select>
       <p class="hint" data-pf-hint hidden>For companies interested in hosting trainees, job shadowing participants, professional visits, meetings or other work-based learning experiences.</p></div>
     <fieldset class="field"><legend>How would you like to work with us?</legend>
       <details class="multi"><summary>Choose…</summary><div class="multi__list">${C.PARTNER_WAYS.map((w, i) => `<label class="check"><input type="checkbox" name="How we could work together" value="${esc(w)}"><span>${w}</span></label>`).join('')}</div></details>

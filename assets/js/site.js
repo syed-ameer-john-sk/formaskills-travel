@@ -5,6 +5,11 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const coarse = matchMedia('(pointer: coarse)').matches;
   const EMAIL = 'contact.skillstravel@gmail.com';
+  // i18n: strings come from window.FS_T (injected per language at build time), English as fallback
+  const LANG = window.FS_LANG || 'en', BASE = window.FS_BASE || '';
+  const T = (s, vars) => { let v = (window.FS_T && window.FS_T[s]) || s; if (vars) for (const k in vars) v = v.split(`{${k}}`).join(vars[k]); return v; };
+  const localHref = (html) => html.replace(/href="\/(?!\/|assets\/)/g, `href="${BASE}/`);
+  window.FST = T;
   const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
 
   // ---------- Smooth scroll (desktop pointers only) ----------
@@ -23,12 +28,12 @@
   const toastEl = $('[data-toast]');
   let toastT;
   const toast = (msg) => { if (!toastEl) return; toastEl.textContent = msg; toastEl.classList.add('is-on'); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('is-on'), 2600); };
-  const copy = async (text, msg = 'Copied') => {
+  const copy = async (text, msg = T('Copied')) => {
     try { await navigator.clipboard.writeText(text); toast(msg); }
     catch { const t = document.createElement('textarea'); t.value = text; document.body.append(t); t.select(); document.execCommand('copy'); t.remove(); toast(msg); }
   };
   window.FSCopy = copy; window.FSToast = toast;
-  $$('[data-copy-text]').forEach(b => b.addEventListener('click', () => copy(b.dataset.copyText, 'Address copied')));
+  $$('[data-copy-text]').forEach(b => b.addEventListener('click', () => copy(b.dataset.copyText, T('Address copied'))));
 
   // ---------- Header: progress, hide on scroll, solid after the flight ----------
   const bar = $('.hdr__progress i');
@@ -112,8 +117,8 @@
   const setWho = (w) => {
     who.forEach(b => b.setAttribute('aria-checked', String(b.dataset.who === w)));
     const plan = $('[data-enq-link="plan"]'), write = $('[data-enq-link="write"]');
-    if (plan) plan.href = `/plan-your-stay/?for=${w}`;
-    if (write) write.href = w === 'partner' ? '/partners/#enquiry' : '/contact/#write';
+    if (plan) plan.href = `${BASE}/plan-your-stay/?for=${w}`;
+    if (write) write.href = w === 'partner' ? `${BASE}/partners/#enquiry` : `${BASE}/contact/#write`;
   };
   who.forEach(b => {
     b.addEventListener('click', () => setWho(b.dataset.who));
@@ -123,8 +128,30 @@
       setWho(n.dataset.who); n.focus();
     });
   });
-  if (location.pathname.startsWith('/partners')) setWho('partner');
-  else if (location.pathname.startsWith('/for-organisations')) setWho('org');
+  const pagePath = location.pathname.slice(BASE.length) || '/';
+  if (pagePath.startsWith('/partners')) setWho('partner');
+  else if (pagePath.startsWith('/for-organisations')) setWho('org');
+
+  // ---------- Language switcher (header dropdown; the choice is remembered) ----------
+  $$('[data-lang-code]').forEach(a => a.addEventListener('click', () => store.set('fs-lang', a.dataset.langCode)));
+  const lang = $('[data-lang]');
+  if (lang) {
+    const btn = $('.lang__btn', lang), menu = $('.lang__menu', lang), items = () => $$('a', menu);
+    const setOpen = (open, focus) => {
+      menu.hidden = !open; btn.setAttribute('aria-expanded', String(open)); lang.classList.toggle('is-open', open);
+      if (open && focus) (menu.querySelector('[aria-current="true"]') || items()[0])?.focus();
+    };
+    btn.addEventListener('click', () => setOpen(menu.hidden, true));
+    btn.addEventListener('keydown', (e) => { if (e.key === 'ArrowDown') { e.preventDefault(); setOpen(true, true); } });
+    menu.addEventListener('keydown', (e) => {
+      const list = items(), i = list.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown') { e.preventDefault(); list[(i + 1) % list.length].focus(); }
+      if (e.key === 'ArrowUp') { e.preventDefault(); list[(i - 1 + list.length) % list.length].focus(); }
+      if (e.key === 'Escape') { setOpen(false); btn.focus(); }
+      if (e.key === 'Tab') setOpen(false);
+    });
+    document.addEventListener('click', (e) => { if (!lang.contains(e.target)) setOpen(false); });
+  }
 
   // ---------- In-page anchors with smooth scroll ----------
   document.addEventListener('click', (e) => {
@@ -313,21 +340,40 @@
   const TOPICS = { orgfr: 'French language and immersion programmes', orgstay: 'Accommodation and transport', orgcult: 'Cultural and educational experiences, activities and excursions', orgcoord: 'Local coordination and support in France', groups: 'Individual and group programmes', groupmob: 'Plan group mobility', erasmus: 'Erasmus+ reception', jobshadow: 'Job shadowing' };
   const topic = new URLSearchParams(location.search).get('topic');
   const subj = $('[data-subject]');
-  if (subj && topic && TOPICS[topic]) subj.value = `Enquiry: ${TOPICS[topic]}`;
+  if (subj && topic && TOPICS[topic]) subj.value = T('Enquiry: {topic}', { topic: T(TOPICS[topic]) });
   const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+  // Label shown on the page for a field (already in the page's language)
+  const fieldLabel = (form, el) => {
+    if (el.type === 'checkbox' || el.type === 'radio') return (el.closest('fieldset')?.querySelector('legend')?.textContent || '').trim();
+    return (form.querySelector(`label[for="${el.id}"]`)?.textContent || el.name || '').trim();
+  };
+  const fieldValue = (el) => {
+    if (el.tagName === 'SELECT') return el.value ? el.selectedOptions[0].textContent.trim() : '';
+    if (el.type === 'checkbox' || el.type === 'radio') return el.checked ? (el.closest('label')?.textContent || el.value).trim() : '';
+    return el.value.trim();
+  };
   $$('[data-mailform]').forEach(form => {
     const kind = form.dataset.mailform, err = $('[data-form-err]', form);
+    // Builds the email in the page's language from the labels and values visitors actually see.
     const compose = () => {
+      const groups = new Map();
+      for (const el of form.querySelectorAll('input[name], select[name], textarea[name]')) {
+        if (el.dataset.consent != null || el.name === 'company_website') continue;   // consent box and honeypot
+        const v = fieldValue(el); if (!v) continue;
+        const k = fieldLabel(form, el);
+        if (!groups.has(k)) groups.set(k, []);
+        groups.get(k).push(v);
+      }
+      let subject = kind === 'partner' ? T('Partnership enquiry') : T('Enquiry');
       const lines = [];
-      const fd = new FormData(form); const seen = {};
-      for (const [k, v] of fd.entries()) { if (!v) continue; (seen[k] ||= []).push(v); }
-      let subject = kind === 'partner' ? 'Partnership enquiry' : 'Enquiry';
-      for (const [k, vs] of Object.entries(seen)) {
-        if (k === 'Subject') { subject = vs[0]; continue; }
+      for (const [k, vs] of groups) {
+        const el = form.querySelector('[data-subject]');
+        if (el && k === fieldLabel(form, el)) { subject = vs[0]; continue; }
         lines.push(vs.length > 1 ? `${k}:\n- ${vs.join('\n- ')}` : `${k}: ${vs[0]}`);
       }
-      if (kind === 'partner' && seen['Organisation']) subject = `Partnership enquiry: ${seen['Organisation'][0]}`;
-      return { subject, body: lines.join('\n\n') + `\n\n—\nSent from formaskills-travel.fr. ${'Sending an enquiry is not a booking. Nothing is reserved or charged.'}` };
+      const org = form.querySelector('#pf-org')?.value.trim();
+      if (kind === 'partner' && org) subject = `${T('Partnership enquiry')}: ${org}`;
+      return { subject, body: `${lines.join('\n\n')}\n\n—\n${T('Sent from the Formaskills Travel website.')} ${T('Sending an enquiry is not a booking. Nothing is reserved or charged.')}` };
     };
     const validate = () => {
       const bad = [];
@@ -337,7 +383,7 @@
       });
       if (bad.length) {
         const f = bad[0];
-        err.textContent = f.type === 'checkbox' ? 'Tick the box to continue.' : f.type === 'email' ? 'Enter a valid email address.' : `Fill in “${form.querySelector(`label[for="${f.id}"]`)?.textContent || 'this field'}”.`;
+        err.textContent = f.type === 'checkbox' ? T('Tick the box to continue.') : f.type === 'email' ? T('Enter a valid email address.') : T('Fill in “{field}”.', { field: fieldLabel(form, f) || T('this field') });
         f.focus(); return false;
       }
       err.textContent = ''; return true;
@@ -346,27 +392,28 @@
       e.preventDefault(); if (!validate()) return;
       const { subject, body } = compose();
       location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      toast('Your email app should open with the message ready');
+      toast(T('Your email app should open with the message ready'));
     });
-    $('[data-copy-form]', form)?.addEventListener('click', () => { const { subject, body } = compose(); copy(`To: ${EMAIL}\nSubject: ${subject}\n\n${body}`, 'Message copied'); });
+    $('[data-copy-form]', form)?.addEventListener('click', () => { const { subject, body } = compose(); copy(`${T('To')}: ${EMAIL}\n${T('Subject')}: ${subject}\n\n${body}`, T('Message copied')); });
     form.addEventListener('input', (e) => { if (e.target.getAttribute('aria-invalid') === 'true') e.target.setAttribute('aria-invalid', 'false'); });
   });
   // Partner category helper
   const cat = $('[data-pf-cat]'), hint = $('[data-pf-hint]');
+  // option values are stable English identifiers; the visible text is translated
   const MAP = ['School / university / training organisation', 'Company / employer / professional organisation', 'Accommodation provider', 'Cultural activity / guide / experience provider', 'Travel agency / educational travel partner', 'Restaurant / catering provider', 'Other business or organisation'];
   const syncHint = () => { if (hint) hint.hidden = cat.value !== 'Company / employer / professional organisation'; };
   cat?.addEventListener('change', syncHint);
   $$('[data-partner-cat]').forEach(a => a.addEventListener('click', () => { if (cat) { cat.value = MAP[+a.dataset.partnerCat]; syncHint(); setTimeout(() => $('#pf-org')?.focus({ preventScroll: true }), 900); } }));
   const multi = $('.multi');
-  if (multi) { const sum = $('summary', multi); const upd = () => { const n = $$('input:checked', multi).length; sum.firstChild.textContent = n ? `${n} selected` : 'Choose…'; }; multi.addEventListener('change', upd); }
+  if (multi) { const sum = $('summary', multi); const upd = () => { const n = $$('input:checked', multi).length; sum.firstChild.textContent = n ? T('{n} selected', { n }) : T('Choose…'); }; multi.addEventListener('change', upd); }
 
   // ---------- Google map (only after consent) ----------
   const gm = $('[data-gmap]');
   if (gm) {
     const consent = gm.innerHTML;
     const showMap = () => {
-      gm.innerHTML = `<iframe title="Map of the contact address" src="${gm.dataset.gmap}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
-      const hide = document.createElement('button'); hide.type = 'button'; hide.className = 'btn btn--ghost btn--sm'; hide.textContent = 'Hide map and withdraw this choice';
+      gm.innerHTML = `<iframe title="${T('Map of the contact address')}" src="${gm.dataset.gmap}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+      const hide = document.createElement('button'); hide.type = 'button'; hide.className = 'btn btn--ghost btn--sm'; hide.textContent = T('Hide map and withdraw this choice');
       hide.addEventListener('click', () => { store.set('fs-map', '0'); gm.innerHTML = consent; bind(); hide.remove(); });
       gm.after(hide); store.set('fs-map', '1');
     };
@@ -392,7 +439,7 @@
 
   // ---------- Search ----------
   let IDX = null;
-  const ensureIndex = () => IDX ? Promise.resolve(IDX) : fetch('/assets/data/search.json').then(r => r.json()).then(d => (IDX = d)).catch(() => (IDX = []));
+  const ensureIndex = () => IDX ? Promise.resolve(IDX) : fetch(`/assets/data/search-${LANG}.json`).then(r => r.json()).then(d => (IDX = d)).catch(() => (IDX = []));
   const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   const escH = (s) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   function search(q) {
@@ -420,7 +467,7 @@
       const q = input.value.trim();
       if (!q) { out.innerHTML = ''; return; }
       const res = search(q);
-      out.innerHTML = res.length ? res.join('') : `<li class="search__empty">No results for “${escH(q)}”. Try another word, or <a href="/contact/#write">write to us</a>.</li>`;
+      out.innerHTML = res.length ? res.join('') : `<li class="search__empty">${localHref(T('No results for “{q}”. Try another word, or <a href="/contact/#write">write to us</a>.', { q: escH(q) }))}</li>`;
     });
     input.addEventListener('input', run);
     f.addEventListener('submit', (e) => { if (!input.hasAttribute('data-search-page')) return; e.preventDefault(); history.replaceState(null, '', `?q=${encodeURIComponent(input.value)}`); run(); });
@@ -453,19 +500,19 @@
       say(escH(q), 'me');
       const k = answer(q);
       setTimeout(() => {
-        if (k) say(`<p>${escH(k.a)}</p><p><a href="${k.u}">Read more on this page</a></p>`);
-        else say(`<p>I could not find that on this website. Our team replies personally: <a href="/contact/#write">write to us</a>, call <a href="tel:+33975462281">+33 9 75 46 22 81</a>, or <a href="/plan-your-stay/">plan your project</a>.</p>`);
+        if (k) say(`<p>${escH(k.a)}</p><p><a href="${k.u}">${T('Read more on this page')}</a></p>`);
+        else say(`<p>${localHref(T('I could not find that on this website. Our team replies personally: <a href="/contact/#write">write to us</a>, call <a href="tel:+33975462281">+33 9 75 46 22 81</a>, or <a href="/plan-your-stay/">plan your project</a>.'))}</p>`);
       }, 260);
     };
     const toggle = (open) => {
       ai.classList.toggle('is-open', open); panel.hidden = !open;
       $('.ai__launch', ai).setAttribute('aria-expanded', String(open));
       if (open) {
-        (KB ? Promise.resolve() : fetch('/assets/data/kb.json').then(r => r.json()).then(d => { KB = d; }).catch(() => { KB = []; })).then(() => {
+        (KB ? Promise.resolve() : fetch(`/assets/data/kb-${LANG}.json`).then(r => r.json()).then(d => { KB = d; }).catch(() => { KB = []; })).then(() => {
           if (!greeted) {
             greeted = true;
-            say('<p>Hello! Ask me about French courses, Erasmus+, destinations, au pair stays or how an enquiry works.</p>');
-            chips.innerHTML = ['Why are prices not displayed?', 'Do you accept complete beginners?', 'What is job shadowing?', 'Who books my flight?', 'Best period for Nice?'].map(c => `<button type="button">${c}</button>`).join('');
+            say(`<p>${escH(T('Hello! Ask me about French courses, Erasmus+, destinations, au pair stays or how an enquiry works.'))}</p>`);
+            chips.innerHTML = [T('Why are prices not displayed?'), T('Do you accept complete beginners?'), T('What is job shadowing?'), T('Who books my flight?'), T('Best period for Nice?')].map(c => `<button type="button">${escH(c)}</button>`).join('');
           }
           input.focus();
         });
