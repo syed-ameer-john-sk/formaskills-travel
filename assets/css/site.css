@@ -894,20 +894,4 @@ main > .sec, .after-flight > .sec, main > .cta-band, .after-flight > .cta-band, 
 }
 @media (max-width: 560px) { .pl-fieldrow { grid-template-columns: 1fr 6.5rem; } .pl-fieldrow > :nth-child(5) { grid-column: 1 / -1; justify-self: start; } .pl-fieldrow > span:last-child { display: none; } }
 
-/* ---------- Golden hour glide (scroll-driven tropicbird) ---------- */
-.glide { position: relative; height: 320svh; background: #2a2c4a; color: #fff; }
-.glide__stage { position: sticky; top: 0; height: 100svh; min-height: 520px; overflow: hidden; isolation: isolate; }
-.glide__sky { position: absolute; inset: 0; background: linear-gradient(180deg, #232a52 0%, #3e4a7c 30%, #8a7fa0 52%, #e9a874 70%, #f7c98e 78%, #e7b38a 100%); }
-.glide__sun { position: absolute; left: 2%; top: 58%; width: 46vmax; height: 46vmax; margin: -23vmax 0 0 -23vmax; border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,246,222,1) 0 3%, rgba(255,214,150,.85) 7%, rgba(250,170,100,.35) 22%, rgba(240,150,100,0) 60%); will-change: transform; }
-.glide__clouds { position: absolute; left: 0; right: 0; bottom: -6%; width: 100%; height: 58%; object-fit: cover; object-position: center 62%; filter: sepia(.45) saturate(1.5) hue-rotate(-12deg) brightness(.97); transform-origin: 50% 100%; will-change: transform;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 30%); mask-image: linear-gradient(180deg, transparent 0, #000 30%); }
-.glide__warm { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: soft-light;
-  background: radial-gradient(80% 60% at 10% 75%, rgba(255,170,90,.75), transparent 70%), linear-gradient(180deg, rgba(30,40,90,.35), rgba(255,160,90,.35)); }
-.glide__bird { position: absolute; left: 0; top: 0; z-index: 2; width: min(62vw, 110svh); height: auto; opacity: 0; transform-origin: 50% 50%; will-change: transform, opacity; pointer-events: none; }
-@media (max-width: 700px) { .glide__bird { width: 92vw; } }
-.glide__copy { position: absolute; left: 0; right: 0; top: 0; z-index: 3; padding: calc(var(--hdr-h) + 6vh) var(--gut) 0; max-width: 46rem; opacity: 0; will-change: transform, opacity; text-shadow: 0 1px 24px rgba(28,34,70,.45); }
-.glide .glide__h { color: #fff; font: 500 var(--t-h1)/1.05 var(--f-ui); margin: 0 0 1rem; letter-spacing: -.01em; }
-.glide__lead { margin: 0; color: rgba(255,255,255,.88); max-width: 32rem; }
-@media (max-width: 700px) { .glide { height: 260svh; } .glide__copy { padding-top: calc(var(--hdr-h) + 3vh); } }
-@media (prefers-reduced-motion: reduce) { .glide { height: auto; } .glide__stage { position: relative; } .glide__copy { opacity: 1; } }
+

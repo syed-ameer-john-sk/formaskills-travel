@@ -151,25 +151,8 @@ const flightHero = () => `
   </div>
 </section>`;
 
-const glideScene = () => `
-<section class="glide" data-glide aria-labelledby="glide-h">
-  <div class="glide__stage">
-    <div class="glide__sky" aria-hidden="true"></div>
-    <div class="glide__sun" aria-hidden="true" data-glide-sun></div>
-    <img class="glide__clouds" src="/assets/img/hero-clouds-hq.webp" width="2000" height="1116" alt="" loading="lazy" decoding="async" data-glide-clouds>
-    <div class="glide__warm" aria-hidden="true"></div>
-    <img class="glide__bird" src="/assets/img/tropicbird.webp" srcset="/assets/img/tropicbird-800.webp 800w, /assets/img/tropicbird.webp 1341w" sizes="(max-width: 700px) 92vw, 62vw" width="1341" height="840" alt="" aria-hidden="true" decoding="async" data-glide-bird>
-    <div class="glide__copy" data-glide-copy>
-      <p class="fl-eyebrow">Golden hour over the Mediterranean</p>
-      <h2 id="glide-h" class="glide__h">Rise above the ordinary.</h2>
-      <p class="glide__lead">Every programme starts with a view like this: wide skies, warm light and a coast that feels like home.</p>
-    </div>
-  </div>
-</section>`;
-
 const home = () => `
 ${flightHero()}
-${glideScene()}
 <div class="after-flight" id="explore">
 ${sec(`
   <div class="paths">
@@ -528,7 +511,7 @@ const notFound = () => `
 
 // =============== REGISTRY ===============
 export const PAGES = [
-  { path: '/', title: 'Your journey begins before you land. | Formaskills Travel', desc: 'Group programmes, mobility projects, cultural experiences and French learning in France, coordinated from Sète. Enquire online.', body: home, home: true, scripts: ['/assets/js/skygen.js', '/assets/js/flight.js', '/assets/js/glide.js'] },
+  { path: '/', title: 'Your journey begins before you land. | Formaskills Travel', desc: 'Group programmes, mobility projects, cultural experiences and French learning in France, coordinated from Sète. Enquire online.', body: home, home: true, scripts: ['/assets/js/skygen.js', '/assets/js/flight.js'] },
   { path: '/what-we-offer/', title: 'What we offer', desc: 'Language, educational, professional and cultural programmes in France, for individuals, groups, schools, universities, training organisations and companies.', body: whatWeOffer },
   { path: '/for-me/', title: 'For me', desc: 'Learn French online, discover France and plan a stay around your interests.', body: forMe },
   { path: '/learn-french/', title: 'Learn French online', desc: 'French courses for individuals online and FLE programmes in France for groups.', body: learnFrench },
