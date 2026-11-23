@@ -484,9 +484,7 @@ ${sec(`${head2('Directions')}<div class="dir">
     <h3>Operating hours</h3>
     <dl class="hours"><div><dt>Weekdays</dt><dd>08:30 AM - 04:30 PM</dd></div><div><dt>Weekends</dt><dd>Closed</dd></div></dl><p class="muted">France time</p>
   </div>
-  <div class="dir__map" data-gmap="${SITE.mapsEmbed}">
-    <div class="dir__consent">${icon('pin')}<p>The map connects to Google only after your choice. You can also open directions in a new tab.</p><button class="btn btn--secondary" type="button" data-gmap-show>Show Google Maps</button></div>
-  </div>
+  <div class="dir__map"><iframe title="Map of the contact address" src="${SITE.mapsEmbed}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
 </div>`)}`;
 
 // =============== LEGAL ===============
@@ -508,7 +506,7 @@ const privacy = () => legal('Privacy notice', '/legal/privacy/', `
 const cookies = () => legal('Cookie policy', '/legal/cookies/', `
 <p>This website does not set advertising or analytics cookies and does not track you across other websites.</p>
 <h2>Local storage on your device</h2><p>We use your browser's local storage only to remember your choices on this site, such as the assistant notice you have accepted or your language preference. This information stays on your device and is not shared with us or third parties.</p>
-<h2>Maps</h2><p>The contact map is provided by Google Maps and loads only when you choose to display it. When it loads, Google may set its own cookies. You can choose not to display the map.</p>
+<h2>Maps</h2><p>The contact map is provided by Google Maps and is shown on the contact page. When it loads, Google may set its own cookies.</p>
 <h2>If this changes</h2><p>We keep this page under review. If we add a tool that requires consent, we will ask for your consent first, block it until you accept, make refusing as easy as accepting, and let you change your choice at any time.</p>`);
 const accessibility = () => legal('Accessibility statement', '/legal/accessibility/', `
 <p>We want this website to be usable by everyone. Our target is level AA of the Web Content Accessibility Guidelines (WCAG 2.2).</p>
