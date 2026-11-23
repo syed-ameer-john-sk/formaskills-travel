@@ -161,7 +161,7 @@ export const FAQ_ME = [
 
 export const ME_OFFERS = [
   {
-    id: 'o-learn', t: 'Learn French online', status: 'Available', statusKey: 'ok',
+    id: 'o-learn', t: 'Learn French online', tab: 'Learn French online', status: 'Available', statusKey: 'ok',
     short: 'French courses on our online learning platform, matched to your level. FLE programmes in France are organised for groups.',
     forMeShort: true,
     href: '/plan-your-stay/?for=me&purpose=learn', cta: 'Start with French', cta2: 'Request a tailored proposal',
@@ -177,7 +177,7 @@ export const ME_OFFERS = [
     ],
   },
   {
-    id: 'o-cult', t: 'Cultural activities, local experiences and excursions', status: 'In development', statusKey: 'dev',
+    id: 'o-cult', t: 'Cultural activities, local experiences and excursions', tab: 'Cultural activities and excursions', status: 'In development', statusKey: 'dev',
     short: 'Guided tours, local activities, food and excursions. In development: register your interest.',
     href: '/plan-your-stay/?for=me&purpose=discover', cta: 'Register my interest', cta2: 'Register your interest',
     details: [
@@ -192,7 +192,7 @@ export const ME_OFFERS = [
     ],
   },
   {
-    id: 'o-aupair', t: 'Au pair and host families', status: 'In development', statusKey: 'dev',
+    id: 'o-aupair', t: 'Au pair and host families', tab: 'Au pair and host families', status: 'In development', statusKey: 'dev',
     short: 'Register your interest in a cultural exchange in France. Our au pair network is in development.',
     forMeText: 'Our au pair and host-family network is in development. You can register your interest in future opportunities. Registration does not guarantee a match or a placement.',
     href: '/plan-your-stay/?for=me&purpose=aupair', cta: 'Register your interest', cta2: 'Register your interest',

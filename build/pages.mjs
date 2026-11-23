@@ -96,7 +96,7 @@ const clearStart = () => sec(`${head2('Clear from the start')}
   <div class="trio">${C.CLEAR_START.map((c, i) => `<div class="trio__i trio__i--${i}"><h3>${c.t}</h3><p>${c.d}</p></div>`).join('')}</div>`, 'sec--tint');
 
 const meOffer = (o, i, { detailed = false } = {}) => `
-<article class="offer" id="${o.id}">
+<article class="offer" ${detailed ? '' : `id="${o.id}"`}>
   <div class="offer__head">
     <span class="offer__n" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
     <h3>${o.t}</h3>
@@ -108,10 +108,22 @@ const meOffer = (o, i, { detailed = false } = {}) => `
   ${btn(o.href, detailed ? o.cta2 : o.cta, 'secondary')}
 </article>`;
 
+// "For me" offers as a tab queue, like the organisation services: one offer at a time.
+// Each panel keeps the offer id, so deep links such as /what-we-offer/#o-cult still open it.
+const meTabs = () => `<div class="tabs offers--detailed" data-tabs>
+    <div class="tabs__bar">
+      <div class="tabs__list" role="tablist" aria-label="Our offers for you">
+        ${C.ME_OFFERS.map((o, i) => `<button type="button" role="tab" id="t-${o.id}" aria-controls="${o.id}" aria-selected="${i === 0}" data-tab="${o.id}">${o.tab}</button>`).join('')}
+      </div>
+      <a class="tabs__link" href="/contact/#write">Others</a>
+    </div>
+    ${C.ME_OFFERS.map((o, i) => `<div class="tabs__panel" role="tabpanel" id="${o.id}" aria-labelledby="t-${o.id}" tabindex="0" ${i ? 'hidden' : ''}>${meOffer(o, i, { detailed: true })}</div>`).join('')}
+  </div>`;
+
 const forMeBlocks = ({ detailed = false } = {}) => `
 ${sec(`<div class="split split--if"><div>${head2('This is for you if…')}</div>${ticks(C.FOR_ME_IF, 'ticks--lg')}</div>`)}
 ${sec(`${head2('Our offers for you', detailed ? 'Pick the offer that fits you. For Erasmus+ projects, see the Erasmus+ tab.' : 'Three ways we can help. Pick one to start.')}
-  <div class="offers ${detailed ? 'offers--detailed' : ''}">${C.ME_OFFERS.map((o, i) => meOffer(o, i, { detailed })).join('')}</div>
+  ${detailed ? meTabs() : `<div class="offers">${C.ME_OFFERS.map((o, i) => meOffer(o, i)).join('')}</div>`}
   <div class="aside-card">
     <div><h3>Have a specific request?</h3><p>Something that does not fit a standard offer? Tell us what you have in mind and we shape it with you.</p></div>
     ${btn('/contact/#write', 'Make a tailor-made request')}
