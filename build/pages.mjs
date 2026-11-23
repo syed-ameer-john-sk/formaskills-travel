@@ -30,7 +30,7 @@ const testimonials = () => TESTIMONIALS.length ? sec(`${head2('What participants
 // =============== Shared blocks ===============
 const destPanel = (d, i, { full = true } = {}) => `
 <article class="dpanel" id="map-${d.slug}" data-dest-panel="${d.slug}" ${i ? 'hidden' : ''} role="tabpanel" aria-labelledby="tab-${d.slug}">
-  <figure class="dpanel__fig">${picture(d.img, d.alt, '(min-width: 900px) 40vw, 100vw')}</figure>
+  <figure class="dpanel__fig dpanel__fig--v" data-story><video class="story__v" muted loop playsinline preload="none" data-poster="/assets/video/${d.slug}-poster.jpg" aria-hidden="true" tabindex="-1" width="720" height="1280"><source data-src="/assets/video/${d.slug}.webm" type="video/webm"><source data-src="/assets/video/${d.slug}.mp4" type="video/mp4"></video><span class="dest__live" aria-hidden="true">${icon('play')}<span>${d.name}</span></span><p class="sr-only">Silent video clip of ${d.name}.</p></figure>
   <div class="dpanel__body">
     <p class="tag">${d.tag}</p>
     <h3 class="dpanel__name">${d.name}</h3>
@@ -96,7 +96,7 @@ const clearStart = () => sec(`${head2('Clear from the start')}
   <div class="trio">${C.CLEAR_START.map((c, i) => `<div class="trio__i trio__i--${i}"><h3>${c.t}</h3><p>${c.d}</p></div>`).join('')}</div>`, 'sec--tint');
 
 const meOffer = (o, i, { detailed = false } = {}) => `
-<article class="offer" id="${o.id}">
+<article class="offer" ${detailed ? '' : `id="${o.id}"`}>
   <div class="offer__head">
     <span class="offer__n" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
     <h3>${o.t}</h3>
@@ -108,10 +108,22 @@ const meOffer = (o, i, { detailed = false } = {}) => `
   ${btn(o.href, detailed ? o.cta2 : o.cta, 'secondary')}
 </article>`;
 
+// "For me" offers as a tab queue, like the organisation services: one offer at a time.
+// Each panel keeps the offer id, so deep links such as /what-we-offer/#o-cult still open it.
+const meTabs = () => `<div class="tabs offers--detailed" data-tabs>
+    <div class="tabs__bar">
+      <div class="tabs__list" role="tablist" aria-label="Our offers for you">
+        ${C.ME_OFFERS.map((o, i) => `<button type="button" role="tab" id="t-${o.id}" aria-controls="${o.id}" aria-selected="${i === 0}" data-tab="${o.id}">${o.tab}</button>`).join('')}
+      </div>
+      <a class="tabs__link" href="/contact/#write">Others</a>
+    </div>
+    ${C.ME_OFFERS.map((o, i) => `<div class="tabs__panel" role="tabpanel" id="${o.id}" aria-labelledby="t-${o.id}" tabindex="0" ${i ? 'hidden' : ''}>${meOffer(o, i, { detailed: true })}</div>`).join('')}
+  </div>`;
+
 const forMeBlocks = ({ detailed = false } = {}) => `
 ${sec(`<div class="split split--if"><div>${head2('This is for you if…')}</div>${ticks(C.FOR_ME_IF, 'ticks--lg')}</div>`)}
 ${sec(`${head2('Our offers for you', detailed ? 'Pick the offer that fits you. For Erasmus+ projects, see the Erasmus+ tab.' : 'Three ways we can help. Pick one to start.')}
-  <div class="offers ${detailed ? 'offers--detailed' : ''}">${C.ME_OFFERS.map((o, i) => meOffer(o, i, { detailed })).join('')}</div>
+  ${detailed ? meTabs() : `<div class="offers">${C.ME_OFFERS.map((o, i) => meOffer(o, i)).join('')}</div>`}
   <div class="aside-card">
     <div><h3>Have a specific request?</h3><p>Something that does not fit a standard offer? Tell us what you have in mind and we shape it with you.</p></div>
     ${btn('/contact/#write', 'Make a tailor-made request')}
@@ -131,7 +143,11 @@ const flightHero = () => `
     <div class="fl-view" aria-hidden="true" data-view>
       <img class="fl-clouds" src="/assets/img/hero-clouds-hq.webp" width="2000" height="1116" alt="" fetchpriority="high" decoding="async" data-clouds>
       <div class="fl-france" data-france><img src="/assets/img/sete-aerial-hq.webp" width="2000" height="1116" alt="" decoding="async" data-france-img><div class="fl-haze" data-haze></div></div>
-      <div class="fl-reel" data-reel>${DESTINATIONS.map((d, i) => `<div class="fl-reel__p" style="--i:${i}" data-reel-p><video muted loop playsinline preload="none" data-poster="/assets/video/${d.slug}-poster.jpg" tabindex="-1" width="720" height="1280"><source data-src="/assets/video/${d.slug}.webm" type="video/webm"><source data-src="/assets/video/${d.slug}.mp4" type="video/mp4"></video><div class="fl-reel__n"><p class="fl-reel__city">${d.name}</p><p class="fl-reel__tag">${d.tag}</p></div></div>`).join('')}</div>
+      <div class="fl-reel" data-reel>
+        <div class="fl-reel__bg">${DESTINATIONS.map(d => `<img class="fl-reel__bgi" data-src="/assets/video/${d.slug}-poster.jpg" alt="" decoding="async">`).join('')}</div>
+        <div class="fl-reel__stage">${DESTINATIONS.map((d, i) => `<figure class="fl-reel__p" style="--i:${i}" data-reel-p><video muted loop playsinline preload="none" data-poster="/assets/video/${d.slug}-poster.jpg" tabindex="-1" width="720" height="1280"><source data-src="/assets/video/${d.slug}.webm" type="video/webm"><source data-src="/assets/video/${d.slug}.mp4" type="video/mp4"></video><figcaption class="fl-reel__n"><p class="fl-reel__tag">${d.tag}</p><p class="fl-reel__city">${d.name}</p></figcaption></figure>`).join('')}</div>
+        <div class="fl-reel__nav">${DESTINATIONS.map((d, i) => `<button type="button" class="fl-reel__go" tabindex="-1" data-reel-go="${i}"><span>${d.name}</span><i></i></button>`).join('')}</div>
+      </div>
       <canvas class="fl-cloudlayer" data-cloudlayer></canvas>
       <canvas class="fl-birds" data-flock></canvas>
     </div>
@@ -189,9 +205,6 @@ ${sec(`<div class="why">
   <div class="why__head">${head2('Why Formaskills Travel?')}<figure class="why__fig"><div data-parallax><img src="/assets/img/experience_sete.jpg" width="1376" height="768" alt="Four young travellers walking along a harbour wall in Sète" loading="lazy" decoding="async"></div></figure></div>
   <div class="why__grid">${C.WHY.map(w => `<div class="why__i"><span class="why__ico">${icon(w.icon)}</span><h3>${w.t}</h3><p>${w.d}</p></div>`).join('')}</div>
 </div>`)}
-
-${sec(`${head2('Our destinations in motion', 'Short silent clips of Sète, Montpellier, Paris and Nice. Select a city to explore it.')}
-  <div class="stories" data-stories>${DESTINATIONS.map(storyCard).join('')}</div>`, 'sec--stories')}
 
 ${wave('var(--paper)', 'var(--nuit)')}
 ${mapSection({ after: `<div class="actions actions--map">${btn('/destinations/', 'Explore All Destinations')}${btn('/contact/#write', 'Make a personalised request', 'ghost')}</div>` })}
@@ -471,9 +484,7 @@ ${sec(`${head2('Directions')}<div class="dir">
     <h3>Operating hours</h3>
     <dl class="hours"><div><dt>Weekdays</dt><dd>08:30 AM - 04:30 PM</dd></div><div><dt>Weekends</dt><dd>Closed</dd></div></dl><p class="muted">France time</p>
   </div>
-  <div class="dir__map" data-gmap="${SITE.mapsEmbed}">
-    <div class="dir__consent">${icon('pin')}<p>The map connects to Google only after your choice. You can also open directions in a new tab.</p><button class="btn btn--secondary" type="button" data-gmap-show>Show Google Maps</button></div>
-  </div>
+  <div class="dir__map"><iframe title="Map of the contact address" src="${SITE.mapsEmbed}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
 </div>`)}`;
 
 // =============== LEGAL ===============
@@ -495,7 +506,7 @@ const privacy = () => legal('Privacy notice', '/legal/privacy/', `
 const cookies = () => legal('Cookie policy', '/legal/cookies/', `
 <p>This website does not set advertising or analytics cookies and does not track you across other websites.</p>
 <h2>Local storage on your device</h2><p>We use your browser's local storage only to remember your choices on this site, such as the assistant notice you have accepted or your language preference. This information stays on your device and is not shared with us or third parties.</p>
-<h2>Maps</h2><p>The contact map is provided by Google Maps and loads only when you choose to display it. When it loads, Google may set its own cookies. You can choose not to display the map.</p>
+<h2>Maps</h2><p>The contact map is provided by Google Maps and is shown on the contact page. When it loads, Google may set its own cookies.</p>
 <h2>If this changes</h2><p>We keep this page under review. If we add a tool that requires consent, we will ask for your consent first, block it until you accept, make refusing as easy as accepting, and let you change your choice at any time.</p>`);
 const accessibility = () => legal('Accessibility statement', '/legal/accessibility/', `
 <p>We want this website to be usable by everyone. Our target is level AA of the Web Content Accessibility Guidelines (WCAG 2.2).</p>

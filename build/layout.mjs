@@ -232,7 +232,7 @@ export const footer = (scripts = []) => `
 <nav class="srail" aria-label="Social media"><ul>${SITE.socials.filter(s => s.href).map((s, i) => `<li style="--i:${i}"><a href="${s.href}" target="_blank" rel="noopener" aria-label="${s.name} (opens in a new tab)" data-tip="${s.name}">${icon(s.name.toLowerCase())}</a></li>`).join('')}</ul><span class="srail__line" aria-hidden="true"></span></nav>
 <button class="stick-enq btn btn--primary" type="button" data-open="enquire" data-stick-enq data-magnetic>${icon('mail')}<span>Enquire</span></button>
 <div class="cursor-glow" aria-hidden="true" data-cursor-glow></div>
-<div class="cursor" aria-hidden="true" data-cursor><i class="cursor__ring"></i><i class="cursor__dot"></i></div>
+<div class="cursor" aria-hidden="true" data-cursor><i class="cursor__dot"></i></div>
 
 <script src="/assets/vendor/lenis.min.js" defer></script>
 <script src="/assets/js/birds.js?v=__V__" defer></script>

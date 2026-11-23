@@ -20,11 +20,11 @@ and tick the checkboxes as each item ships. Every item has a measurable **Done w
 | ID | Client note | Page / area | Change | Done when |
 |----|-------------|-------------|--------|-----------|
 | DU1-0 | "Does it possible cloud moves" | Home intro | Clouds drift continuously (slow Ken Burns drift + parallax wisps) during the intro | Intro clouds visibly move without scroll; static under reduced motion |
-| DU1-1 | Text more visible and bigger; cursor effect more visible | Home window scene, global cursor | Larger window copy with a legibility scrim; stronger cursor (ring + dot + glow, grows on links) | Window H1 ≥ 1.25× old size and contrast ≥ 4.5:1; cursor clearly visible on light and dark |
+| DU1-1 | Text more visible and bigger; cursor effect more visible | Home window scene, global cursor | Larger window copy with a legibility scrim; stronger cursor (dot + glow, grows on links; ring removed at client request) | Window H1 ≥ 1.25× old size and contrast ≥ 4.5:1; cursor clearly visible on light and dark |
 | DU1-2a | Hero like videos of French cities | Home landing scene | After landing, the hero plays the city clips (Sète → Montpellier → Paris → Nice) with crossfade and a city label | Landing shows live video, cycles cities, falls back to posters |
 | DU1-2b | Header letters highlighted and visible | Header over media | Nav links get a glass pill backdrop and text shadow while the header overlays media | Nav text contrast ≥ 4.5:1 over the brightest frame |
 | DU1-3 | Highlight the chatbot on the right with animation | Global "Ask" AI launcher | Pulsing halo, gradient sheen and a one-time greeting bubble | Launcher draws attention on load; stops once opened; static under reduced motion |
-| DU1-4 | Social icons on the left, through the whole site | Global | Fixed vertical social rail (Instagram, LinkedIn, Facebook, TikTok) | Rail visible on every page ≥ 900px wide; hidden on small screens (footer keeps icons) |
+| DU1-4 | Social icons on the left, through the whole site | Global | Fixed vertical social rail (Instagram, LinkedIn, Facebook, TikTok) | Rail visible on every page at every screen size (docked slim tab below 1100px) |
 | DU1-5 | Trendy buttons that pop colour on hover ("Explore for me") | Home path cards | Pill CTAs with colour fill sweep, arrow nudge and per-card accent | Hover/focus floods the pill with colour; keyboard focus shows the same state |
 | DU1-6 | Keep the city clips; use video instead of images on Destinations | Destinations page | Destination cards use the city video (poster fallback) in place of the still | Each destination card plays its clip when in view |
 | DU1-7a | Improve the design here | Home map section, offer detail cards | Refined map panel (glass, motion on switch) and offer cards (header band, two-column facts) | Visual review sign-off |
@@ -56,7 +56,8 @@ and tick the checkboxes as each item ships. Every item has a measurable **Done w
 
 ## Tooling: rtk (token-efficient CLI output)
 
-rtk v1.2.1 is installed at `%USERPROFILE%\.localintk.exe` (official release, SHA-256 verified).
+rtk v1.2.1 is installed at `%USERPROFILE%\.localin
+tk.exe` (official release, SHA-256 verified).
 To route Claude Code's shell commands through it, run once in a normal terminal:
 
 ```powershell

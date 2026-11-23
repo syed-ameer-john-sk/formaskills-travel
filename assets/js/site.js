@@ -437,20 +437,6 @@
   const multi = $('.multi');
   if (multi) { const sum = $('summary', multi); const upd = () => { const n = $$('input:checked', multi).length; sum.firstChild.textContent = n ? T('{n} selected', { n }) : T('Choose…'); }; multi.addEventListener('change', upd); }
 
-  // ---------- Google map (only after consent) ----------
-  const gm = $('[data-gmap]');
-  if (gm) {
-    const consent = gm.innerHTML;
-    const showMap = () => {
-      gm.innerHTML = `<iframe title="${T('Map of the contact address')}" src="${gm.dataset.gmap}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
-      const hide = document.createElement('button'); hide.type = 'button'; hide.className = 'btn btn--ghost btn--sm'; hide.textContent = T('Hide map and withdraw this choice');
-      hide.addEventListener('click', () => { store.set('fs-map', '0'); gm.innerHTML = consent; bind(); hide.remove(); });
-      gm.after(hide); store.set('fs-map', '1');
-    };
-    const bind = () => $('[data-gmap-show]', gm)?.addEventListener('click', showMap);
-    bind(); if (store.get('fs-map') === '1') showMap();
-  }
-
   // ---------- Checklist ----------
   const cl = $('[data-checklist]');
   if (cl) {
