@@ -88,6 +88,20 @@
     const panes = $$('[data-reel-p]', reel), vids = panes.map(p => $('video', p));
     const bgs = $$('.fl-reel__bgi', reel), gos = $$('[data-reel-go]', reel), place = $('[data-place]');
     const N = panes.length, STEP = 6000;
+    // background film: wide screens only (phones show the active clip full screen), never with data saver
+    const film = $('.fl-reel__film', reel), FILM_RATE = .6;
+    const filmOk = () => film && motionOk && matchMedia('(min-width: 760px) and (min-aspect-ratio: 1/1)').matches;
+    const runFilm = (play) => {
+      if (!filmOk()) return;
+      if (play) {
+        if (!film.src) {
+          film.defaultPlaybackRate = FILM_RATE; film.src = film.dataset.src;
+          film.addEventListener('loadedmetadata', () => { film.playbackRate = FILM_RATE; });
+          film.addEventListener('playing', () => film.classList.add('is-playing'));
+        }
+        film.playbackRate = FILM_RATE; film.play().catch(() => {});
+      } else film.pause();
+    };
     let on = false, act = 0, timer = 0, hover = false;
     reel.style.setProperty('--reel-t', `${STEP}ms`);
     const sync = () => vids.forEach((v, j) => { if (!v.dataset.loaded) return; if (on && j === act) { v.currentTime = 0; v.play().catch(() => {}); } else v.pause(); });
@@ -111,12 +125,13 @@
     stage.addEventListener('pointerleave', () => { hover = false; reel.classList.remove('is-paused'); });
     gos.forEach((g, j) => g.addEventListener('click', () => { activate(j); cycle(); }));
     panes.forEach((p, j) => p.addEventListener('click', () => { if (j !== act) { activate(j); cycle(); } }));
-    document.addEventListener('visibilitychange', () => { if (document.hidden) vids.forEach(v => v.pause()); else sync(); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) { vids.forEach(v => v.pause()); runFilm(false); } else { sync(); runFilm(on); } });
     window.FSReel = (v) => {
       if (v === on) return; on = v;
       reel.classList.toggle('is-on', on);
       if (on) { bgs.forEach(b => { if (!b.src) b.src = b.dataset.src; }); vids.forEach(load); activate(act); cycle(); }
       else { clearInterval(timer); sync(); }
+      runFilm(on);
     };
   }
 
