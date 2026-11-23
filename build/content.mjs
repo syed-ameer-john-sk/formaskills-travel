@@ -17,6 +17,8 @@ export const SITE = {
     { name: 'Instagram', href: 'https://www.instagram.com/formaskills_travels/' },
     { name: 'TikTok', href: 'https://www.tiktok.com/@formaskills_travels' },
     { name: 'LinkedIn', href: 'https://www.linkedin.com/company/formaskills-travel/' },
+    // Facebook: add the page URL to show it in the social rail and footer (see CONTENT_GAPS.md)
+    { name: 'Facebook', href: '' },
   ],
 };
 

@@ -25,6 +25,8 @@ const P = {
   instagram: '<rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.8" cy="7.2" r=".6" fill="currentColor"/>',
   tiktok: '<path d="M14 4v10.5a3.5 3.5 0 1 1-3.5-3.5M14 4c.4 2.5 2.2 4.2 5 4.5"/>',
   linkedin: '<rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M8.5 10.5v5.5M8.5 7.8v.1M12 16v-5.5M12 13c0-1.6 1-2.6 2.3-2.6s2.2.8 2.2 2.6V16"/>',
+  play: '<path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/>',
+  facebook: '<path d="M14.5 8H16V4.8a19 19 0 0 0-2.3-.1c-2.3 0-3.9 1.4-3.9 4V11H7.3v3.5h2.5v6h3.1v-6h2.5l.4-3.5h-2.9V9c0-1 .3-1 1.6-1z"/>',
   leaf: '<path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14zM5 19l7-7"/>',
   users: '<circle cx="9" cy="9" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0M15.5 6.3a3 3 0 0 1 0 5.6M17.5 14.3A5.5 5.5 0 0 1 20.5 19"/>',
   building: '<path d="M5 20.5V5.5l7-2v17M12 8.5h7v12M3.5 20.5h17M8 8v.1M8 11.5v.1M8 15v.1M15.5 12v.1M15.5 15.5v.1"/>',
@@ -168,7 +170,7 @@ export const footer = (scripts = []) => `
         <li>${icon('clock')}<span>${SITE.hours}</span></li>
       </ul>
       <!--LANG-FOOTER-->
-      <ul class="ftr__social">${SITE.socials.map(s => `<li><a href="${s.href}" target="_blank" rel="noopener" aria-label="${s.name} (opens in a new tab)">${icon(s.name.toLowerCase())}</a></li>`).join('')}</ul>
+      <ul class="ftr__social">${SITE.socials.filter(s => s.href).map(s => `<li><a href="${s.href}" target="_blank" rel="noopener" aria-label="${s.name} (opens in a new tab)">${icon(s.name.toLowerCase())}</a></li>`).join('')}</ul>
     </div>
     <nav class="ftr__cols" aria-label="Pages">
       ${FOOTER_COLS.map(c => `<div><h2 class="ftr__h">${c.title}</h2><ul>${c.links.map(([h, l]) => `<li><a href="${h}">${l}</a></li>`).join('')}</ul></div>`).join('')}
@@ -216,7 +218,8 @@ export const footer = (scripts = []) => `
 </div>
 
 <div class="ai" data-ai>
-  <button class="ai__launch" type="button" data-ai-toggle aria-expanded="false" aria-controls="ai-panel">${icon('spark')}<span>Ask</span><span class="sr-only"> Formaskills AI</span></button>
+  <p class="ai__hello" data-ai-hello aria-hidden="true"><span>Hi! Questions about France? Ask me.</span></p>
+  <button class="ai__launch" type="button" data-ai-toggle aria-expanded="false" aria-controls="ai-panel"><i class="ai__halo" aria-hidden="true"></i>${icon('spark')}<span>Ask</span><span class="sr-only"> Formaskills AI</span></button>
   <section class="ai__panel" id="ai-panel" aria-labelledby="ai-title" hidden>
     <header class="ai__head"><h2 id="ai-title">Formaskills AI</h2><button class="iconbtn" type="button" data-ai-toggle aria-label="Close assistant">${icon('close')}</button></header>
     <p class="ai__note">Answers come from the information on this website. For anything specific to your project, our team replies personally.</p>
@@ -226,8 +229,10 @@ export const footer = (scripts = []) => `
   </section>
 </div>
 <div class="toast" role="status" aria-live="polite" data-toast></div>
+<nav class="srail" aria-label="Social media"><ul>${SITE.socials.filter(s => s.href).map((s, i) => `<li style="--i:${i}"><a href="${s.href}" target="_blank" rel="noopener" aria-label="${s.name} (opens in a new tab)" data-tip="${s.name}">${icon(s.name.toLowerCase())}</a></li>`).join('')}</ul><span class="srail__line" aria-hidden="true"></span></nav>
 <button class="stick-enq btn btn--primary" type="button" data-open="enquire" data-stick-enq data-magnetic>${icon('mail')}<span>Enquire</span></button>
 <div class="cursor-glow" aria-hidden="true" data-cursor-glow></div>
+<div class="cursor" aria-hidden="true" data-cursor><i class="cursor__ring"></i><i class="cursor__dot"></i></div>
 
 <script src="/assets/vendor/lenis.min.js" defer></script>
 <script src="/assets/js/birds.js?v=__V__" defer></script>

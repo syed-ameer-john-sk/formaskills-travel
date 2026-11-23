@@ -2,6 +2,22 @@
 
 Design and engineering changes made against the PRD (`formaskills-website-prd.md`). Newest first.
 
+## Client Design Update 01 (`docs/PRD-design-update-01.md`)
+
+- **Intro clouds move** on their own: the photo slowly orbits and breathes, and a veil of cloud puffs drifts across it (DU1-0).
+- **Window copy** is larger and bolder, with a deeper scrim; a new **cursor** (dot and trailing ring, inverted against the background) replaces the faint glow-only effect (DU1-1).
+- **Landing reel:** after the descent, the hero plays Sète, Montpellier, Paris and Nice side by side. The active city widens every 5 s, follows the pointer, and updates the location pill. On phones one city fills the screen and they crossfade (DU1-2a).
+- **Header links** are bolder, with an animated underline and a glass pill while over media (DU1-2b).
+- **Chatbot launcher** has a gradient pill, a breathing halo, a sheen and a one-time greeting bubble; the halo stops once it is opened (DU1-3).
+- **Social rail** fixed on the left of every page (≥1100 px), with pop-colour hover and tooltips (DU1-4).
+- **"Explore for…" buttons** fill with each card's colour from the arrow outwards, and the arrow rotates (DU1-5).
+- **Destinations page:** each destination plays its city clip instead of a photo, and the map section is removed (DU1-6, DU1-8).
+- **Home map section:** drifting aurora, glass tabs, panel image zoom. **Offer cards:** accent bar, outlined numerals, interactive fact rows. **"In development" badges** removed (DU1-7).
+- **Partners and About:** numbered partner cards, card surfaces with hover lift and accent lines, animated team avatars, drifting hero photo; **"Where we work" removed** from About (DU1-9, DU1-12).
+- **FAQ:** each category title is a drop-down with a chevron; deep links open their category (DU1-10).
+- **Scroll progress bar** is thicker, glows, and stays visible while the header is hidden (DU1-11).
+- Build: `I18N_MISSING=1 npm run build` lists untranslated strings. Two new strings are translated into all 6 languages.
+
 ## Motion, video, map, cursor, forms, QA (PRD §4–§10)
 
 ### Home page below the hero (§4)

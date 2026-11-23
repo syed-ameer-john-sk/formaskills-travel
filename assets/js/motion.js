@@ -79,6 +79,51 @@
     }
   }
 
+  // ---------- Landing reel: French cities in motion (called by flight.js as the plane lands) ----------
+  // Wide screens show the four cities side by side, the active one widest; narrow screens crossfade
+  // one city at a time. Clips load only on first landing and play only while the reel is on.
+  const reel = $('[data-reel]');
+  if (reel) {
+    const panes = $$('[data-reel-p]', reel), vids = panes.map(p => $('video', p)), place = $('[data-place]');
+    const wideMq = matchMedia('(min-width: 760px) and (min-aspect-ratio: 1/1)');
+    let on = false, act = 0, timer = 0, hover = false;
+    const sync = () => vids.forEach((v, j) => { if (!v.dataset.loaded) return; (on && (wideMq.matches || j === act)) ? v.play().catch(() => {}) : v.pause(); });
+    const activate = (i) => {
+      act = (i + panes.length) % panes.length;
+      panes.forEach((p, j) => p.classList.toggle('is-act', j === act));
+      // translated city name and region straight from the pane, so every language stays in sync
+      if (place) place.textContent = `${$('.fl-reel__city', panes[act]).textContent}, ${$('.fl-reel__tag', panes[act]).textContent}`;
+      sync();
+    };
+    const cycle = () => { clearInterval(timer); timer = setInterval(() => { if (!hover) activate(act + 1); }, 5200); };
+    panes.forEach((p, j) => {
+      p.addEventListener('pointerenter', () => { hover = true; activate(j); });
+      p.addEventListener('pointerleave', () => { hover = false; });
+    });
+    wideMq.addEventListener?.('change', sync);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) vids.forEach(v => v.pause()); else sync(); });
+    window.FSReel = (v) => {
+      if (v === on) return; on = v;
+      reel.classList.toggle('is-on', on);
+      if (on) { vids.forEach(load); activate(act); cycle(); }
+      else { clearInterval(timer); sync(); }
+    };
+  }
+
+  // ---------- Chatbot launcher: greeting bubble once per visit, halo until first opened ----------
+  const ai = $('[data-ai]'), hello = $('[data-ai-hello]');
+  if (ai && hello) {
+    let seen = false; try { seen = sessionStorage.getItem('fs-ai-hi') === '1'; } catch (e) {}
+    const hide = () => { hello.classList.remove('is-on'); try { sessionStorage.setItem('fs-ai-hi', '1'); } catch (e) {} };
+    $$('[data-ai-toggle]', ai).forEach(b => b.addEventListener('click', () => { hide(); ai.classList.add('was-opened'); }));
+    if (!seen) {
+      const show = () => { if (!ai.classList.contains('is-open')) { hello.classList.add('is-on'); setTimeout(hide, 7000); } };
+      // after a moment on the page (on the home page: only once the plane has landed)
+      const wait = () => (!document.body.classList.contains('is-home') || ai.classList.contains('is-ready')) ? setTimeout(show, 2200) : setTimeout(wait, 600);
+      wait();
+    }
+  }
+
   // ---------- Sticky Enquire ----------
   const stick = $('[data-stick-enq]');
   const flight = $('[data-flight]');
@@ -109,13 +154,21 @@
   // ---------- Desktop pointer effects ----------
   if (reduce || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   document.documentElement.classList.add('has-pointer');
-  const glow = $('[data-cursor-glow]');
-  const mouse = { x: innerWidth / 2, y: innerHeight / 2 }, g = { x: mouse.x, y: mouse.y };
+  const glow = $('[data-cursor-glow]'), cur = $('[data-cursor]'), dot = cur && $('.cursor__dot', cur), ring = cur && $('.cursor__ring', cur);
+  const mouse = { x: innerWidth / 2, y: innerHeight / 2 }, g = { x: mouse.x, y: mouse.y }, rg = { x: mouse.x, y: mouse.y };
+  const HOT = 'a, button, [role="tab"], label, summary, [data-reel-p], .story, .path';
+  const DARK = '.sec--map, .ftr, .cta-band, .flight, .ai__head, .story, .dest__fig, .srail, video';
   let glowOn = false, raf = 0;
   const QUIET = 'input, textarea, select, video, iframe, .mapx__map, [contenteditable]';
   const mags = new Set();   // magnetic elements currently being moved
   const frame = () => {
     raf = 0; let busy = false;
+    if (cur) {
+      rg.x += (mouse.x - rg.x) * .22; rg.y += (mouse.y - rg.y) * .22;
+      dot.style.transform = `translate3d(${mouse.x.toFixed(1)}px, ${mouse.y.toFixed(1)}px, 0)`;
+      ring.style.transform = `translate3d(${rg.x.toFixed(1)}px, ${rg.y.toFixed(1)}px, 0)`;
+      if (Math.abs(mouse.x - rg.x) + Math.abs(mouse.y - rg.y) > .3) busy = true;
+    }
     if (glow) {
       g.x += (mouse.x - g.x) * .16; g.y += (mouse.y - g.y) * .16;
       glow.style.transform = `translate3d(${(g.x - 210).toFixed(1)}px, ${(g.y - 210).toFixed(1)}px, 0)`;
@@ -134,10 +187,17 @@
     mouse.x = e.clientX; mouse.y = e.clientY;
     const quiet = e.target.closest?.(QUIET);
     const on = !quiet;
-    if (glow && on !== glowOn) { glowOn = on; glow.classList.toggle('is-on', on); }
+    if (on !== glowOn) { glowOn = on; glow?.classList.toggle('is-on', on); cur?.classList.toggle('is-on', on); }
+    if (cur) {
+      const hot = !!e.target.closest?.(HOT), dark = !!e.target.closest?.(DARK);
+      if (hot !== cur.classList.contains('is-hot')) cur.classList.toggle('is-hot', hot);
+      if (dark !== cur.classList.contains('is-dark')) cur.classList.toggle('is-dark', dark);
+    }
     kick();
   }, { passive: true });
-  document.addEventListener('pointerleave', () => { glowOn = false; glow?.classList.remove('is-on'); });
+  document.addEventListener('pointerleave', () => { glowOn = false; glow?.classList.remove('is-on'); cur?.classList.remove('is-on'); });
+  addEventListener('pointerdown', () => cur?.classList.add('is-down'));
+  addEventListener('pointerup', () => cur?.classList.remove('is-down'));
 
   // magnetic: primary buttons and calls to action ease towards the pointer (max ~8px) and back
   $$('.btn:not(form .btn), [data-magnetic]').forEach(el => {

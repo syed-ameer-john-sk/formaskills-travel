@@ -459,9 +459,29 @@
     cl.addEventListener('change', upd); upd();
   }
 
-  // ---------- FAQ category scroll-spy ----------
+  // ---------- FAQ categories: each title is a drop-down that shows its questions ----------
   const fc = $('[data-faqcat]');
   if (fc) {
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const setCat = (sec, open) => {
+      const b = $('[data-faqcat-toggle]', sec), q = $('.faqcat__q', sec);
+      b.setAttribute('aria-expanded', String(open)); sec.classList.toggle('is-open', open);
+      q.hidden = !open;
+      if (open && !calm) q.animate?.([{ opacity: 0, transform: 'translateY(-8px)' }, { opacity: 1, transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.2,.7,.1,1)' });
+      window.FSMeasure?.();
+    };
+    fc.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-faqcat-toggle]');
+      if (b) { setCat(b.closest('.faqcat__sec'), b.getAttribute('aria-expanded') !== 'true'); return; }
+      // side links open their category before scrolling to it
+      const a = e.target.closest('.faqcat__nav a');
+      const sec = a && fc.querySelector(a.getAttribute('href'));
+      if (sec && !sec.classList.contains('is-open')) setCat(sec, true);
+    });
+    // deep links (#faq-2 or a question id) open the category that holds them
+    const target = location.hash.length > 1 && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    const hashSec = target && target.closest('.faqcat__sec');
+    if (hashSec) setCat(hashSec, true);
     const links = $$('.faqcat__nav a', fc);
     const spy = new IntersectionObserver((es) => es.forEach(e => { if (e.isIntersecting) links.forEach(l => l.setAttribute('aria-current', String(l.getAttribute('href') === `#${e.target.id}`))); }), { rootMargin: '-35% 0px -60% 0px' });
     $$('.faqcat__sec', fc).forEach(s => spy.observe(s));
