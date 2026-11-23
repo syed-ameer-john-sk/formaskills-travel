@@ -29,33 +29,37 @@ document.addEventListener('DOMContentLoaded', () => {
   // Landmark-aligned Bezier control points (normalized to viewport width & height)
   // Derived directly from the user's hand-drawn trajectories across Hero and the 3 Destination slides:
   const FLIGHT_CURVES = {
+    // 1. HERO: Starts low-left (y: 0.65), arches over the headline (y: 0.48), rises over Quick Finder card (apex x: 0.68, y: 0.24), plunges to bottom-right (y: 0.84)
     hero: [
-      [-0.02, 0.630], [0.120, 0.400], [0.190, 0.540], [0.400, 0.560],
-      [0.450, 0.410], [0.500, 0.240], [0.685, 0.245],
-      [0.860, 0.230], [0.870, 0.480], [1.040, 0.880]
+      [-0.02, 0.650], [0.120, 0.520], [0.240, 0.490], [0.380, 0.480],
+      [0.480, 0.460], [0.580, 0.240], [0.680, 0.240],
+      [0.780, 0.240], [0.880, 0.540], [1.020, 0.840]
     ],
+    // 2. SÈTE: Starts mid-left across canal rooftops (y: 0.35), deep dive in front of the lighthouse (trough x: 0.64, y: 0.58), sweeps steeply UP into the upper sky (exit y: 0.14)
     sete: [
-      [-0.02, 0.235], [0.281, 0.185], [0.251, 0.248], [0.401, 0.447],
-      [0.464, 0.559], [0.686, 0.571], [0.759, 0.539],
-      [0.938, 0.439], [0.915, 0.229], [1.020, 0.119]
+      [-0.02, 0.350], [0.160, 0.340], [0.280, 0.350], [0.380, 0.380],
+      [0.480, 0.440], [0.560, 0.580], [0.640, 0.580],
+      [0.760, 0.580], [0.900, 0.320], [1.020, 0.140]
     ],
+    // 3. MONTPELLIER: Starts mid-left (y: 0.36), glides down through trees, dips through Porte du Peyrou arch promenade (trough x: 0.70, y: 0.49), curves smoothly up to the right (exit y: 0.32)
     montpellier: [
-      [-0.02, 0.250], [0.254, 0.209], [0.255, 0.228], [0.450, 0.350],
-      [0.528, 0.427], [0.680, 0.459], [0.789, 0.455],
-      [0.933, 0.414], [0.946, 0.333], [1.020, 0.212]
+      [-0.02, 0.360], [0.160, 0.360], [0.300, 0.410], [0.440, 0.440],
+      [0.560, 0.470], [0.620, 0.490], [0.700, 0.490],
+      [0.820, 0.490], [0.920, 0.410], [1.020, 0.320]
     ],
+    // 4. PARIS: Starts mid-left (y: 0.46), climbs across sunset sky/bridge (crest x: 0.34, y: 0.36), dips across Seine by Eiffel Tower base (trough x: 0.68, y: 0.46), curves up to the right (exit y: 0.34)
     paris: [
-      [-0.02, 0.470], [0.131, 0.329], [0.237, 0.280], [0.432, 0.290],
-      [0.543, 0.346], [0.607, 0.440], [0.792, 0.450],
-      [0.868, 0.431], [0.943, 0.316], [1.020, 0.251]
+      [-0.02, 0.460], [0.120, 0.400], [0.220, 0.360], [0.340, 0.360],
+      [0.460, 0.360], [0.560, 0.460], [0.680, 0.460],
+      [0.780, 0.460], [0.900, 0.400], [1.020, 0.340]
     ]
   };
 
   const WAYPOINT_FRACTIONS = {
-    hero: [0.30, 0.68, 0.88],
-    sete: [0.36, 0.65, 0.90],
-    montpellier: [0.28, 0.62, 0.88],
-    paris: [0.28, 0.58, 0.88]
+    hero: [0.28, 0.65, 0.88],
+    sete: [0.30, 0.60, 0.90],
+    montpellier: [0.30, 0.65, 0.88],
+    paris: [0.30, 0.64, 0.88]
   };
 
   let targetCurveName = 'hero';
@@ -123,8 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof setTargetCurve === 'function') {
         setTargetCurve('hero');
         const heroHeight = heroSectionEl ? heroSectionEl.offsetHeight : window.innerHeight;
-        const heroP = Math.min(1, Math.max(0, window.scrollY / (heroHeight * 0.8)));
-        targetFlightProg = 0.26 + heroP * 0.16;
+        const heroP = Math.min(1, Math.max(0, window.scrollY / (heroHeight * 0.85)));
+        targetFlightProg = 0.18 + heroP * 0.70;
       }
     }
   }
@@ -253,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentFlightProg += deltaProg * followEase;
 
     // Ambient soaring glide along the active landmark curve
-    const ambientGlide = prefersReducedMotion ? 0 : Math.sin(glideTimer * 0.75) * 0.016;
+    const ambientGlide = prefersReducedMotion ? 0 : (Math.sin(glideTimer * 0.75) * 0.045 + Math.sin(glideTimer * 0.3) * 0.02);
     const effectiveProg = Math.max(0.01, Math.min(0.99, currentFlightProg + ambientGlide));
 
     const dist = Math.max(0, Math.min(pathTotal, effectiveProg * pathTotal));
@@ -385,12 +389,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const clamped = Math.max(0, Math.min(2, idx));
     const curveName = clamped === 0 ? 'sete' : (clamped === 1 ? 'montpellier' : 'paris');
     setTargetCurve(curveName);
-    targetFlightProg = [0.36, 0.62, 0.88][clamped];
+    targetFlightProg = [0.58, 0.62, 0.65][clamped];
     if (!isMobileLayout && pinScrollTrigger) {
       const ratios = [0.01, 0.50, 0.96];
       scroller.scrollTo(pinScrollTrigger.start + (pinScrollTrigger.end - pinScrollTrigger.start) * ratios[clamped]);
     } else {
       if (shouldScroll && destPinEl) scroller.scrollTo(destPinEl, { offset: -72 });
+      if (track) track.style.transform = `translate3d(-${clamped * 100}%, 0, 0)`;
       if (cardsTrack) cardsTrack.style.transform = `translate3d(-${clamped * 100}%, 0, 0)`;
       updateActiveIndicators(clamped);
     }
@@ -465,13 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const curveName = activeIdx === 0 ? 'sete' : (activeIdx === 1 ? 'montpellier' : 'paris');
           setTargetCurve(curveName);
           const localP = (p * 3) - activeIdx;
-          if (activeIdx === 0) {
-            targetFlightProg = 0.24 + localP * 0.26;
-          } else if (activeIdx === 1) {
-            targetFlightProg = 0.42 + localP * 0.26;
-          } else {
-            targetFlightProg = 0.58 + localP * 0.32;
-          }
+          targetFlightProg = 0.18 + Math.min(1, Math.max(0, localP)) * 0.72;
         }
       });
       return () => { if (pinScrollTrigger) { pinScrollTrigger.kill(); pinScrollTrigger = null; } };

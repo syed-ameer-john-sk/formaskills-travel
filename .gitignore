@@ -8,3 +8,5 @@ Thumbs.db
 site/
 qa/lighthouse/*.json
 qa/*.log
+.claude/
+legacy/assets/
