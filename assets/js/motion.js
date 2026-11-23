@@ -154,8 +154,8 @@
   // ---------- Desktop pointer effects ----------
   if (reduce || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   document.documentElement.classList.add('has-pointer');
-  const glow = $('[data-cursor-glow]'), cur = $('[data-cursor]'), dot = cur && $('.cursor__dot', cur), ring = cur && $('.cursor__ring', cur);
-  const mouse = { x: innerWidth / 2, y: innerHeight / 2 }, g = { x: mouse.x, y: mouse.y }, rg = { x: mouse.x, y: mouse.y };
+  const glow = $('[data-cursor-glow]'), cur = $('[data-cursor]'), dot = cur && $('.cursor__dot', cur);
+  const mouse = { x: innerWidth / 2, y: innerHeight / 2 }, g = { x: mouse.x, y: mouse.y };
   const HOT = 'a, button, [role="tab"], label, summary, [data-reel-p], .story, .path';
   const DARK = '.sec--map, .ftr, .cta-band, .flight, .ai__head, .story, .dest__fig, .srail, video';
   let glowOn = false, raf = 0;
@@ -164,10 +164,7 @@
   const frame = () => {
     raf = 0; let busy = false;
     if (cur) {
-      rg.x += (mouse.x - rg.x) * .22; rg.y += (mouse.y - rg.y) * .22;
       dot.style.transform = `translate3d(${mouse.x.toFixed(1)}px, ${mouse.y.toFixed(1)}px, 0)`;
-      ring.style.transform = `translate3d(${rg.x.toFixed(1)}px, ${rg.y.toFixed(1)}px, 0)`;
-      if (Math.abs(mouse.x - rg.x) + Math.abs(mouse.y - rg.y) > .3) busy = true;
     }
     if (glow) {
       g.x += (mouse.x - g.x) * .16; g.y += (mouse.y - g.y) * .16;

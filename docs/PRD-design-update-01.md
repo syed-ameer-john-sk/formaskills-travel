@@ -20,7 +20,7 @@ and tick the checkboxes as each item ships. Every item has a measurable **Done w
 | ID | Client note | Page / area | Change | Done when |
 |----|-------------|-------------|--------|-----------|
 | DU1-0 | "Does it possible cloud moves" | Home intro | Clouds drift continuously (slow Ken Burns drift + parallax wisps) during the intro | Intro clouds visibly move without scroll; static under reduced motion |
-| DU1-1 | Text more visible and bigger; cursor effect more visible | Home window scene, global cursor | Larger window copy with a legibility scrim; stronger cursor (ring + dot + glow, grows on links) | Window H1 ≥ 1.25× old size and contrast ≥ 4.5:1; cursor clearly visible on light and dark |
+| DU1-1 | Text more visible and bigger; cursor effect more visible | Home window scene, global cursor | Larger window copy with a legibility scrim; stronger cursor (dot + glow, grows on links; ring removed at client request) | Window H1 ≥ 1.25× old size and contrast ≥ 4.5:1; cursor clearly visible on light and dark |
 | DU1-2a | Hero like videos of French cities | Home landing scene | After landing, the hero plays the city clips (Sète → Montpellier → Paris → Nice) with crossfade and a city label | Landing shows live video, cycles cities, falls back to posters |
 | DU1-2b | Header letters highlighted and visible | Header over media | Nav links get a glass pill backdrop and text shadow while the header overlays media | Nav text contrast ≥ 4.5:1 over the brightest frame |
 | DU1-3 | Highlight the chatbot on the right with animation | Global "Ask" AI launcher | Pulsing halo, gradient sheen and a one-time greeting bubble | Launcher draws attention on load; stops once opened; static under reduced motion |
@@ -56,7 +56,8 @@ and tick the checkboxes as each item ships. Every item has a measurable **Done w
 
 ## Tooling: rtk (token-efficient CLI output)
 
-rtk v1.2.1 is installed at `%USERPROFILE%\.localintk.exe` (official release, SHA-256 verified).
+rtk v1.2.1 is installed at `%USERPROFILE%\.localin
+tk.exe` (official release, SHA-256 verified).
 To route Claude Code's shell commands through it, run once in a normal terminal:
 
 ```powershell

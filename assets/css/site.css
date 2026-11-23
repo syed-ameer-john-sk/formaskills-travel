@@ -1118,13 +1118,10 @@ h1, h2, h3, h4, .btn, .hdr__nav a, .tabs__list button, .badge, .path__h, .dest__
 .cursor { display: none; }
 .has-pointer .cursor { display: block; position: fixed; inset: 0; z-index: 9990; pointer-events: none; mix-blend-mode: difference; opacity: 0; transition: opacity .3s; }
 .has-pointer .cursor.is-on { opacity: 1; }
-.cursor__dot, .cursor__ring { position: absolute; left: 0; top: 0; width: 0; height: 0; will-change: transform; }
-.cursor__dot::before, .cursor__ring::before { content: ""; position: absolute; border-radius: 50%; }
-.cursor__dot::before { width: 8px; height: 8px; margin: -4px 0 0 -4px; background: #fff; transition: transform .25s var(--ease); }
-.cursor__ring::before { width: 40px; height: 40px; margin: -20px 0 0 -20px; border: 1.5px solid #fff; transition: transform .45s var(--ease), background .3s, border-width .3s; }
-.cursor.is-hot .cursor__ring::before { transform: scale(1.6); background: rgba(255,255,255,.16); border-width: 1px; }
-.cursor.is-hot .cursor__dot::before { transform: scale(0); }
-.cursor.is-down .cursor__ring::before { transform: scale(.75); }
+.cursor__dot { position: absolute; left: 0; top: 0; width: 0; height: 0; will-change: transform; }
+.cursor__dot::before { content: ""; position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: #fff; transition: transform .3s var(--ease); }
+.cursor.is-hot .cursor__dot::before { transform: scale(1.8); }
+.cursor.is-down .cursor__dot::before { transform: scale(.7); }
 .has-pointer .cursor-glow { background: radial-gradient(closest-side, rgba(130,150,240,.42), rgba(150,170,240,.16) 55%, rgba(150,170,240,0)); }
 
 /* DU1-2a — landing reel: the four cities in motion */
