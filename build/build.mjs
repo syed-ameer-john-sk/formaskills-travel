@@ -165,4 +165,5 @@ await writeFile(join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?
 
 const count = (await readdir(OUT, { recursive: true })).filter(f => f.endsWith('.html')).length;
 const miss = BUILD_LANGS.filter(l => l !== 'en').map(l => `${l}:${missing[l].size}`).join(' ');
+if (process.env.I18N_MISSING) console.log([...missing[BUILD_LANGS.find(l => l !== 'en')]].join('\n'));
 console.log(`Built ${count} pages in ${BUILD_LANGS.length} language(s) → site/  (assistant entries: ${kbCount}, JS strings: ${jsKeys.size})${miss ? `  untranslated strings → ${miss}` : ''}`);

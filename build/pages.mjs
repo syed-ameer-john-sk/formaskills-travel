@@ -100,7 +100,7 @@ const meOffer = (o, i, { detailed = false } = {}) => `
   <div class="offer__head">
     <span class="offer__n" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span>
     <h3>${o.t}</h3>
-    ${detailed ? `<span class="badge badge--${o.statusKey}">${o.status}</span>` : ''}
+    ${detailed && o.statusKey !== 'dev' ? `<span class="badge badge--${o.statusKey}">${o.status}</span>` : ''}
   </div>
   <p>${o.forMeText && !detailed ? o.forMeText : o.short}</p>
   ${o.id === 'o-learn' ? `<p class="muted">${C.FORMAT_NOTE}</p><p class="muted">${C.FORMAT_NOTE2}</p>` : ''}
@@ -131,6 +131,7 @@ const flightHero = () => `
     <div class="fl-view" aria-hidden="true" data-view>
       <img class="fl-clouds" src="/assets/img/hero-clouds-hq.webp" width="2000" height="1116" alt="" fetchpriority="high" decoding="async" data-clouds>
       <div class="fl-france" data-france><img src="/assets/img/sete-aerial-hq.webp" width="2000" height="1116" alt="" decoding="async" data-france-img><div class="fl-haze" data-haze></div></div>
+      <div class="fl-reel" data-reel>${DESTINATIONS.map((d, i) => `<div class="fl-reel__p" style="--i:${i}" data-reel-p><video muted loop playsinline preload="none" data-poster="/assets/video/${d.slug}-poster.jpg" tabindex="-1" width="720" height="1280"><source data-src="/assets/video/${d.slug}.webm" type="video/webm"><source data-src="/assets/video/${d.slug}.mp4" type="video/mp4"></video><div class="fl-reel__n"><p class="fl-reel__city">${d.name}</p><p class="fl-reel__tag">${d.tag}</p></div></div>`).join('')}</div>
       <canvas class="fl-cloudlayer" data-cloudlayer></canvas>
       <canvas class="fl-birds" data-flock></canvas>
     </div>
@@ -154,7 +155,7 @@ const flightHero = () => `
     </div>
 
     <div class="fl-copy fl-copy--land" data-copy3 aria-hidden="true">
-      <p class="fl-place">${icon('pin')}<span>Sète, Mediterranean coast</span></p>
+      <p class="fl-place">${icon('pin')}<span data-place>Sète, Mediterranean coast</span></p>
       <p class="fl-land">Learn. Explore.<br>Experience. Grow.</p>
     </div>
 
@@ -180,7 +181,7 @@ ${sec(`
       ['For me', 'Learn French, explore France and plan a stay around your interests.', '/what-we-offer/#me', 'Explore for me', 'users'],
       ['For my organisation', 'Plan a group programme or mobility project for your learners or staff.', '/what-we-offer/#org', 'Explore for organisations', 'building'],
       ['Become a partner', 'Offer your classes, accommodation or activities to learners and visitors.', '/partners/', 'Explore for partners', 'handshake'],
-    ].map(([k, h, href, l, ic], i) => `<article class="path"><div class="path__img" aria-hidden="true">${picture(['/assets/img/photos/montpellier', '/assets/img/photos/sete', '/assets/img/photos/nice'][i], '', '(min-width: 860px) 30vw, 80vw')}<span class="path__badge">${icon(ic)}</span></div><div class="path__body"><p class="path__k"><span>${k}</span></p><h2 class="path__h">${h}</h2><a class="path__a" href="${href}" data-magnetic><span>${l}</span>${icon('arrow')}</a></div></article>`).join('')}
+    ].map(([k, h, href, l, ic], i) => `<article class="path" style="--acc:${['#f0a35e', '#5f6ca3', '#2a7d67'][i]};--acc-ink:${['#1c2246', '#fff', '#fff'][i]}"><div class="path__img" aria-hidden="true">${picture(['/assets/img/photos/montpellier', '/assets/img/photos/sete', '/assets/img/photos/nice'][i], '', '(min-width: 860px) 30vw, 80vw')}<span class="path__badge">${icon(ic)}</span></div><div class="path__body"><p class="path__k"><span>${k}</span></p><h2 class="path__h">${h}</h2><a class="path__a pop" href="${href}" data-magnetic><span>${l}</span><i class="pop__ic">${icon('arrow')}</i></a></div></article>`).join('')}
   </div>
   ${notice()}`, 'sec--paths')}
 
@@ -285,7 +286,7 @@ ${pageHero({ crumb: [['/destinations/', 'Destinations']], title: 'Discover our m
 <section class="sec" id="cards"><div class="wrap"><h2 class="sr-only">Destination cards</h2>
   <div class="dests">${DESTINATIONS.map((d, i) => `
     <article class="dest ${i % 2 ? 'dest--flip' : ''}">
-      <a class="dest__fig" href="${destUrl(d)}" tabindex="-1" aria-hidden="true"><div data-parallax>${picture(d.img, d.alt, '(min-width: 900px) 55vw, 100vw')}</div></a>
+      <a class="dest__fig dest__fig--v" href="${destUrl(d)}" tabindex="-1" aria-hidden="true" data-story><video class="story__v" muted loop playsinline preload="none" data-poster="/assets/video/${d.slug}-poster.jpg" width="720" height="1280"><source data-src="/assets/video/${d.slug}.webm" type="video/webm"><source data-src="/assets/video/${d.slug}.mp4" type="video/mp4"></video><span class="dest__live">${icon('play')}<span>${d.name}</span></span></a>
       <div class="dest__body">
         <p class="tag">${d.tag}</p>
         <h3 class="dest__name"><a href="${destUrl(d)}">${d.name}</a></h3>
@@ -296,7 +297,6 @@ ${pageHero({ crumb: [['/destinations/', 'Destinations']], title: 'Discover our m
       </div>
     </article>`).join('')}</div>
 </div></section>
-${mapSection({ full: false, id: 'map' })}
 ${ctaBand({ title: 'Looking for another destination?', text: 'Submit a personalised request for another destination in France or elsewhere, depending on what can realistically be organised. Tell us what you have in mind and our team will look at it.', actions: btn('/contact/', 'Make a personalised request', 'light') })}`;
 
 const destination = (d) => {
@@ -331,7 +331,7 @@ const tourism = () => `
 ${pageHero({ crumb: [['/tourism/', 'Cultural activities and local experiences']], title: 'The pleasure of discovery, pure and simple.',
   lead: ['Visits and activities, with or without French classes.', 'Tell us which of our featured destinations interests you and what you would like to discover, with or without French classes.'],
   media: `<figure class="phero__photo">${picture('/assets/img/photos/nice', 'A narrow street in the old town of Nice', '(min-width: 900px) 45vw, 100vw')}</figure>` })}
-${sec(`<div class="status-line"><span class="badge badge--dev">In development</span><p><b>Cultural activities and local experiences.</b> Tourism programmes are in development. You can register your interest. Nothing is confirmed until we reply.</p></div>
+${sec(`<div class="status-line"><p><b>Cultural activities and local experiences.</b> Tourism programmes are in development. You can register your interest. Nothing is confirmed until we reply.</p></div>
 <div class="trio">${[['Heritage and neighbourhoods', 'Explore the places and stories that give a destination its character.'], ['Culture and flavours', 'Share your interests in visits, local culture and food.'], ['At your pace', 'A programme for an individual, a family or a group.']].map(([t, d], i) => `<div class="trio__i trio__i--${i}"><h2>${t}</h2><p>${d}</p></div>`).join('')}</div>
 <p class="muted">Activities, reservations and availability are set out in a proposal.</p>`)}
 ${ctaBand({ title: 'Tell us what you would like to discover', text: 'Register your interest and our team will reply.', actions: `${btn('/plan-your-stay/?for=me&purpose=discover', 'Tell us your interests', 'light')}${btn('/contact/', 'Register your interest', 'ghost-light')}` })}`;
@@ -437,10 +437,6 @@ ${sec(`${head2('What we do', 'Choose one service or combine several into a progr
   ['Tailor-made group programmes', 'Combine language learning, accommodation coordination, meals, local transport, activities and local support according to your project.', '/for-organisations/#group-programmes', 'Plan a group programme', 'users'],
 ].map(([t, d, h, l, ic]) => `<div class="quad__i">${icon(ic)}<h3>${t}</h3><p>${d}</p><a class="more" href="${h}"><span>${l}</span>${icon('arrow')}</a></div>`).join('')}</div>
 <div class="aside-card"><p>${C.FORMAT_NOTE}</p><p>Also available: online French courses (online FLE), to learn French online before, during or after a stay.</p>${btn('/for-organisations/#french-and-immersion', 'Explore FLE programmes', 'secondary')}</div>`, 'sec--tint')}
-${sec(`<div class="where">
-  <div>${head2('Where we work')}<div class="prose"><p>Our programmes can be organised across France, depending on your project, group profile, dates and the availability of suitable local partners and services.</p><p>Sète, Montpellier, Paris and Nice are currently our featured destinations, but other locations in France can be considered on request.</p><p><b>Looking for another destination in France? Tell us about your project.</b></p></div>
-  <div class="actions">${btn('/destinations/', 'Explore our destinations')}${btn('/contact/#write', 'Request another destination', 'ghost')}</div></div>
-  <div class="where__map">${franceMap(false)}</div></div>`)}
 ${sec(`${head2('How we work', 'Every project starts with your group and your objectives.')}${steps([
   { t: 'Tell us about your project', d: 'Share your group profile, objectives, dates, preferred destination and the services you need.' },
   { t: 'We shape your programme', d: 'We take the time to understand your priorities, constraints and expectations before identifying suitable services and local options. No two groups are the same, so the programme is built around your project rather than taken from a standard package.' },
@@ -465,7 +461,7 @@ ${sec(`<div class="split split--form">
 ${sec(`${head2('Frequently asked questions')}
 <div class="faqcat" data-faqcat>
   <nav class="faqcat__nav" aria-label="FAQ categories"><ul>${C.FAQ_CONTACT.map((c, i) => `<li><a href="#${c.id}" ${i === 0 ? 'aria-current="true"' : ''}><span>${c.t}</span><small>${c.items.length}</small></a></li>`).join('')}</ul></nav>
-  <div class="faqcat__body">${C.FAQ_CONTACT.map(c => `<section class="faqcat__sec" id="${c.id}"><h3 class="faqcat__h">${c.t}</h3>${faqList(c.items)}</section>`).join('')}</div>
+  <div class="faqcat__body">${C.FAQ_CONTACT.map((c, i) => `<section class="faqcat__sec ${i === 0 ? 'is-open' : ''}" id="${c.id}"><h3 class="faqcat__h"><button type="button" aria-expanded="${i === 0}" aria-controls="${c.id}-q" data-faqcat-toggle><span>${c.t}</span><small>${c.items.length}</small><i class="faqcat__chev" aria-hidden="true">${icon('chevron')}</i></button></h3><div class="faqcat__q" id="${c.id}-q" ${i === 0 ? '' : 'hidden'}>${faqList(c.items)}</div></section>`).join('')}</div>
 </div>`, 'sec--tint')}
 ${sec(`${head2('Directions')}<div class="dir">
   <div class="dir__info">

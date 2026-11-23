@@ -234,13 +234,28 @@
     el.flock.width = Math.round(M.W * dpr); el.flock.height = Math.round(M.H * dpr); fctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   let cloudsDrawn = true;
+  // intro: a thin veil of puffs drifts across the opening clouds (each depth at its own speed)
+  function drawDrift(t, vis) {
+    const { W, H } = M, fov = Math.max(W, H) * .42;
+    for (const o of puffs) {
+      const z = .9 + o.z * .9;
+      const x = W / 2 + ((((o.x + 1.3 + t * .000026 * (2.6 - o.z)) % 2.6) + 2.6) % 2.6 - 1.3) * fov * 1.25;
+      const y = H / 2 + (o.y * .8 + Math.sin(t * .0002 + o.d * 6) * .015) * fov / z;
+      const sw = (fov * 1.6) / z, sh = sw * .62;
+      lctx.globalAlpha = vis * (.35 + o.d * .4);
+      lctx.drawImage(o.sp, x - sw / 2, y - sh / 2, sw, sh);
+    }
+    lctx.globalAlpha = 1;
+  }
   function drawClouds(p, t) {
-    const vis = fade(p, .44, .5, .66, .76);
+    const dive = fade(p, .44, .5, .66, .76), intro = 1 - seg(p, .01, .08);
+    const vis = Math.max(dive, intro * .85);
     set(el.layer, 'opacity', String(f3(vis)));
     if (vis < .01) { if (cloudsDrawn) { lctx.clearRect(0, 0, M.W, M.H); cloudsDrawn = false; } return; }
     cloudsDrawn = true;
     const { W, H } = M;
     lctx.clearRect(0, 0, W, H);
+    if (intro * .85 > dive) { drawDrift(t, 1); return; }
     const travel = seg(p, .44, .76) * 1.9, part = eio(seg(p, .62, .76));
     const fov = Math.max(W, H) * .42;
     const list = puffs.map(o => { let z = o.z - travel; z = ((z - .05) % 2 + 2) % 2 + .05; return { o, z }; }).sort((a, b) => b.z - a.z);
@@ -301,7 +316,7 @@
   }
 
   // ---------- render ----------
-  let target = 0, cur = 0, raf = 0, visible = true, lastAlt = '', scrolled = false;
+  let target = 0, cur = 0, raf = 0, visible = true, lastAlt = '', scrolled = false, reelState = false;
   const fmt = (n) => String(Math.round(n / 10) * 10).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
   function render(p, t) {
@@ -325,7 +340,9 @@
 
     // 3. Sky through the window: drift, then tilt down and dive
     const dive = eio(seg(p, .4, .6));
-    set(el.clouds, 'transform', `translate3d(${f3(Math.sin(t * .00008) * 1.2)}%, ${f3(-dive * 12)}%, 0) scale3d(${f3(1.06 + dive * .42)}, ${f3(1.06 + dive * .42)}, 1)`);
+    // clouds drift on their own (wide, slow orbit + breathing) so the opening sky is never still
+    const dz = 1.07 + Math.sin(t * .00011) * .018 + dive * .42;
+    set(el.clouds, 'transform', `translate3d(${f3(Math.sin(t * .00009) * 3.2)}%, ${f3(Math.cos(t * .00007) * 1.4 - dive * 12)}%, 0) scale3d(${f3(dz)}, ${f3(dz)}, 1)`);
     set(el.clouds, 'opacity', String(f3(1 - seg(p, .56, .64))));
 
     // 4. Copy
@@ -350,6 +367,9 @@
     const fz = lerp(1, FRANCE_MAX_ZOOM, near);
     set(el.france, 'transform', `translate3d(0, ${f3(near * 1.5)}%, 0) scale3d(${f3(fz)}, ${f3(fz)}, 1)`);
     set(el.haze, 'opacity', String(f3(1 - seg(p, .6, .86) * .92)));
+    // the landing turns into a reel of French cities in motion
+    const reelOn = p > .74;
+    if (reelOn !== reelState) { reelState = reelOn; window.FSReel?.(reelOn); }
 
     // 6. HUD (altitude text changes in steps of 10 m inside a size-contained box)
     const alt = fmt(10670 * (1 - eio(seg(p, .05, .97))));
@@ -427,6 +447,7 @@
   relayout();
   new IntersectionObserver(([e]) => {
     visible = e.isIntersecting;
+    if (!visible && reelState) window.FSReel?.(false), reelState = false;
     if (visible) { lastT = 0; kick(); } else { hdr?.classList.add('logo-landed', 'nav-in'); ai?.classList.add('is-ready'); }
   }).observe(root);
   addEventListener('scroll', kick, { passive: true });

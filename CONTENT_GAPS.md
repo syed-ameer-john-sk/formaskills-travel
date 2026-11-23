@@ -12,6 +12,7 @@ Content the site is ready for but does not have yet. Nothing below has been inve
 | **Native-speaker review of translations** | All non-English pages | See `TRANSLATION_REVIEW.md` (French first). |
 | **Legal placeholders** | Legal notices, privacy notice | Share capital, publication manager, hosting provider, AI provider and processors, retention periods — in square brackets on the pages, in every language. |
 | **Form backend** | Contact form, Enquire dialog | Email fallback works today; see README "Enquiry forms" to connect an API. |
-| **Social media accounts** | Footer | Links point to the accounts listed in `build/content.mjs` — confirm they are correct and active. |
+| **Facebook page URL** | Social rail, footer | The client asked for Facebook in the left social rail. Add its URL to `SITE.socials` in `build/content.mjs` (empty `href` today, so it is hidden). |
+| **Social media accounts** | Footer, social rail | Links point to the accounts listed in `build/content.mjs` — confirm they are correct and active. |
 | **Final domain** | Canonical URLs, sitemap, hreflang, robots.txt | Built for `formaskills-travel.fr` — confirm. |
 | **Open Graph image per page** | Social sharing previews | One shared image (`assets/img/og.jpg`) is used site-wide. |
