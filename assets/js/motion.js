@@ -80,32 +80,42 @@
   }
 
   // ---------- Landing reel: French cities in motion (called by flight.js as the plane lands) ----------
-  // Wide screens show the four cities side by side, the active one widest; narrow screens crossfade
-  // one city at a time. Clips load only on first landing and play only while the reel is on.
+  // One clip plays at a time in a rounded "window"; the next cities wait stacked behind it and a blurred
+  // still of the active city fills the screen. Chapters advance every 6 s, pause on hover, and can be
+  // picked from the nav. Clips load on first landing only and pause whenever the reel is off.
   const reel = $('[data-reel]');
   if (reel) {
-    const panes = $$('[data-reel-p]', reel), vids = panes.map(p => $('video', p)), place = $('[data-place]');
-    const wideMq = matchMedia('(min-width: 760px) and (min-aspect-ratio: 1/1)');
+    const panes = $$('[data-reel-p]', reel), vids = panes.map(p => $('video', p));
+    const bgs = $$('.fl-reel__bgi', reel), gos = $$('[data-reel-go]', reel), place = $('[data-place]');
+    const N = panes.length, STEP = 6000;
     let on = false, act = 0, timer = 0, hover = false;
-    const sync = () => vids.forEach((v, j) => { if (!v.dataset.loaded) return; (on && (wideMq.matches || j === act)) ? v.play().catch(() => {}) : v.pause(); });
+    reel.style.setProperty('--reel-t', `${STEP}ms`);
+    const sync = () => vids.forEach((v, j) => { if (!v.dataset.loaded) return; if (on && j === act) { v.currentTime = 0; v.play().catch(() => {}); } else v.pause(); });
     const activate = (i) => {
-      act = (i + panes.length) % panes.length;
-      panes.forEach((p, j) => p.classList.toggle('is-act', j === act));
+      act = (i + N) % N;
+      const rel = (j) => (j - act + N) % N;
+      panes.forEach((p, j) => {
+        const r = rel(j);
+        p.classList.toggle('is-act', r === 0); p.classList.toggle('is-next', r === 1);
+        p.classList.toggle('is-next2', r === 2); p.classList.toggle('is-prev', r === N - 1);
+      });
+      bgs.forEach((b, j) => b.classList.toggle('is-act', j === act));
+      gos.forEach((g, j) => { g.classList.remove('is-act'); if (j === act) { void g.offsetWidth; g.classList.add('is-act'); } });
       // translated city name and region straight from the pane, so every language stays in sync
       if (place) place.textContent = `${$('.fl-reel__city', panes[act]).textContent}, ${$('.fl-reel__tag', panes[act]).textContent}`;
       sync();
     };
-    const cycle = () => { clearInterval(timer); timer = setInterval(() => { if (!hover) activate(act + 1); }, 5200); };
-    panes.forEach((p, j) => {
-      p.addEventListener('pointerenter', () => { hover = true; activate(j); });
-      p.addEventListener('pointerleave', () => { hover = false; });
-    });
-    wideMq.addEventListener?.('change', sync);
+    const cycle = () => { clearInterval(timer); timer = setInterval(() => { if (!hover) activate(act + 1); }, STEP); };
+    const stage = $('.fl-reel__stage', reel);
+    stage.addEventListener('pointerenter', () => { hover = true; reel.classList.add('is-paused'); });
+    stage.addEventListener('pointerleave', () => { hover = false; reel.classList.remove('is-paused'); });
+    gos.forEach((g, j) => g.addEventListener('click', () => { activate(j); cycle(); }));
+    panes.forEach((p, j) => p.addEventListener('click', () => { if (j !== act) { activate(j); cycle(); } }));
     document.addEventListener('visibilitychange', () => { if (document.hidden) vids.forEach(v => v.pause()); else sync(); });
     window.FSReel = (v) => {
       if (v === on) return; on = v;
       reel.classList.toggle('is-on', on);
-      if (on) { vids.forEach(load); activate(act); cycle(); }
+      if (on) { bgs.forEach(b => { if (!b.src) b.src = b.dataset.src; }); vids.forEach(load); activate(act); cycle(); }
       else { clearInterval(timer); sync(); }
     };
   }
