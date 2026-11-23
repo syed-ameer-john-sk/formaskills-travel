@@ -30,7 +30,7 @@ const testimonials = () => TESTIMONIALS.length ? sec(`${head2('What participants
 // =============== Shared blocks ===============
 const destPanel = (d, i, { full = true } = {}) => `
 <article class="dpanel" id="map-${d.slug}" data-dest-panel="${d.slug}" ${i ? 'hidden' : ''} role="tabpanel" aria-labelledby="tab-${d.slug}">
-  <figure class="dpanel__fig">${picture(d.img, d.alt, '(min-width: 900px) 40vw, 100vw')}</figure>
+  <figure class="dpanel__fig dpanel__fig--v" data-story><video class="story__v" muted loop playsinline preload="none" data-poster="/assets/video/${d.slug}-poster.jpg" aria-hidden="true" tabindex="-1" width="720" height="1280"><source data-src="/assets/video/${d.slug}.webm" type="video/webm"><source data-src="/assets/video/${d.slug}.mp4" type="video/mp4"></video><span class="dest__live" aria-hidden="true">${icon('play')}<span>${d.name}</span></span><p class="sr-only">Silent video clip of ${d.name}.</p></figure>
   <div class="dpanel__body">
     <p class="tag">${d.tag}</p>
     <h3 class="dpanel__name">${d.name}</h3>
@@ -193,9 +193,6 @@ ${sec(`<div class="why">
   <div class="why__head">${head2('Why Formaskills Travel?')}<figure class="why__fig"><div data-parallax><img src="/assets/img/experience_sete.jpg" width="1376" height="768" alt="Four young travellers walking along a harbour wall in Sète" loading="lazy" decoding="async"></div></figure></div>
   <div class="why__grid">${C.WHY.map(w => `<div class="why__i"><span class="why__ico">${icon(w.icon)}</span><h3>${w.t}</h3><p>${w.d}</p></div>`).join('')}</div>
 </div>`)}
-
-${sec(`${head2('Our destinations in motion', 'Short silent clips of Sète, Montpellier, Paris and Nice. Select a city to explore it.')}
-  <div class="stories" data-stories>${DESTINATIONS.map(storyCard).join('')}</div>`, 'sec--stories')}
 
 ${wave('var(--paper)', 'var(--nuit)')}
 ${mapSection({ after: `<div class="actions actions--map">${btn('/destinations/', 'Explore All Destinations')}${btn('/contact/#write', 'Make a personalised request', 'ghost')}</div>` })}
