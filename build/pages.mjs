@@ -143,11 +143,7 @@ const flightHero = () => `
     <div class="fl-view" aria-hidden="true" data-view>
       <img class="fl-clouds" src="/assets/img/hero-clouds-hq.webp" width="2000" height="1116" alt="" fetchpriority="high" decoding="async" data-clouds>
       <div class="fl-france" data-france><img src="/assets/img/sete-aerial-hq.webp" width="2000" height="1116" alt="" decoding="async" data-france-img><div class="fl-haze" data-haze></div></div>
-      <div class="fl-reel" data-reel>
-        <div class="fl-reel__bg">${DESTINATIONS.map(d => `<img class="fl-reel__bgi" data-src="/assets/video/${d.slug}-poster.jpg" alt="" decoding="async">`).join('')}</div>
-        <div class="fl-reel__stage">${DESTINATIONS.map((d, i) => `<figure class="fl-reel__p" style="--i:${i}" data-reel-p><video muted loop playsinline preload="none" data-poster="/assets/video/${d.slug}-poster.jpg" tabindex="-1" width="720" height="1280"><source data-src="/assets/video/${d.slug}.webm" type="video/webm"><source data-src="/assets/video/${d.slug}.mp4" type="video/mp4"></video><figcaption class="fl-reel__n"><p class="fl-reel__tag">${d.tag}</p><p class="fl-reel__city">${d.name}</p></figcaption></figure>`).join('')}</div>
-        <div class="fl-reel__nav">${DESTINATIONS.map((d, i) => `<button type="button" class="fl-reel__go" tabindex="-1" data-reel-go="${i}"><span>${d.name}</span><i></i></button>`).join('')}</div>
-      </div>
+      <div class="fl-reel" data-reel><video class="fl-reel__film" muted loop playsinline preload="none" tabindex="-1" width="1280" height="720" data-src="/assets/video/france-cities.mp4"></video></div>
       <canvas class="fl-cloudlayer" data-cloudlayer></canvas>
       <canvas class="fl-birds" data-flock></canvas>
     </div>

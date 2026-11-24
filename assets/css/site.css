@@ -1124,66 +1124,16 @@ h1, h2, h3, h4, .btn, .hdr__nav a, .tabs__list button, .badge, .path__h, .dest__
 .cursor.is-down .cursor__dot::before { transform: scale(.7); }
 .has-pointer .cursor-glow { background: radial-gradient(closest-side, rgba(130,150,240,.42), rgba(150,170,240,.16) 55%, rgba(150,170,240,0)); }
 
-/* DU1-2a — landing reel: a cinematic "window deck" of the four cities.
-   A blurred still of the active city fills the screen; the clip plays sharp, at its native portrait
-   size, in a rounded window on the right with the next cities stacked behind it. */
-.fl-reel { position: absolute; inset: 0; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 1s var(--ease), visibility 0s 1s; --deck-h: min(calc(100% - var(--hdr-h) - 9.5rem), 74vh); }
-.fl-reel.is-on { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity 1s var(--ease); }
-.fl-reel__bg { position: absolute; inset: 0; overflow: hidden; background: var(--nuit); }
-.fl-reel__bgi { position: absolute; inset: -8%; width: 116%; height: 116%; max-width: none; object-fit: cover; filter: blur(34px) saturate(1.25) brightness(.62); opacity: 0; transform: scale(1.08); transition: opacity 1.4s var(--ease), transform 7s linear; }
-.fl-reel__bgi.is-act { opacity: 1; transform: scale(1); }
-.fl-reel__bg::after { content: ""; position: absolute; inset: 0;
-  background: linear-gradient(90deg, rgba(14,18,44,.88) 0%, rgba(14,18,44,.55) 38%, rgba(14,18,44,.15) 70%, rgba(14,18,44,.35) 100%), linear-gradient(180deg, rgba(14,18,44,.55), transparent 22%, transparent 70%, rgba(14,18,44,.7)); }
-/* the deck */
-.fl-reel__stage { position: absolute; right: clamp(6rem, 13vw, 14rem); top: calc(var(--hdr-h) + 2.2rem); height: var(--deck-h); aspect-ratio: 9 / 16; perspective: 1600px; }
-.fl-reel__p { position: absolute; inset: 0; margin: 0; border-radius: clamp(26px, 3vw, 44px); overflow: hidden; background: #0e1230; box-shadow: 0 50px 90px -30px rgba(0,0,0,.7), inset 0 0 0 1px rgba(255,255,255,.14);
-  opacity: 0; transform: translate3d(0, 6%, 0) scale(.92); transition: transform 1.1s cubic-bezier(.65,0,.2,1), opacity .9s var(--ease), filter 1.1s var(--ease); will-change: transform, opacity; }
-.fl-reel__p::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 6px rgba(255,255,255,.08), inset 0 0 40px rgba(0,0,0,.25); pointer-events: none; }
-.fl-reel__p.is-act { opacity: 1; z-index: 3; transform: none; }
-.fl-reel__p.is-next { opacity: .55; z-index: 2; transform: translate3d(22%, 0, -120px) rotate(4deg) scale(.86); filter: brightness(.6) saturate(.8); }
-.fl-reel__p.is-next2 { opacity: .25; z-index: 1; transform: translate3d(40%, 0, -240px) rotate(8deg) scale(.74); filter: brightness(.45) saturate(.7); }
-.fl-reel__p.is-prev { opacity: 0; z-index: 4; transform: translate3d(-34%, 4%, 0) rotate(-7deg) scale(.96); }
-.fl-reel__p video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.06); transition: transform 7s cubic-bezier(.2,.6,.2,1); }
-.fl-reel__p.is-act video { transform: scale(1); }
-.fl-reel.is-on .fl-reel__p.is-act { animation: deckIn 1.3s cubic-bezier(.2,.8,.2,1) both; }
-@keyframes deckIn { from { opacity: 0; transform: translate3d(0, 10%, 0) scale(.9); } }
-.fl-reel__n { position: absolute; left: 0; right: 0; bottom: 0; padding: 4.5rem 1.4rem 1.4rem; background: linear-gradient(transparent, rgba(10,14,36,.78)); color: #fff; }
-.fl-reel__n p { margin: 0; color: #fff; }
-.fl-reel__tag { font: 500 .76rem var(--f-ui); letter-spacing: .16em; text-transform: uppercase; opacity: .85; margin-bottom: .3rem !important; }
-.fl-reel__city { font: 600 clamp(1.6rem, 2.4vw, 2.3rem)/1 var(--f-ui); letter-spacing: -.02em; }
-.fl-reel__p.is-act .fl-reel__n > * { animation: capIn .9s .35s var(--ease) both; }
-.fl-reel__p.is-act .fl-reel__city { animation-delay: .45s; }
-@keyframes capIn { from { opacity: 0; transform: translateY(12px); } }
-/* chapter nav under the deck: number, city and a progress line for the active one */
-.fl-reel__nav { position: absolute; z-index: 5; right: clamp(6rem, 13vw, 14rem); top: calc(var(--hdr-h) + 3.4rem + var(--deck-h)); display: flex; gap: clamp(.8rem, 1.6vw, 1.6rem); }
-.fl-reel__go { position: relative; display: grid; grid-template-columns: auto auto; gap: .45rem; align-items: baseline; padding: 0 0 .7rem; border: 0; background: none; color: rgba(255,255,255,.55); font: 500 .92rem var(--f-ui); cursor: pointer; transition: color .4s; }
-.fl-reel__nav { counter-reset: reel; }
-.fl-reel__go { counter-increment: reel; }
-.fl-reel__go::before { content: "0" counter(reel); font-weight: 600; font-size: .72rem; letter-spacing: .08em; }
-.fl-reel__go i { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 2px; background: rgba(255,255,255,.22); overflow: hidden; }
-.fl-reel__go i::after { content: ""; position: absolute; inset: 0; background: var(--amber); transform: scaleX(0); transform-origin: 0 50%; }
-.fl-reel__go:hover { color: #fff; }
-.fl-reel__go.is-act { color: #fff; }
-.fl-reel__go.is-act i::after { animation: reelBar var(--reel-t, 6s) linear both; }
-.fl-reel.is-paused .fl-reel__go.is-act i::after { animation-play-state: paused; }
-@keyframes reelBar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+/* DU1-2a — landing: the France film fades in over the Sète aerial as the plane lands, played slowly */
+.fl-reel { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity 1.2s var(--ease), visibility 0s 1.2s; }
+.fl-reel.is-on { opacity: 1; visibility: visible; transition: opacity 1.2s var(--ease); }
+.fl-reel::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(14,18,44,.62) 0%, rgba(14,18,44,.25) 45%, transparent 75%), linear-gradient(180deg, rgba(14,18,44,.5), transparent 24%, transparent 60%, rgba(14,18,44,.7)); }
+/* no zoom on the film (it is 720p, already scaled up on large screens); a touch of contrast keeps it crisp */
+.fl-reel__film { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; filter: contrast(1.06) saturate(1.06); transition: opacity 1.6s var(--ease); }
+.fl-reel__film.is-playing { opacity: 1; }
 .fl-copy--land { z-index: 11; }
-/* phones and portrait screens: the active clip fills the screen, chapters sit under the header */
-@media (max-width: 759px), (max-aspect-ratio: 1/1) {
-  .fl-reel__bg { display: none; }
-  .fl-reel__stage { inset: 0; height: auto; aspect-ratio: auto; perspective: none; }
-  .fl-reel__p { border-radius: 0; box-shadow: none; transform: none !important; filter: none !important; transition: opacity 1.1s var(--ease); }
-  .fl-reel__p::after { display: none; }
-  .fl-reel__p.is-next, .fl-reel__p.is-next2, .fl-reel__p.is-prev { opacity: 0; }
-  .fl-reel__n { top: 0; bottom: auto; padding: calc(var(--hdr-h) + 3.6rem) 1.2rem 3rem; background: linear-gradient(rgba(10,14,36,.7), transparent); }
-  .fl-reel__p::before { content: ""; position: absolute; inset: auto 0 0; height: 55%; background: linear-gradient(transparent, rgba(10,14,36,.85)); z-index: 1; }
-  .fl-reel.is-on .fl-reel__p.is-act { animation: none; }
-  .fl-reel__nav { left: 1.2rem; right: 1.2rem; top: calc(var(--hdr-h) + .9rem); gap: .5rem; }
-  .fl-reel__go { flex: 1; grid-template-columns: 1fr; font-size: 0; padding-bottom: 0; }
-  .fl-reel__go::before, .fl-reel__go span { display: none; }
-  .fl-reel__go i { position: static; display: block; height: 3px; }
-}
-@media (prefers-reduced-motion: reduce) { .fl-reel__p, .fl-reel__bgi { transition: opacity .3s !important; } }
+@media (prefers-reduced-motion: reduce) { .fl-reel__film { transition: opacity .3s; } }
 
 /* DU1-3 — chatbot launcher: gradient pill, breathing halo, sheen, greeting bubble */
 .ai__launch { position: relative; height: 56px; padding: 0 1.4rem 0 1.15rem; background: linear-gradient(135deg, #2b3576, var(--nuit) 55%, #3a2f6b); font-weight: 600; overflow: visible; isolation: isolate; }
@@ -1330,5 +1280,5 @@ html[style*="overflow: hidden"] .srail { opacity: 0; pointer-events: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .ai__launch::before, .ai__launch .ico, .ai__halo, .ai__halo::before, .sec--map::before, .phero__photo img, .srail li, .dest__fig--v .dest__live .ico { animation: none !important; }
-  .fl-reel__p, .fl-reel__p video, .path__a.pop::before, .ptype, .quad__i, .member, .versus__i, .offers--detailed .offer { transition: none !important; }
+  .path__a.pop::before, .ptype, .quad__i, .member, .versus__i, .offers--detailed .offer { transition: none !important; }
 }
