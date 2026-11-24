@@ -144,6 +144,7 @@ const flightHero = () => `
       <img class="fl-clouds" src="/assets/img/hero-clouds-hq.webp" width="2000" height="1116" alt="" fetchpriority="high" decoding="async" data-clouds>
       <div class="fl-france" data-france><img src="/assets/img/sete-aerial-hq.webp" width="2000" height="1116" alt="" decoding="async" data-france-img><div class="fl-haze" data-haze></div></div>
       <div class="fl-reel" data-reel><video class="fl-reel__film" muted loop playsinline preload="none" tabindex="-1" width="1280" height="720" data-src="/assets/video/france-cities.mp4"></video></div>
+      <svg class="fl-svgdefs" width="0" height="0" aria-hidden="true" focusable="false"><filter id="fl-sharpen" color-interpolation-filters="sRGB"><feConvolveMatrix order="3" preserveAlpha="true" kernelMatrix="0 -0.6 0 -0.6 3.4 -0.6 0 -0.6 0"/></filter></svg>
       <canvas class="fl-cloudlayer" data-cloudlayer></canvas>
       <canvas class="fl-birds" data-flock></canvas>
     </div>

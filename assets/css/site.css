@@ -1132,6 +1132,10 @@ h1, h2, h3, h4, .btn, .hdr__nav a, .tabs__list button, .badge, .path__h, .dest__
 /* no zoom on the film (it is 720p, already scaled up on large screens); a touch of contrast keeps it crisp */
 .fl-reel__film { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; filter: contrast(1.06) saturate(1.06); transition: opacity 1.6s var(--ease); }
 .fl-reel__film.is-playing { opacity: 1; }
+/* the film is 720p, so large screens stretch it: a light unsharp pass restores edge clarity there
+   (browsers without SVG filters on video keep the plain contrast lift above) */
+.fl-svgdefs { position: absolute; width: 0; height: 0; overflow: hidden; }
+@media (min-width: 1000px) { .fl-reel__film { filter: url(#fl-sharpen) contrast(1.06) saturate(1.06); } }
 .fl-copy--land { z-index: 11; }
 @media (prefers-reduced-motion: reduce) { .fl-reel__film { transition: opacity .3s; } }
 
