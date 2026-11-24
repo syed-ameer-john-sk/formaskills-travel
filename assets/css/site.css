@@ -1129,10 +1129,11 @@ h1, h2, h3, h4, .btn, .hdr__nav a, .tabs__list button, .badge, .path__h, .dest__
 .fl-reel.is-on { opacity: 1; visibility: visible; transition: opacity 1.2s var(--ease); }
 .fl-reel::after { content: ""; position: absolute; inset: 0; pointer-events: none;
   background: linear-gradient(90deg, rgba(14,18,44,.62) 0%, rgba(14,18,44,.25) 45%, transparent 75%), linear-gradient(180deg, rgba(14,18,44,.5), transparent 24%, transparent 60%, rgba(14,18,44,.7)); }
-.fl-reel__film { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.06); transition: opacity 1.6s var(--ease), transform 14s linear; }
-.fl-reel__film.is-playing { opacity: 1; transform: scale(1); }
+/* no zoom on the film (it is 720p, already scaled up on large screens); a touch of contrast keeps it crisp */
+.fl-reel__film { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; filter: contrast(1.06) saturate(1.06); transition: opacity 1.6s var(--ease); }
+.fl-reel__film.is-playing { opacity: 1; }
 .fl-copy--land { z-index: 11; }
-@media (prefers-reduced-motion: reduce) { .fl-reel__film { transition: opacity .3s; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .fl-reel__film { transition: opacity .3s; } }
 
 /* DU1-3 — chatbot launcher: gradient pill, breathing halo, sheen, greeting bubble */
 .ai__launch { position: relative; height: 56px; padding: 0 1.4rem 0 1.15rem; background: linear-gradient(135deg, #2b3576, var(--nuit) 55%, #3a2f6b); font-weight: 600; overflow: visible; isolation: isolate; }
